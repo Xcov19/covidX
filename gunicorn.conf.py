@@ -1,8 +1,16 @@
 """Gunicorn Configuration"""
+
+import multiprocessing
 import os
-from multiprocessing import cpu_count
 
 import dotenv
+
+# Parameters
+GUNICORN_PORT = os.getenv("GUNICORN_PORT", "8080")
+LOG_DIR = os.getenv(
+    "LOG_DIR",
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "server_logs.txt")),
+)
 
 
 def max_workers() -> int:
@@ -22,15 +30,32 @@ def max_workers() -> int:
 
     Link: http://docs.gunicorn.org/en/stable/design.html#how-many-workers
     """
-    return min(cpu_count() + 1, 12)
+    # Number of workers = 2*CPU + 1 (recommendation from Gunicorn documentation)
+    workers = multiprocessing.cpu_count() * 2 + 1
+    return min(workers, 12)
 
 
 dotenv.load_dotenv()
 
-bind = ":".join(["0.0.0.0", os.getenv("PORT", "8000")])
+
+# Bind to localhost on specified port
+bind = f"0.0.0.0:{GUNICORN_PORT}"
 worker_class = "gevent"
+loglevel = os.getenv("GUNICORN_LOG_LEVEL", "debug")
+
+# Access log
+accesslog = os.path.join(LOG_DIR, "gunicorn_access.log")
+access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+
+# Error log
+errorlog = os.path.join(LOG_DIR, "gunicorn_error.log")
+capture_output = True
+
+# Max requests settings - a worker restarts after handling this many
+# requests.
+# max_requests = 0
+
 workers = max_workers()
-loglevel = os.getenv("GUNICORN_LOG_LEVEL", "info")
 
 # If we run Gunicorn within a docker command, the worker heartbeat mechanism will
 # be created in /tmp within the container which is actually on the disk and hence can be
