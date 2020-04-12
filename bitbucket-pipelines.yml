@@ -1,0 +1,20 @@
+image: python:3.8
+
+pipelines:
+  default:
+    - step:
+          name: Code style check
+          caches:
+            - pip
+          script:
+            - pip install django==3.0.3
+            - pip install pylint
+            - pip install pylint_django
+            - pylint **/*.py
+
+    - step:
+        name: Run Tests
+        caches:
+          - pip
+        script:
+          - python3 -m unittest discover covidX/tests

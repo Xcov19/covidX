@@ -1,0 +1,8 @@
+asgiref==3.2.3            # via django
+django==3.0.3             # via -r requirements.in (line 1)
+gevent==1.4.0             # via gunicorn
+greenlet==0.4.15          # via gevent
+gunicorn[gevent]==20.0.4  # via -r requirements.in (line 2)
+python-dotenv==0.11.0     # via -r requirements.in (line 3)
+pytz==2019.3              # via django
+sqlparse==0.3.0           # via django
