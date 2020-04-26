@@ -31,8 +31,8 @@ def max_workers() -> int:
     Link: http://docs.gunicorn.org/en/stable/design.html#how-many-workers
     """
     # Number of workers = 2*CPU + 1 (recommendation from Gunicorn documentation)
-    workers = multiprocessing.cpu_count() * 2 + 1
-    return min(workers, 12)
+    num_workers = multiprocessing.cpu_count() * 2 + 1
+    return min(num_workers, 12)
 
 
 dotenv.load_dotenv()
