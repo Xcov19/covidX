@@ -50,5 +50,6 @@ venv.bak/
 nohup.out
 
 # Miscelleneaous
+bazel*
 bazel-*/
 pazel/
