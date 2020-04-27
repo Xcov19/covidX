@@ -48,3 +48,7 @@ venv.bak/
 
 #Stdout
 nohup.out
+
+# Miscelleneaous
+bazel-*/
+pazel/
