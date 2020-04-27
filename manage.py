@@ -4,6 +4,7 @@ import os
 import sys
 
 import dotenv
+import django
 
 
 def main():
