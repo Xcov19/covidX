@@ -53,3 +53,10 @@ nohup.out
 bazel*
 bazel-*/
 pazel/
+# Python pycache:
+__pycache__/
+# Ignored by the build system
+/setup.cfg
+
+# Misc
+$HOME
