@@ -29,3 +29,6 @@ Enable following options on GAE:
 gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
 ```
 
+
+TODO:
+    How to contribute. Coming soon.
