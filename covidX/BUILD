@@ -22,6 +22,8 @@ py_library(
     srcs = ["urls.py"],
     deps = [
         requirement("django"),
+        "//apps/apihealth:apps",
+        "//apps/apihealth:urls",
     ],
 )
 
