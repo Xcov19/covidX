@@ -10,18 +10,22 @@ We are an open community of volunteers without a commercial purpose. We believe 
 covidX will be run on python *3.7.6*
 
 #### Installation
-Clone this git repo and then run:
+Clone this git repo and then build like:
 ```bash
-bazel build //:app --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=10 --loading_phase_threads=HOST_CPUS
+bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=20 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)"
 
 ```
+
 Run it like:
 ```bash
-bazel run --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=10 --loading_phase_threads=HOST_CPUS //:app -- runserver
+bazel run :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=20 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)" -- runserver
 
 ```
 
-TODO:
+DEPLOY like:
 Enable following options on GAE:
-* With a wsgi server => `gunicorn -c gunicorn.conf.py covidX.wsgi`
+
+```python
+gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
+```
 
