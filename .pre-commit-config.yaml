@@ -30,3 +30,4 @@ repos:
         types: [python]
         args:
           - --rcfile=.pylintrc
+          - --disable=C

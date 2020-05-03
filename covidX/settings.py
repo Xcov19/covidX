@@ -74,25 +74,25 @@ WSGI_APPLICATION = "covidX.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.getenv('GAE_APPLICATION', None):
+if os.getenv("GAE_APPLICATION", None):
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'HOST': f'/cloudsql/{os.getenv("CONNECTION_NAME")}',
-            'USER': f'{os.getenv("DB_USER")}',
-            'PASSWORD': f'{os.getenv("DB_PWD")}',
-            'NAME': f'{os.getenv("DB_NAME")}',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "HOST": f'/cloudsql/{os.getenv("CONNECTION_NAME")}',
+            "USER": f'{os.getenv("DB_USER")}',
+            "PASSWORD": f'{os.getenv("DB_PWD")}',
+            "NAME": f'{os.getenv("DB_NAME")}',
         }
     }
 else:
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'HOST': 'localhost',
-            'PORT': f'{os.getenv("DB_PORT")}',
-            'NAME': 'covid',
-            'USER': 'covid',
-            'PASSWORD': 'postgres',
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "HOST": "localhost",
+            "PORT": f'{os.getenv("DB_PORT")}',
+            "NAME": "covid",
+            "USER": "covid",
+            "PASSWORD": "postgres",
         }
     }
 
@@ -127,5 +127,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, 'static')
+STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
 STATIC_URL = "/static/"
