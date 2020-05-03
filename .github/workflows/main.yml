@@ -16,6 +16,9 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.7.6]
 
     steps:
     - uses: actions/checkout@v2
@@ -25,10 +28,9 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        # Install ubuntu python dependencies
-        apt-get install -y python3-setuptools
         # Install dependencies
-        python3 -m pip install --upgrade pip
+        set -xe
+        python3 -m pip install --upgrade pip setuptools wheel
         pip3 install flake8 pytest
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
     - name: Lint with flake8
