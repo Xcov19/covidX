@@ -31,3 +31,6 @@ repos:
         args:
           - --rcfile=.pylintrc
           - --disable=C
+          - --disable=C0415
+          - --disable=W
+          - --msg-template="{path}||{msg_id}||{symbol}||{category}||{line}||{column}||{msg}"

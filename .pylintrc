@@ -155,6 +155,12 @@ disable=parameter-unpacking,
         no-self-use,
         # exit zero
         exit-zero,
+        W0511,
+        C0321,
+        C0415,
+        # Method 'auth_html' is abstract in class 'BaseAuth' but is not overridden
+        W0223,
+        C,
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

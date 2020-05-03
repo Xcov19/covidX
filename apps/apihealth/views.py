@@ -6,7 +6,5 @@ def api_health(request):
     """
     API Health Check which will returns 200.
     """
-    data = {
-        "success": True
-    }
+    data = {"success": True}
     return JsonResponse(data)
