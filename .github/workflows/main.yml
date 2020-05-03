@@ -23,11 +23,11 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install ubuntu python dependencies
-      run: |
-        apt install build-essential python-dev python3-setuptools
     - name: Install dependencies
       run: |
+        # Install ubuntu python dependencies
+        apt-get install -y python3-setuptools
+        # Install dependencies
         python3 -m pip install --upgrade pip
         pip3 install flake8 pytest
         if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
