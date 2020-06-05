@@ -24,14 +24,15 @@ _REQ = [
         "psycopg2-binary",
         "psycopg2",
         "pyopenssl",
-
+        "Werkzeug",
+        #Misc
+        'django_extensions',
         # Django related packages
         "django-model-utils",
         "django-phonenumber-field",
         "phonenumbers",
         "social-auth-app-django",
         "graphene-file-upload",
-        "django-extensions",
 
         # Tests and Fixtures
         "factory-boy",
@@ -59,7 +60,8 @@ py_binary(
     deps = [
         "//covidX:settings",
         "//covidX:urls",
-        "//covidX:wsgi",
+        # "//covidX:wsgi",
+        "//covidX:asgi",
     ] + [requirement(pkg) for pkg in _REQ],
 )
 

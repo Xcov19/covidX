@@ -7,7 +7,7 @@ pytz==2019.3              # via django
 sqlparse==0.3.0           # via django
 pyopenssl
 asgiref
-
+Werkzeug
 
 # Django related packages
 django-model-utils>=4.0.0

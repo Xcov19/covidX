@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -68,8 +69,9 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = "covidX.wsgi.application"
+# WSGI_APPLICATION = "covidX.wsgi.application"
 
+ASGI_APPLICATION = "covidX.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
