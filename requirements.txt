@@ -36,5 +36,6 @@ graphene-django>=2.7.1
 django-filter>=2.2.0
 django-cors-headers>=3.2.0
 
-# Gunicorn
-gunicorn==20.0.4
+# Tests and Fixtures
+factory-boy==2.12.0
+snapshottest==0.5.1

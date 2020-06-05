@@ -10,11 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import os
+import sys
 
-
+PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": 1800,
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -26,7 +33,11 @@ SECRET_KEY = "EOakcFyDvwLstAthJy1zTpSQbka1SHFm"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    os.getenv("DJANGO_ALLOWED_HOST", "localhost"),
+    "127.0.0.1",
+    os.getenv("DOMAIN_NAME", ""),
+]
 
 
 # Application definition
@@ -39,6 +50,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_extensions",
+    "graphene_django",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -129,5 +142,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(PROJECT_DIR)
+sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
+
 STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
 STATIC_URL = "/static/"
+
+GRAPHENE = {
+    "SCHEMA": "covidX.schema.schema",
+    "SCHEMA_OUTPUT": "schema.json",
+    "SCHEMA_INDENT": 2,
+}
