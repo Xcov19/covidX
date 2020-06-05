@@ -1,8 +1,9 @@
-import django_filters
+# import django_filters
 import graphene
-from graphene import relay
-from graphene_django import DjangoObjectType
-from graphene_django.filter import DjangoFilterConnectionField
+
+# from graphene import relay
+# from graphene_django import DjangoObjectType
+# from graphene_django.filter import DjangoFilterConnectionField
 
 
 class HealthStat(graphene.ObjectType):
@@ -12,5 +13,5 @@ class HealthStat(graphene.ObjectType):
 class Query(graphene.ObjectType):
     health_stat = graphene.Field(HealthStat)
 
-    def resolve_health_stat(self, info):
+    def resolve_health_stat(self, _info):
         return HealthStat("ok")
