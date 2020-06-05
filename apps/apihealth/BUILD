@@ -32,3 +32,14 @@ py_library(
     srcs = ["views.py"],
     deps = [requirement("django")],
 )
+
+py_library(
+    name = "schema",
+    srcs = ["schema.py"],
+    deps = [requirement(r) for r in [
+        "graphene",
+        "graphene-django",
+        "django-filter",
+        ]
+    ],
+)
