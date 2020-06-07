@@ -17,6 +17,8 @@ py_library(
     srcs = ["settings.py"],
     deps = [
         ":schema",
+        "//apps/apihealth:apps",
+        "//apps/hrm:apps",
     ],
 )
 
