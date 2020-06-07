@@ -106,7 +106,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": "localhost",
-            "PORT": f'{os.getenv("DB_PORT", 5432)}',
+            "PORT": os.getenv("DB_PORT", "5432"),
             "NAME": "covid",
             "USER": "covid",
             "PASSWORD": "postgres",
