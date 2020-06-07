@@ -1,4 +1,4 @@
-django             # via -r requirements.in (line 1)
+django==3.0.7             # via -r requirements.in (line 1)
 gevent==1.4.0             # via gunicorn
 greenlet==0.4.15          # via gevent
 gunicorn[gevent]  # via -r requirements.in (line 2)
