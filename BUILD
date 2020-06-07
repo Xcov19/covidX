@@ -7,7 +7,7 @@ load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
  "container",
  "image")
 load("@io_bazel_rules_docker//python:image.bzl", "py_layer")
-load("@io_bazel_rules_k8s//k8s:object.bzl", "k8s_object")
+# load("@io_bazel_rules_k8s//k8s:object.bzl", "k8s_object")
 
 load("@rules_python//python:defs.bzl", "py_runtime_pair")
 
@@ -60,7 +60,6 @@ py_binary(
     deps = [
         "//covidX:settings",
         "//covidX:urls",
-        # "//covidX:wsgi",
         "//covidX:asgi",
     ] + [requirement(pkg) for pkg in _REQ],
 )

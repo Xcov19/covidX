@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sys
 
+from apps.apihealth.apps import APIHealthConfig
+
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -52,6 +54,8 @@ INSTALLED_APPS = [
     "django_extensions",
     "graphene_django",
     "corsheaders",
+    "apps.hrm.apps.HrmConfig",
+    "apps.apihealth.apps.APIHealthConfig",
 ]
 
 MIDDLEWARE = [
@@ -104,7 +108,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": "localhost",
-            "PORT": f'{os.getenv("DB_PORT")}',
+            "PORT": f'{os.getenv("DB_PORT", 5432)}',
             "NAME": "covid",
             "USER": "covid",
             "PASSWORD": "postgres",
@@ -141,11 +145,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(PROJECT_DIR)
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
 sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
 
-STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
 GRAPHENE = {
