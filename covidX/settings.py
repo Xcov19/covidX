@@ -162,7 +162,7 @@ if os.environ.get("AUTH0_AUDIENCE"):
     AUDIENCE = os.environ.get("AUTH0_AUDIENCE")
 else:
     if SOCIAL_AUTH_AUTH0_DOMAIN:
-        AUDIENCE = "https://" + SOCIAL_AUTH_AUTH0_DOMAIN + "/userinfo"
+        AUDIENCE = f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
 if AUDIENCE:
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
 AUTHENTICATION_BACKENDS = {
