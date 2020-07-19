@@ -10,11 +10,18 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import os
+import sys
 
-
+PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "TIMEOUT": 1800,
+    }
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -26,7 +33,11 @@ SECRET_KEY = "EOakcFyDvwLstAthJy1zTpSQbka1SHFm"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    os.getenv("DJANGO_ALLOWED_HOST", "localhost"),
+    "127.0.0.1",
+    os.getenv("DOMAIN_NAME", ""),
+]
 
 
 # Application definition
@@ -38,10 +49,12 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "social_django",
+    "django_extensions",
+    "corsheaders",
+    "apps.hrm.apps.HrmConfig",
+    "apps.apihealth.apps.APIHealthConfig",
 ]
 
-MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -69,8 +82,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "covidX.wsgi.application"
+# WSGI_APPLICATION = "covidX.wsgi.application"
 
+ASGI_APPLICATION = "covidX.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -90,7 +104,7 @@ else:
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": "localhost",
-            "PORT": f'{os.getenv("DB_PORT")}',
+            "PORT": os.getenv("DB_PORT", "5432"),
             "NAME": "covid",
             "USER": "covid",
             "PASSWORD": "postgres",
@@ -127,8 +141,10 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-PROJECT_DIR = os.path.dirname(os.path.abspath(__file__))
-STATIC_ROOT = os.path.join(PROJECT_DIR, "static")
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
 
@@ -153,3 +169,8 @@ AUTHENTICATION_BACKENDS = {
 
 LOGIN_URL = "/login/auth0"
 LOGIN_REDIRECT_URL = "/dashboard"
+GRAPHENE = {
+    "SCHEMA": "covidX.schema.schema",
+    "SCHEMA_OUTPUT": "schema.json",
+    "SCHEMA_INDENT": 2,
+}

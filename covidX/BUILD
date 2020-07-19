@@ -15,6 +15,11 @@ py_library(
 py_library(
     name = "settings",
     srcs = ["settings.py"],
+    deps = [
+        ":schema",
+        "//apps/apihealth:apps",
+        "//apps/hrm:apps",
+    ],
 )
 
 py_library(
@@ -22,8 +27,21 @@ py_library(
     srcs = ["urls.py"],
     deps = [
         requirement("django"),
+        requirement("graphene-django"),
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
+    ],
+)
+
+py_library(
+    name = "schema",
+    srcs = ["schema.py"],
+    deps = [requirement(r) for r in [
+            "graphene",
+            "graphene-django",
+        ]
+    ] + [
+        "//apps/apihealth:schema",
     ],
 )
 

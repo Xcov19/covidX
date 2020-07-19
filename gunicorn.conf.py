@@ -6,7 +6,10 @@ import dotenv
 
 # Parameters
 GUNICORN_PORT = os.getenv("GUNICORN_PORT", "8080")
-LOG_DIR = os.getenv("LOG_DIR", os.path.abspath(os.path.dirname(__file__)),)
+LOG_DIR = os.getenv(
+    "LOG_DIR",
+    os.path.abspath(os.path.join(os.path.dirname(__file__), "server_logs.txt")),
+)
 
 
 def max_workers() -> int:

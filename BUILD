@@ -7,7 +7,7 @@ load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
  "container",
  "image")
 load("@io_bazel_rules_docker//python:image.bzl", "py_layer")
-load("@io_bazel_rules_k8s//k8s:object.bzl", "k8s_object")
+# load("@io_bazel_rules_k8s//k8s:object.bzl", "k8s_object")
 
 load("@rules_python//python:defs.bzl", "py_runtime_pair")
 
@@ -24,14 +24,15 @@ _REQ = [
         "psycopg2-binary",
         "psycopg2",
         "pyopenssl",
-
+        "Werkzeug",
+        #Misc
+        'django_extensions',
         # Django related packages
         "django-model-utils",
         "django-phonenumber-field",
         "phonenumbers",
         "social-auth-app-django",
         "graphene-file-upload",
-        "django-extensions",
 
         # Tests and Fixtures
         "factory-boy",
@@ -59,7 +60,7 @@ py_binary(
     deps = [
         "//covidX:settings",
         "//covidX:urls",
-        "//covidX:wsgi",
+        "//covidX:asgi",
     ] + [requirement(pkg) for pkg in _REQ],
 )
 

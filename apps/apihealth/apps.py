@@ -6,4 +6,4 @@ class APIHealthConfig(AppConfig):
     App configuration for api health
     """
 
-    name = "apihealth"
+    name = "apps.apihealth"
