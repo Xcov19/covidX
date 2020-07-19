@@ -21,6 +21,7 @@ class Auth0(BaseOAuth2):
 
     def get_user_id(self, details, response):
         """Return current user id."""
+        print(response)
         return details["user_id"]
 
     def get_user_details(self, response):
