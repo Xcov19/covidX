@@ -24,8 +24,8 @@ def max_workers() -> int:
     The number 12 comes from the following line:
 
     `DO NOT scale the number of workers to the number of clients you expect to have.
-    Gunicorn should only need 4-12 worker processes to handle hundreds or thousands of requests
-    per second.`
+    Gunicorn should only need 4-12 worker processes to handle hundreds or thousands
+    of requests per second.`
 
     Link: http://docs.gunicorn.org/en/stable/design.html#how-many-workers
     """
@@ -57,8 +57,11 @@ capture_output = True
 workers = max_workers()
 
 # If we run Gunicorn within a docker command, the worker heartbeat mechanism will
-# be created in /tmp within the container which is actually on the disk and hence can be
-# slow when it comes to responding to the heartbeat request
-# Setting the location to a tmpfs mount will help with quick response to the hearbeat requests
-# Details: http://docs.gunicorn.org/en/stable/faq.html#how-do-i-avoid-gunicorn-excessively-blocking-in-os-fchmod
+# be created in /tmp within the container which is actually on the disk and hence
+# can be slow when it comes to responding to the heartbeat request
+# Setting the location to a tmpfs mount will help with quick response to the
+# hearbeat requests.
+# Details: https://bit.ly/32MDyB0 (http://docs.gunicorn.org/en/stable/faq.html
+# #how-do-i-avoid-gunicorn-excessively-blocking-in-os-fchmod)
+
 worker_tmp_dir = "/dev/shm"
