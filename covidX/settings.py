@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     "social_django",
     "django_extensions",
     "graphene_django",
+    "algoliasearch_django",
     "corsheaders",
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
@@ -177,3 +178,8 @@ GRAPHENE = {
     "SCHEMA_OUTPUT": "schema.json",
     "SCHEMA_INDENT": 2,
 }
+
+ALGOLIA = {
+            'APPLICATION_ID': 'YourApplicationID',
+                'API_KEY': 'YourAdminAPIKey'
+                }
