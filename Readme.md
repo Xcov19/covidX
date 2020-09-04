@@ -6,6 +6,8 @@
 
 ![CI](https://github.com/Xcov19/covidX/workflows/CI/badge.svg)
 
+[![Open Source Helpers](https://www.codetriage.com/xcov19/covidx/badges/users.svg)](https://www.codetriage.com/xcov19/covidx)
+
 We are an open community of volunteers without a commercial purpose. We believe that through a utilitarian approach, we can do the most good in the quickest time. Applying unused engineering we can help the world cope with the threat of COVID-19.
 
 #### Python Version
