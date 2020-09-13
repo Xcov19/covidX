@@ -32,3 +32,4 @@ bazel-covidx/$HOME/
 bazel-out/*
 bazel-out
 bazel-bin
+bazel-covidX

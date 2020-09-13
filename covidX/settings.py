@@ -28,15 +28,15 @@ CACHES = {
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "EOakcFyDvwLstAthJy1zTpSQbka1SHFm"
+SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
 ALLOWED_HOSTS = [
     os.getenv("DJANGO_ALLOWED_HOST", "localhost"),
     "127.0.0.1",
-    os.getenv("DOMAIN_NAME", ""),
+    os.getenv("DOMAIN_NAME"),
 ]
 
 
