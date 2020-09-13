@@ -4,3 +4,4 @@
 pip
 pre-commit
 pylint_django
+black

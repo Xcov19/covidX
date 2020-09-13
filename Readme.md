@@ -11,7 +11,7 @@
 We are an open community of volunteers without a commercial purpose. We believe that through a utilitarian approach, we can do the most good in the quickest time. Applying unused engineering we can help the world cope with the threat of COVID-19.
 
 #### Python Version
-covidX will be run on python *3.7.6*
+covidX will be run on python *3.7.6* and *3.8.5*
 
 #### Installation
 Clone this git repo and then build like:
