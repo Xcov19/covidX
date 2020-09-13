@@ -1,5 +1,5 @@
 # [START django_app]
-runtime: python37
+runtime: python38
 env_variables:
   BUCKET_NAME: "gae-bizlead"
 
