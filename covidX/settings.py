@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sys
 
+from covidX import gae_settings as gae
+
+
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -28,7 +31,8 @@ CACHES = {
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+# When running on GAE, access from gcp secret manager.
+SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
