@@ -4,11 +4,7 @@ from google.cloud import secretmanager
 
 
 def access_secret_key_version():
-    """Access the payload for the given secret version if one exists.
-
-    The version can be a version number as a string (e.g. "5")
-    or an alias (e.g. "latest").
-    """
+    """Access the payload for the given secret version if one exists."""
     if not os.getenv("GAE_APPLICATION"):
         return None
 
