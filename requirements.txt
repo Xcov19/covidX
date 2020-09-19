@@ -39,3 +39,6 @@ django-cors-headers
 # Tests and Fixtures
 factory-boy==2.12.0
 snapshottest==0.5.1
+
+# GAE related libraries
+google-cloud-secret-manager

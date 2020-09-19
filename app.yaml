@@ -2,6 +2,7 @@
 runtime: python38
 env_variables:
   BUCKET_NAME: "gae-bizlead"
+  SECRET_ID: "SECRET_KEY"
 
 handlers:
 # This configures Google App Engine to serve the files in the app's static
@@ -16,6 +17,9 @@ handlers:
   secure: always
   script: auto
 # TODO(codecakes): Remove later when staging/prod.
-basic_scaling:
+automatic_scaling:
+  min_idle_instances: 1
+  min_instances: 1
   max_instances: 1
+
 # [END django_app]
