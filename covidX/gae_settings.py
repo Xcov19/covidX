@@ -9,7 +9,6 @@ def access_secret_key_version():
     The version can be a version number as a string (e.g. "5")
     or an alias (e.g. "latest").
     """
-
     if not os.getenv("GAE_APPLICATION"):
         return None
 
