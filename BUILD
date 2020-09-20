@@ -2,18 +2,11 @@ package(default_visibility = ["//visibility:public"])
 
 load("@my_deps//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary")
-load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
-("@io_bazel_rules_docker//container:image.bzl",
- "container",
- "image")
-load("@io_bazel_rules_docker//python:image.bzl", "py_layer")
-# load("@io_bazel_rules_k8s//k8s:object.bzl", "k8s_object")
 
-load("@rules_python//python:defs.bzl", "py_runtime_pair")
 
 _REQ = [
         "asgiref",
-        "django",             # via -r requirements.in (line 1)
+        "django==3.0.7",             # via -r requirements.in (line 1)
         "gevent",             # via gunicorn
         "greenlet",          # via gevent
         # Gunicorn
@@ -32,7 +25,6 @@ _REQ = [
         "django-phonenumber-field",
         "phonenumbers",
         "social-auth-app-django",
-        "graphene-file-upload",
 
         # Tests and Fixtures
         "factory-boy",
@@ -48,6 +40,18 @@ _REQ = [
         "graphene-django",
         "django-filter",
         "django-cors-headers",
+
+        # GAE related libraries
+        "google-cloud==0.34.0",
+        "google-api-core[grpc]==1.22.2",  # via google-cloud-secret-manager
+        "google-auth==1.21.2",       # via google-api-core
+        "google-cloud-secret-manager==2.0.0",  # via -r requirements.txt
+        "googleapis-common-protos[grpc]==1.52.0",  # via google-api-core, grpc-google-iam-v1
+        "graphene-django==2.13.0",   # via -r requirements.txt
+        "graphene-file-upload==1.2.2",  # via -r requirements.txt
+        "graphene==2.1.8",           # via graphene-django
+        "graphql-core==2.3.2",       # via graphene, graphene-django, graphql-relay
+        "graphql-relay==2.0.1",      # via graphene
     ]
 
 py_binary(
@@ -75,42 +79,3 @@ py_binary(
     stamp=0,
     visibility=["//visibility:public"],
 )
-
-py_runtime(
-    name = "py37",
-    interpreter_path = "/usr/bin/python3",
-    files = [],
-)
-
-py_runtime_pair(
-    name = "pair",
-    py3_runtime = ":py37",
-)
-
-toolchain(
-    name = "my_toolchain",
-#    target_compatible_with = <...>,
-    toolchain = ":pair",
-    toolchain_type = "@rules_python//python:toolchain_type",
-)
-#
-#py3_image(
-#  name='main',
-#  srcs=['main.py'],
-#  main='main.py',
-#  stamp=0,
-#  layers=[
-#    # This takes the name as specified in requirements.txt
-#    "//:manage",
-#  ],
-#  visibility=['//visibility:public'],
-#)
-#
-#k8s_object(
-#    name = "dev",
-#    kind="deployment",
-#    images = {
-#        "covidx:latest": ":main",
-#    },
-#    template = "//:deployment.yaml",
-#)

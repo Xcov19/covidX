@@ -16,9 +16,18 @@ py_library(
     name = "settings",
     srcs = ["settings.py"],
     deps = [
+        ":gae_settings",
         ":schema",
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
+    ],
+)
+
+py_library(
+    name = "gae_settings",
+    srcs = ["gae_settings.py"],
+    deps = [
+        requirement("google-cloud-secret-manager"),
     ],
 )
 
