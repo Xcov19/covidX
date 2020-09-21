@@ -15,10 +15,10 @@ covidX will be run on python *3.7.6* and *3.8.5*
 
 #### Installation
 
-Setup SECRET_KEY and DEBUG env vars for in settings.py.
-Then,
+FIRST SEE HERE: https://forum.mycovidconnect.com/d/14-how-to-contribute-backenddjangopython-devs
 
-- Clone this git repo
+Then,
+- Clone this git repo. SECRET_KEY and DEBUG env vars are in settings.py.
 - Pre-requisites:
 ```bash
 export DEBUG_ENV=1
@@ -59,5 +59,6 @@ gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
 ```
 
 
-TODO:
+TODO/TBA:
     How to contribute. Coming soon.
+    Project Roadmap
