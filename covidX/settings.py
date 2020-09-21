@@ -38,9 +38,9 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
 ALLOWED_HOSTS = [
-    os.getenv("DJANGO_ALLOWED_HOST", "localhost"),
-    "127.0.0.1",
-    os.getenv("DOMAIN_NAME"),
+    "*",
+    os.getenv("DJANGO_ALLOWED_HOST", "127.0.0.1"),
+    "localhost",
 ]
 
 
@@ -89,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-# WSGI_APPLICATION = "covidX.wsgi.application"
+WSGI_APPLICATION = "covidX.wsgi.application"
 
 ASGI_APPLICATION = "covidX.asgi.application"
 
