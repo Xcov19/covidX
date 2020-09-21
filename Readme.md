@@ -18,7 +18,15 @@ covidX will be run on python *3.7.6* and *3.8.5*
 Setup SECRET_KEY and DEBUG env vars for in settings.py.
 Then,
 
-Clone this git repo and then build like:
+- Clone this git repo
+- Pre-requisites:
+```bash
+export DEBUG_ENV=1
+export SECRET_KEY=<YOUR_SECRET>
+CPPFLAGS="$(pg_config --cppflags)
+LDFLAGS="$(pg_config --ldflags)"
+```
+- and then build like:
 ```bash
 bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=20 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)"
 
