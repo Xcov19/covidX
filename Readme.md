@@ -32,7 +32,11 @@ bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@baze
 
 ```
 
-Run it like:
+- Collectstatic
+```bash
+bazel run -s :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=200 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=SECRET_KEY --action_env=DEBUG_ENV -- collectstatic
+```
+- Then Run it like:
 
 With Debug Mode:
 
