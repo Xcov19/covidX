@@ -10,6 +10,7 @@ py_library(
     name = "asgi",
     srcs = ["asgi.py"],
     deps = [requirement("django")],
+    srcs_version="PY3",
 )
 
 py_library(
@@ -21,6 +22,7 @@ py_library(
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
     ],
+    srcs_version="PY3",
 )
 
 py_library(
@@ -29,6 +31,7 @@ py_library(
     deps = [
         requirement("google-cloud-secret-manager"),
     ],
+    srcs_version="PY3",
 )
 
 py_library(
@@ -40,6 +43,7 @@ py_library(
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
     ],
+    srcs_version="PY3",
 )
 
 py_library(
@@ -52,10 +56,12 @@ py_library(
     ] + [
         "//apps/apihealth:schema",
     ],
+    srcs_version="PY3",
 )
 
 py_library(
     name = "wsgi",
     srcs = ["wsgi.py"],
     deps = [requirement("django")],
+    srcs_version="PY3",
 )

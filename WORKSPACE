@@ -1,6 +1,7 @@
 workspace(name = "covidx")
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 
 http_archive(
     name = "com_github_ali5h_rules_pip",
@@ -9,6 +10,60 @@ http_archive(
     urls = ["https://github.com/ali5h/rules_pip/archive/3.0.0.tar.gz"],
 )
 load("@com_github_ali5h_rules_pip//:defs.bzl", "pip_import")
+
+http_archive(
+    name = "bazel_skylib",
+    urls = [
+        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+    ],
+    sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+)
+# Add skylib common_settings dependency for buildifier
+load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
+bazel_skylib_workspace()
+
+# Download the rules_docker repository at release v0.14.4
+git_repository(
+    name = "io_bazel_rules_docker",
+    remote = "https://github.com/bazelbuild/rules_docker.git",
+    tag = "v0.14.4",
+)
+
+load(
+    "@io_bazel_rules_docker//repositories:repositories.bzl",
+    container_repositories = "repositories",
+)
+container_repositories()
+
+load("@io_bazel_rules_docker//repositories:deps.bzl", container_deps = "deps")
+
+container_deps()
+
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_pull",
+    "container_image",
+)
+
+container_pull(
+  name = "python3_image",
+  registry = "index.docker.io",
+  repository = "codecakes/buster_py",
+  # 'tag' is also supported, but digest is encouraged for reproducibility.
+  digest = "sha256:c461bf44bafc3b434ec6818075cf499338b8ff934130989a288e5a045b076c16",
+)
+
+load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
+
+pip_deps()
+
+load(
+    "@io_bazel_rules_docker//python3:image.bzl",
+    _py3_image_repos = "repositories",
+)
+
+_py3_image_repos()
 
 http_archive(
     name = "rules_python",
@@ -22,7 +77,6 @@ load("@rules_python//python:repositories.bzl",
 py_repositories()
 # Only needed if using the packaging rules.
 
-#load("@rules_python//python:pip.bzl", "pip3_import", "pip_repositories")
 load("@rules_python//python:pip.bzl", "pip_repositories")
 pip_repositories()
 
@@ -35,20 +89,6 @@ pip_import(
    compile=True,
    python_interpreter="python3",
 )
-
-# Add skylib common_settings dependency for buildifier
-load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-http_archive(
-    name = "bazel_skylib",
-    urls = [
-        "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
-        "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
-    ],
-    sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
-)
-load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
-bazel_skylib_workspace()
-
 
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
