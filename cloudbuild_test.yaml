@@ -1,6 +1,6 @@
 steps:
 - name: 'index.docker.io/codecakes/buster_py'
-  args: ['pip', 'install', '-t', '/workspace/lib', '--no-deps', '--only-binary', ':all:', '--python-version', '3.8', '-r', 'requirements.txt']
+  args: ['-m', 'pip3', 'install', '-r', 'requirements.txt']
 - name: 'index.docker.io/codecakes/buster_py'
   args: ['manage.py', 'collectstatic']
 - name: 'gcr.io/cloud-builders/gcloud'
