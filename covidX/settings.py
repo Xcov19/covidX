@@ -96,8 +96,8 @@ ASGI_APPLICATION = "covidX.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if GAE_APPLICATION := os.getenv("GAE_APPLICATION", False) and (
-    CONNECTION_NAME := os.getenv("CONNECTION_NAME", False)
+if GAE_APPLICATION := os.getenv("GAE_APPLICATION", None) and (
+    CONNECTION_NAME := os.getenv("CONNECTION_NAME", None)
 ):
     DATABASES = {
         "default": {
