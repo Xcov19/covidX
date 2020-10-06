@@ -33,3 +33,5 @@ bazel-out/*
 bazel-out
 bazel-bin
 bazel-covidX
+bitbucket-pipelines.yml
+docker_repo_cache/
