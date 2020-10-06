@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/google-appengine/python'
-  args: ['pip', 'install', '--platform', 'manylinux1_x86_64', '--only-binary', ':all:', '--python-version', '3.8', '-r', 'requirements.txt']
+  args: ['pip', 'install', '-r', 'requirements.txt']
 - name: 'gcr.io/google-appengine/python'
   args: ['manage.py', 'collectstatic']
 - name: 'gcr.io/cloud-builders/gcloud'
