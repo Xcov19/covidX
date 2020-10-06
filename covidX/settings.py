@@ -96,11 +96,13 @@ ASGI_APPLICATION = "covidX.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if os.getenv("GAE_APPLICATION", None):
+if GAE_APPLICATION := os.getenv("GAE_APPLICATION", False) and (
+    CONNECTION_NAME := os.getenv("CONNECTION_NAME", False)
+):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "HOST": f'/cloudsql/{os.getenv("CONNECTION_NAME")}',
+            "HOST": f"/cloudsql/{CONNECTION_NAME}",
             "USER": f'{os.getenv("DB_USER")}',
             "PASSWORD": f'{os.getenv("DB_PWD")}',
             "NAME": f'{os.getenv("DB_NAME")}',
