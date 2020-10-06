@@ -1,7 +1,4 @@
 steps:
 - name: 'index.docker.io/codecakes/buster_py'
-  args: ['-m', 'pip', 'install', '-r', 'requirements.txt']
-- name: 'index.docker.io/codecakes/buster_py'
-  args: ['manage.py', 'collectstatic']
-- name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app', 'deploy', '--verbosity=debug', '--stop-previous-version']
+  entrypoint: 'bash'
+  args: ['./gen_static.sh']
