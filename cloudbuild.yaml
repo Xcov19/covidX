@@ -1,7 +1,8 @@
 steps:
-- name: 'gcr.io/google-appengine/python'
-  args: ['pip', 'install', '--python-version', '3.8', '-r', 'requirements.txt']
-- name: 'gcr.io/google-appengine/python'
-  args: ['manage.py', 'collectstatic']
+- name: 'index.docker.io/codecakes/buster_py'
+  entrypoint: 'bash'
+  args: ['./gen_static.sh']
+  env:
+    - 'SECRET_KEY=testsecret'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', '--verbosity=debug', '--stop-previous-version']
