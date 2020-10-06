@@ -1,8 +1,11 @@
 steps:
+- name: 'gcr.io/kaniko-project/executor:latest'
+  args:
+  - --destination=gcr.io/$PROJECT_ID/$PROJECT_ID-test-pr
+  - --cache=true
+  - --cache-ttl=12h
 - name: 'index.docker.io/codecakes/buster_py'
   entrypoint: 'bash'
   args: ['./gen_static.sh']
   env:
     - 'SECRET_KEY=testsecret'
-images:
-- 'gcr.io/$PROJECT_ID/$PROJECT_ID-test-PR'
