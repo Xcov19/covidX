@@ -4,7 +4,6 @@ load("@my_deps//:requirements.bzl", "requirement")
 load("@rules_python//python:defs.bzl", "py_binary")
 load("@com_github_bazelbuild_buildtools//buildifier:def.bzl", "buildifier")
 load("@io_bazel_rules_docker//python3:image.bzl", "py3_image")
-load("@io_bazel_rules_docker//container:image.bzl", "container_image")
 load("@rules_python//python:defs.bzl", "py_runtime_pair")
 
 # TODO(@codecakes): run after fix:
