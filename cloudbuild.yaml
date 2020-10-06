@@ -1,9 +1,7 @@
 steps:
+- name: 'gcr.io/google-appengine/python3'
+  args: ['-m', 'pip', 'install', '-r', 'requirements.txt']
+- name: 'gcr.io/google-appengine/python3'
+  args: ['manage.py', 'collectstatic']
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', '--verbosity=debug', '--stop-previous-version']
-  env:
-    - 'CPPFLAGS=$(pg_config --cppflags)'
-    - 'LDFLAGS=$(pg_config --ldflags)'
-    - 'SECRET_ID=SECRET_KEY'
-    - 'DJANGO_SETTINGS_MODULE=covidX.settings'
-    - 'WSGI_APPLICATION=covidX.wsgi.application'
