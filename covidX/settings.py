@@ -186,6 +186,6 @@ GRAPHENE = {
 }
 
 ALGOLIA = {
-            'APPLICATION_ID': 'YourApplicationID',
-            'API_KEY': 'YourAdminAPIKey'
+    'APPLICATION_ID': 'YourApplicationID',
+    'API_KEY': 'YourAdminAPIKey'
 }   
