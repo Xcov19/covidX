@@ -184,8 +184,4 @@ GRAPHENE = {
     "SCHEMA_OUTPUT": "schema.json",
     "SCHEMA_INDENT": 2,
 }
-ALGOLIA = {
-    'APPLICATION_ID': 'YourApplicationID',
-    'API_KEY': 'YourAdminAPIKey'
-}
-
+ALGOLIA = {"APPLICATION_ID": "YourApplicationID", "API_KEY": "YourAdminAPIKey"}
