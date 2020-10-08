@@ -93,6 +93,7 @@ wasmer==0.4.1             # via -r requirements.txt, fastdiff
 wcwidth==0.2.5            # via -r requirements.txt, prompt-toolkit
 werkzeug==1.0.1           # via -r requirements.txt
 xlrd==1.2.0               # via -r requirements.txt
+algoliasearch-django==1.7.1  # via -r requirements.txt
 
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==50.3.0        # via -r requirements.txt, google-api-core, google-auth, gunicorn, ipdb, ipython, protobuf
