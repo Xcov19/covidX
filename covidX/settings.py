@@ -185,6 +185,6 @@ GRAPHENE = {
     "SCHEMA_INDENT": 2,
 }
 ALGOLIA = {
-    "APPLICATION_ID": os.getenv("APPLICATION_ID"),
-    "API_KEY": os.getenv("API_KEY"),
+    "APPLICATION_ID": os.getenv("ALGOLIA_APPLICATION_ID"),
+    "API_KEY": os.getenv("ALGOLIA_API_KEY"),
 }
