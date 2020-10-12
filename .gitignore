@@ -62,3 +62,4 @@ $HOME
 static/
 docker_repo_cache/
 apps/*/migrations/**
+apps/*/static/**

@@ -23,7 +23,6 @@ from graphene_django.views import GraphQLView
 urlpatterns = [
     re_path(r"^apihealth/?$", include("apps.apihealth.urls")),
     path("admin/", admin.site.urls),
-    # TODO: add BUILD for this
-    # path("", include("apps.auth.urls")),
+    path("auth0/", include("apps.auth_zero.urls")),
     re_path(r"^api/graphql/?$", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]

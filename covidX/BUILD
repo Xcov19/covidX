@@ -21,6 +21,7 @@ py_library(
         ":schema",
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
+        "//apps/auth_zero:apps",
     ],
     srcs_version="PY3",
 )
@@ -42,6 +43,8 @@ py_library(
         requirement("graphene-django"),
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
+        "//apps/auth_zero:apps",
+        "//apps/auth_zero:urls",
     ],
     srcs_version="PY3",
 )

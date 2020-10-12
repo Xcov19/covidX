@@ -1,12 +1,13 @@
 from django.urls import include
+from django.conf.urls import url
 from django.urls import path
 
-from . import views
+from apps.auth_zero import views
 
 urlpatterns = [
-    path("", views.index),
-    path("dashboard", views.dashboard),
-    path("logout", views.logout),
-    path("", include("django.contrib.auth.urls")),
-    path("", include("social_django.urls")),
+    path("", views.index, name="az_index"),
+    path("dashboard", views.dashboard, name="az_dashboard"),
+    path("logout", views.logout, name="az_logout"),
+    path("", include("django.contrib.auth.urls"), name="az_login"),
+    path("", include("social_django.urls"), name="az_login"),
 ]

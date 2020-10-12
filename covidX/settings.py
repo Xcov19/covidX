@@ -11,13 +11,21 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import os
 import sys
-
+import glob
+from dotenv import load_dotenv
 from covidX import gae_settings as gae
+
+# load variables values into ENV
 
 
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.dirname(BASE_DIR)
+ENV = os.path.join(os.path.expanduser(PROJECT_ROOT), '.env')
+load_dotenv(ENV)
+
+sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
 
 CACHES = {
     "default": {
@@ -59,6 +67,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
+    "apps.auth_zero.apps.Auth0LoginConfig",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +85,7 @@ ROOT_URLCONF = "covidX.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "apps/auth/templates")],
+        "DIRS": glob.glob(os.path.join(os.getcwd(), "apps/*/templates")),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -114,9 +123,9 @@ else:
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": "localhost",
             "PORT": os.getenv("DB_PORT", "5432"),
-            "NAME": "covid",
-            "USER": "covid",
-            "PASSWORD": "postgres",
+            "NAME": "covidx",
+            "USER": "covidx",
+            "PASSWORD": "covidx",
         }
     }
 
@@ -149,20 +158,16 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-PROJECT_ROOT = os.path.dirname(BASE_DIR)
-sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = "/static/"
 
 
 # SOCIAL AUTH AUTH0 BACKEND CONFIG
-SOCIAL_AUTH_TRAILING_SLASH = False
-SOCIAL_AUTH_AUTH0_KEY = os.environ.get("AUTH0_CLIENT_ID")
-SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+SOCIAL_AUTH_TRAILING_SLASH = os.getenv("SOCIAL_AUTH_TRAILING_SLASH")
+SOCIAL_AUTH_AUTH0_KEY = os.environ.get("SOCIAL_AUTH_AUTH0_KEY")
+SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
-SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
+SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
 AUDIENCE = None
 if os.environ.get("AUTH0_AUDIENCE"):
     AUDIENCE = os.environ.get("AUTH0_AUDIENCE")
@@ -172,12 +177,12 @@ else:
 if AUDIENCE:
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
 AUTHENTICATION_BACKENDS = {
-    "apps.auth.auth0backend.Auth0",
+    "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
 }
+LOGIN_URL = "/auth0/login/auth0"
+LOGIN_REDIRECT_URL = "/"
 
-LOGIN_URL = "/login/auth0"
-LOGIN_REDIRECT_URL = "/dashboard"
 GRAPHENE = {
     "SCHEMA": "covidX.schema.schema",
     "SCHEMA_OUTPUT": "schema.json",

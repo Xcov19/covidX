@@ -26,6 +26,11 @@ jobs:
       uses: actions/setup-python@v1
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        DB_PORT: ${{ secrets.DB_PORT }}
+        SOCIAL_AUTH_TRAILING_SLASH: ${{ secrets.SOCIAL_AUTH_TRAILING_SLASH }}
+        SOCIAL_AUTH_AUTH0_DOMAIN: ${{ secrets.SOCIAL_AUTH_AUTH0_DOMAIN }}
+        SOCIAL_AUTH_AUTH0_KEY: ${{ secrets.SOCIAL_AUTH_AUTH0_KEY }}
+        SOCIAL_AUTH_AUTH0_SECRET: ${{ secrets.SOCIAL_AUTH_AUTH0_SECRET }}
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
