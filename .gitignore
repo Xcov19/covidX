@@ -61,3 +61,4 @@ __pycache__/
 $HOME
 static/
 docker_repo_cache/
+apps/*/migrations/**
