@@ -199,7 +199,8 @@ REST_FRAMEWORK = {
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 
-# See: https://django-guardian.readthedocs.io/en/stable/configuration.html#guardian-raise-403
+# See: https://django-guardian.readthedocs.io/en/stable/\
+# configuration.html#guardian-raise-403
 GUARDIAN_RENDER_403 = True
 
 GRAPHENE = {
