@@ -4,7 +4,6 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes requirements.txt
 #
-
 aniso8601==7.0.0 \
     --hash=sha256:513d2b6637b7853806ae79ffaca6f3e8754bdd547048f5ccc1420aec4b714f1e \
     --hash=sha256:d10a4bf949f619f719b227ef5386e31f49a2b6d453004b21f02661ccc8670c7b \
@@ -103,6 +102,10 @@ django-filter==2.3.0 \
     --hash=sha256:11e63dd759835d9ba7a763926ffb2662cf8a6dcb4c7971a95064de34dbc7e5af \
     --hash=sha256:616848eab6fc50193a1b3730140c49b60c57a3eda1f7fc57fa8505ac156c6c75 \
     # via -r requirements.txt
+django-guardian==2.3.0 \
+    --hash=sha256:0e70706c6cda88ddaf8849bddb525b8df49de05ba0798d4b3506049f0d95cbc8 \
+    --hash=sha256:ed2de26e4defb800919c5749fb1bbe370d72829fbd72895b6cf4f7f1a7607e1b \
+    # via -r requirements.txt
 django-model-utils==4.0.0 \
     --hash=sha256:9cf882e5b604421b62dbe57ad2b18464dc9c8f963fc3f9831badccae66c1139c \
     --hash=sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061 \
@@ -114,11 +117,15 @@ django-phonenumber-field==5.0.0 \
 django==3.0.7 \
     --hash=sha256:5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2 \
     --hash=sha256:e1630333248c9b3d4e38f02093a26f1e07b271ca896d73097457996e0fae12e8 \
-    # via -r requirements.txt, django-cors-headers, django-filter, django-model-utils, django-phonenumber-field, graphene-django
+    # via -r requirements.txt, django-cors-headers, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, graphene-django
+djangorestframework==3.12.1 \
+    --hash=sha256:5c5071fcbad6dce16f566d492015c829ddb0df42965d488b878594aabc3aed21 \
+    --hash=sha256:d54452aedebb4b650254ca092f9f4f5df947cb1de6ab245d817b08b4f4156249 \
+    # via -r requirements.txt
 ecdsa==0.14.1 \
     --hash=sha256:64c613005f13efec6541bb0a33290d0d03c27abab5f15fbab20fb0ee162bdd8e \
     --hash=sha256:e108a5fe92c67639abae3260e43561af914e7fd0d27bae6d2ec1312ae7934dfe \
-    # via python-jose
+    # via -r requirements.txt, python-jose
 et-xmlfile==1.0.1 \
     --hash=sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b \
     # via -r requirements.txt, openpyxl
@@ -297,6 +304,10 @@ libcst==0.3.10 \
     --hash=sha256:b0dccbfc1cff7bfa3214980e1d2d90b4e00b2fed002d4b276a8a411217738df3 \
     --hash=sha256:e9395d952a490e6fc160f2bea8df139bdf1fdcb3fe4c01b88893da279eff00de \
     # via -r requirements.txt, google-cloud-secret-manager
+markdown==3.3.1 \
+    --hash=sha256:10db1204a6c4aff7c7cf3cf25cc02761703baea54b6fb5e2b9ce2c186d81116f \
+    --hash=sha256:c3ce9ebb035c078cac0f2036068d054e7dc34354eeecc49c173c33c96b124af6 \
+    # via -r requirements.txt
 mypy-extensions==0.4.3 \
     --hash=sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d \
     --hash=sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8 \
@@ -491,7 +502,7 @@ singledispatch==3.4.0.3 \
 six==1.15.0 \
     --hash=sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259 \
     --hash=sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced \
-    # via -r requirements.txt, cryptography, google-api-core, google-auth, graphene, graphene-django, graphene-file-upload, graphql-core, graphql-relay, grpcio, promise, protobuf, pyopenssl, python-dateutil, python-jose, singledispatch, snapshottest, social-auth-app-django, social-auth-core
+    # via -r requirements.txt, cryptography, ecdsa, google-api-core, google-auth, graphene, graphene-django, graphene-file-upload, graphql-core, graphql-relay, grpcio, promise, protobuf, pyopenssl, python-dateutil, python-jose, singledispatch, snapshottest, social-auth-app-django, social-auth-core
 snapshottest==0.5.1 \
     --hash=sha256:2cc7157e77674ea8ebeb2351466ff50cd4b5ad8e213adc06df9c16a75ab5bafc \
     # via -r requirements.txt
@@ -534,6 +545,10 @@ unidecode==1.1.1 \
     --hash=sha256:1d7a042116536098d05d599ef2b8616759f02985c85b4fef50c78a5aaf10822a \
     --hash=sha256:2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8 \
     # via -r requirements.txt, graphene-django
+uritemplate==3.0.1 \
+    --hash=sha256:07620c3f3f8eed1f12600845892b0e036a2420acf513c53f7de0abd911a5894f \
+    --hash=sha256:5af8ad10cec94f215e3f48112de2022e1d5a37ed427fbd88652fa908f2ab7cae \
+    # via -r requirements.txt
 urllib3==1.25.10 \
     --hash=sha256:91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a \
     --hash=sha256:e7983572181f5e1522d9c98453462384ee92a0be7fac5f1413a1e35c56cc0461 \
@@ -564,4 +579,4 @@ xlrd==1.2.0 \
 setuptools==50.3.0 \
     --hash=sha256:39060a59d91cf5cf403fa3bacbb52df4205a8c3585e0b9ba4b30e0e19d4c4b18 \
     --hash=sha256:c77b3920663a435c9450d9d971c48f5a7478fca8881b2cd2564e59f970f03536 \
-    # via google-api-core, google-auth, gunicorn, ipdb, ipython, protobuf
+    # via -r requirements.txt, google-api-core, google-auth, gunicorn, ipdb, ipython, protobuf

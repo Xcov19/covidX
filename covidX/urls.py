@@ -20,9 +20,16 @@ from django.urls import re_path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 
+from common import utils
+
 urlpatterns = [
+    # See: https://www.django-rest-framework.org/#installation
+    re_path(r"^login-rest-router/?$", include(utils.router.urls)),
+    re_path(
+        r"^rest-auth/?$", include("rest_framework.urls", namespace="rest_framework")
+    ),
     re_path(r"^apihealth/?$", include("apps.apihealth.urls")),
     path("admin/", admin.site.urls),
-    path("auth0/", include("apps.auth_zero.urls")),
+    re_path("^auth0/?$", include("apps.auth_zero.urls")),
     re_path(r"^api/graphql/?$", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]

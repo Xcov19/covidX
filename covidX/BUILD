@@ -17,6 +17,11 @@ py_library(
     name = "settings",
     srcs = ["settings.py"],
     deps = [
+        requirement("django-extensions"),
+        requirement("social-auth-app-django"),
+        requirement("graphene-django"),
+        requirement("django-guardian"),
+        requirement("djangorestframework"),
         ":gae_settings",
         ":schema",
         "//apps/apihealth:apps",
@@ -45,6 +50,7 @@ py_library(
         "//apps/apihealth:urls",
         "//apps/auth_zero:apps",
         "//apps/auth_zero:urls",
+        "//common:utils",
     ],
     srcs_version="PY3",
 )
