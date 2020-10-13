@@ -23,7 +23,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v2
       env:
         SECRET_KEY: ${{ secrets.SECRET_KEY }}
         DB_PORT: ${{ secrets.DB_PORT }}
@@ -48,4 +48,4 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     # Runs a single command using the runners shell
     - name: Black Code Formatter
-      uses: lgeiger/black-action@v1.0.1
+      uses: psf/black@stable  # already includes args "--check --diff"
