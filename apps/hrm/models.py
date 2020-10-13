@@ -13,7 +13,9 @@ class WorkerEnum(utils.EnumChoice):
 # Create your models here.
 class Hospital(models.Model):
     name = models.CharField(blank=False, unique=True, max_length=MAX_LENGTH)
-    address = models.TextField(blank=False,)
+    address = models.TextField(
+        blank=False,
+    )
     city = models.CharField(blank=False, max_length=MAX_LENGTH)
     state = models.CharField(blank=False, max_length=MAX_LENGTH)
     country = models.CharField(blank=False, max_length=MAX_LENGTH)
@@ -40,19 +42,29 @@ class DoctorRegistry(models.Model):
 class Doctor(models.Model):
     name = models.CharField(blank=False, max_length=MAX_LENGTH)
     designation = models.CharField(blank=False, max_length=MAX_LENGTH)
-    attached_to = models.ManyToManyField(Hospital, through=DoctorRegistry,)
+    attached_to = models.ManyToManyField(
+        Hospital,
+        through=DoctorRegistry,
+    )
 
 
 class Patient(models.Model):
     name = models.CharField(blank=False, max_length=MAX_LENGTH)
-    age = models.IntegerField(blank=False,)
+    age = models.IntegerField(
+        blank=False,
+    )
     admitted_in = models.ForeignKey(Hospital, on_delete=models.deletion.CASCADE)
 
 
 class Staff(models.Model):
     name = models.CharField(blank=False, max_length=MAX_LENGTH)
-    age = models.IntegerField(blank=False,)
-    attached_to = models.ManyToManyField(Hospital, through=StaffRegistry,)
+    age = models.IntegerField(
+        blank=False,
+    )
+    attached_to = models.ManyToManyField(
+        Hospital,
+        through=StaffRegistry,
+    )
     designation = models.CharField(blank=False, max_length=MAX_LENGTH)
 
 

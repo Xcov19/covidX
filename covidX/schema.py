@@ -5,12 +5,15 @@ import apps.apihealth.schema
 
 
 class Query(
-    apps.apihealth.schema.Query, graphene.ObjectType,
+    apps.apihealth.schema.Query,
+    graphene.ObjectType,
 ):
     debug = graphene.Field(DjangoDebug, name="_debug")
 
 
-class Mutations(graphene.ObjectType,):
+class Mutations(
+    graphene.ObjectType,
+):
     pass
 
 
