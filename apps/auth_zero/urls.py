@@ -1,5 +1,4 @@
 from django.urls import include
-from django.conf.urls import url
 from django.urls import path
 
 from apps.auth_zero import views
