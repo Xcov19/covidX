@@ -31,7 +31,7 @@ class Auth0(BaseOAuth2):
             f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
         )
         issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
-        audience = self.setting("KEY")  # CLIENT_ID
+        audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
         payload = jwt.decode(
             id_token,
             jwks.content,
