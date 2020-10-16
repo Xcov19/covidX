@@ -49,3 +49,6 @@ jobs:
     # Runs a single command using the runners shell
     - name: Black Code Formatter
       uses: psf/black@stable  # already includes args "--check --diff"
+    # Run gitops local secrets_test.sh
+    - name: Secrets Test Env Runner
+      run: ./secrets_test.sh
