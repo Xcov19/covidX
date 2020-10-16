@@ -29,6 +29,11 @@ LIBS = [
     "//covidX:wsgi",
 ] + [requirement(r) for r in REQS]
 
+py_library(
+    name = "__init__",
+    srcs = ["__init__.py"],
+)
+
 py_binary(
     name = "manage",
     srcs=["manage.py"],
@@ -37,6 +42,7 @@ py_binary(
     stamp=0,
     visibility=["//visibility:public"],
     deps = LIBS,
+    data = [":envs"],
 )
 
 py_binary(
@@ -49,6 +55,7 @@ py_binary(
     python_version="PY3",
     stamp=0,
     visibility=["//visibility:public"],
+    data = [":envs"],
 )
 
 py3_image(
@@ -63,6 +70,7 @@ py3_image(
     visibility=["//visibility:public"],
     base = "@python3_image//image",
     srcs_version="PY3",
+    data = [":envs"],
 )
 
 py3_image(
@@ -74,4 +82,12 @@ py3_image(
     layers = LIBS,
     base = "@python3_image//image",
     srcs_version="PY3",
+    data = [":envs"],
+)
+
+filegroup(
+    name = "envs",
+    srcs = [
+        ".env",
+        ],
 )

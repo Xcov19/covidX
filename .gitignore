@@ -41,6 +41,7 @@ venv.bak/
 
 #Visual studio
 .vscode/*
+.vscode
 
 #Idea Files
 **/.idea/
@@ -61,3 +62,6 @@ __pycache__/
 $HOME
 static/
 docker_repo_cache/
+apps/*/migrations/**
+apps/*/static/**
+profile.json

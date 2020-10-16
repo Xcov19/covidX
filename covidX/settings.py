@@ -9,15 +9,31 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+import functools
+import glob
 import os
 import sys
 
-from covidX import gae_settings as gae
+from dotenv import load_dotenv
 
+import covidX.gae_settings as gae  # pylint: disable=no-name-in-module
+import covidX.utils as utils  # pylint: disable=no-name-in-module
 
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJECT_ROOT = os.path.expanduser(BASE_DIR)
+join_project_path = functools.partial(os.path.join, PROJECT_ROOT)
+
+# load variables values into ENV
+ENV = join_project_path(".env")
+load_dotenv(ENV)
+
+sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
+
+LOGGER = utils.createLogger(join_project_path("logs.log"))
+LOGGER.info(f"Starting {PROJECT_NAME} app")
+LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
 
 CACHES = {
     "default": {
@@ -55,10 +71,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "social_django",
     "django_extensions",
+    "guardian",
     "graphene_django",
     "corsheaders",
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
+    "apps.auth_zero.apps.Auth0LoginConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -76,7 +95,7 @@ ROOT_URLCONF = "covidX.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, "apps/auth/templates")],
+        "DIRS": glob.glob(os.path.join(os.getcwd(), "apps/*/templates")),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -114,9 +133,9 @@ else:
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": "localhost",
             "PORT": os.getenv("DB_PORT", "5432"),
-            "NAME": "covid",
-            "USER": "covid",
-            "PASSWORD": "postgres",
+            "NAME": "covidx",
+            "USER": "covidx",
+            "PASSWORD": "covidx",
         }
     }
 
@@ -125,7 +144,8 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"  # pylint: disable=line-too-long
+        # pylint: disable=line-too-long
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
@@ -149,35 +169,51 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-
-PROJECT_ROOT = os.path.dirname(BASE_DIR)
-sys.path.append(os.path.join(PROJECT_ROOT, "apps/"))
-
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = join_project_path("static")
 STATIC_URL = "/static/"
 
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT)
 
 # SOCIAL AUTH AUTH0 BACKEND CONFIG
-SOCIAL_AUTH_TRAILING_SLASH = False
-SOCIAL_AUTH_AUTH0_KEY = os.environ.get("AUTH0_CLIENT_ID")
-SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("AUTH0_CLIENT_SECRET")
+SOCIAL_AUTH_TRAILING_SLASH = os.getenv("SOCIAL_AUTH_TRAILING_SLASH")
+SOCIAL_AUTH_AUTH0_KEY = os.environ.get("SOCIAL_AUTH_AUTH0_KEY")
+SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
-SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
-AUDIENCE = None
-if os.environ.get("AUTH0_AUDIENCE"):
-    AUDIENCE = os.environ.get("AUTH0_AUDIENCE")
-else:
-    if SOCIAL_AUTH_AUTH0_DOMAIN:
-        AUDIENCE = f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
-if AUDIENCE:
+SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
+SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
+
+if AUDIENCE := (
+    os.getenv("AUTH0_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
+):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
+
 AUTHENTICATION_BACKENDS = {
-    "apps.auth.auth0backend.Auth0",
+    "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
+    "guardian.backends.ObjectPermissionBackend",
 }
 
-LOGIN_URL = "/login/auth0"
-LOGIN_REDIRECT_URL = "/dashboard"
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "rest_framework.permissions.AllowAny",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework.renderers.BrowsableAPIRenderer",
+        "rest_framework.renderers.JSONOpenAPIRenderer",
+    ],
+}
+
+LOGIN_URL = "/auth0/login/auth0"
+LOGIN_REDIRECT_URL = "/"
+
+# See: https://django-guardian.readthedocs.io/en/stable/\
+# configuration.html#guardian-raise-403
+GUARDIAN_RENDER_403 = True
+
 GRAPHENE = {
     "SCHEMA": "covidX.schema.schema",
     "SCHEMA_OUTPUT": "schema.json",
