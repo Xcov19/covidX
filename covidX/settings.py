@@ -33,6 +33,7 @@ sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
 
 LOGGER = utils.createLogger(join_project_path("logs.log"))
 LOGGER.info(f"Starting {PROJECT_NAME} app")
+LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
 
 CACHES = {
     "default": {
@@ -168,8 +169,11 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = join_project_path("static")
 STATIC_URL = "/static/"
+
+if not os.path.exists(STATIC_ROOT):
+    os.makedirs(STATIC_ROOT)
 
 # SOCIAL AUTH AUTH0 BACKEND CONFIG
 SOCIAL_AUTH_TRAILING_SLASH = os.getenv("SOCIAL_AUTH_TRAILING_SLASH")
