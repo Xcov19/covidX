@@ -41,6 +41,6 @@ py_library(
     srcs = ["models.py"],
     deps = [
         requirement("django"),
-        "//common:utils",
+        "//covidX:utils",
     ],
 )

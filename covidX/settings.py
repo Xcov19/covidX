@@ -11,13 +11,13 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import functools
 import glob
-import logging
 import os
 import sys
 
-from covidx.common import utils
-from covidx.covidX import gae_settings as gae
 from dotenv import load_dotenv
+
+import covidX.gae_settings as gae  # pylint: disable=no-name-in-module
+import covidX.utils as utils  # pylint: disable=no-name-in-module
 
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -25,14 +25,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.expanduser(BASE_DIR)
 join_project_path = functools.partial(os.path.join, PROJECT_ROOT)
 
-LOGGER = utils.createLogger(join_project_path("logs.log"))
-LOGGER.info(f"Starting {PROJECT_NAME} app")
-
 # load variables values into ENV
 ENV = join_project_path(".env")
 load_dotenv(ENV)
 
-sys.path.extend(map(join_project_path, ("apps/", "common/")))
+sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
+
+LOGGER = utils.createLogger(join_project_path("logs.log"))
+LOGGER.info(f"Starting {PROJECT_NAME} app")
 
 CACHES = {
     "default": {

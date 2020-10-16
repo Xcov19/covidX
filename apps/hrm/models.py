@@ -1,5 +1,6 @@
-from covidx.common import utils
 from django.db import models
+
+from covidX import utils  # pylint: disable=no-name-in-module
 
 MAX_LENGTH = 1000
 

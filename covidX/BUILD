@@ -24,10 +24,10 @@ py_library(
         requirement("djangorestframework"),
         ":gae_settings",
         ":schema",
+        ":utils",
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
         "//apps/auth_zero:apps",
-        "//common:utils",
         "//:__init__",
     ],
     srcs_version="PY3",
@@ -43,17 +43,23 @@ py_library(
 )
 
 py_library(
+    name = "utils",
+    srcs = ["utils.py"],
+    deps = [],
+)
+
+py_library(
     name = "urls",
     srcs = ["urls.py"],
     deps = [
         requirement("django"),
         requirement("graphene-django"),
         requirement("djangorestframework"),
+        ":utils",
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
         "//apps/auth_zero:apps",
         "//apps/auth_zero:urls",
-        "//common:utils",
     ],
     srcs_version="PY3",
 )
