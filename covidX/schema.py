@@ -1,10 +1,10 @@
 import graphene
 from graphene_django.debug import DjangoDebug
 
-import apps.apihealth.schema as schema
+import apps.apihealth.schema as apihealth_schema
 
 
-class Query(schema.Query, graphene.ObjectType):
+class Query(apihealth_schema.Query, graphene.ObjectType):
     debug = graphene.Field(DjangoDebug, name="_debug")
 
 

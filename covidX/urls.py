@@ -20,12 +20,18 @@ from django.urls import re_path
 from django.views.decorators.csrf import csrf_exempt
 from graphene_django.views import GraphQLView
 from rest_framework import routers
+from rest_framework.schemas import get_schema_view
 
 router = routers.DefaultRouter()
 
+SCHEMA_META = dict(
+    title="CovidX: OpenAPI Spec",
+    description="OpenAPI Spec Schema",
+    version="0.0.1",
+)
 
 urlpatterns = [
-    # See: https://www.django-rest-framework.org/#installation
+    path("openapi-schema/", get_schema_view(**SCHEMA_META), name="openapi-schema"),
     re_path(r"^login-rest-router/?$", include(router.urls)),
     re_path(
         r"^rest-auth/?$", include("rest_framework.urls", namespace="rest_framework")
