@@ -86,6 +86,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Map username from the Access Token payload to
+    # Django authentication system
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -191,6 +194,7 @@ if AUDIENCE := (
 AUTHENTICATION_BACKENDS = {
     "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.RemoteUserBackend",
     "guardian.backends.ObjectPermissionBackend",
 }
 
