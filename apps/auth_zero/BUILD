@@ -19,6 +19,7 @@ py_library(
   name = "auth0backend",
   srcs = ["auth0backend.py"],
   deps = [
+    requirement("django"),
     requirement("python-jose"),
     requirement("social-auth-core"),
   ],
