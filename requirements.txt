@@ -11,7 +11,7 @@ algoliasearch-django==1.7.1 \
 algoliasearch==1.20.0 \
     --hash=sha256:48460675555e6effab946adc58b7483bb88a5a68ddc4bdebee09d93e9253318c \
     --hash=sha256:842fb3e2fb57dc0daa2e97bf0d2e8191498781540901da118e98c24048d8d812 \
-    # via algoliasearch-django
+    # via -r requirements.txt, algoliasearch-django
 aniso8601==7.0.0 \
     --hash=sha256:513d2b6637b7853806ae79ffaca6f3e8754bdd547048f5ccc1420aec4b714f1e \
     --hash=sha256:d10a4bf949f619f719b227ef5386e31f49a2b6d453004b21f02661ccc8670c7b \
@@ -69,7 +69,7 @@ chardet==3.0.4 \
 colorama==0.4.4 \
     --hash=sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b \
     --hash=sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2 \
-    # via ipython
+    # via -r requirements.txt, ipython
 cryptography==3.1 \
     --hash=sha256:10c9775a3f31610cf6b694d1fe598f2183441de81cedcf1814451ae53d71b13a \
     --hash=sha256:180c9f855a8ea280e72a5d61cf05681b230c2dce804c48e9b2983f491ecc44ed \
@@ -114,6 +114,10 @@ django-filter==2.3.0 \
     --hash=sha256:11e63dd759835d9ba7a763926ffb2662cf8a6dcb4c7971a95064de34dbc7e5af \
     --hash=sha256:616848eab6fc50193a1b3730140c49b60c57a3eda1f7fc57fa8505ac156c6c75 \
     # via -r requirements.txt
+django-guardian==2.3.0 \
+    --hash=sha256:0e70706c6cda88ddaf8849bddb525b8df49de05ba0798d4b3506049f0d95cbc8 \
+    --hash=sha256:ed2de26e4defb800919c5749fb1bbe370d72829fbd72895b6cf4f7f1a7607e1b \
+    # via -r requirements.txt
 django-model-utils==4.0.0 \
     --hash=sha256:9cf882e5b604421b62dbe57ad2b18464dc9c8f963fc3f9831badccae66c1139c \
     --hash=sha256:adf09e5be15122a7f4e372cb5a6dd512bbf8d78a23a90770ad0983ee9d909061 \
@@ -125,7 +129,15 @@ django-phonenumber-field==5.0.0 \
 django==3.0.7 \
     --hash=sha256:5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2 \
     --hash=sha256:e1630333248c9b3d4e38f02093a26f1e07b271ca896d73097457996e0fae12e8 \
-    # via -r requirements.txt, algoliasearch-django, django-cors-headers, django-filter, django-model-utils, django-phonenumber-field, graphene-django
+    # via -r requirements.txt, algoliasearch-django, django-cors-headers, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, graphene-django
+djangorestframework==3.12.1 \
+    --hash=sha256:5c5071fcbad6dce16f566d492015c829ddb0df42965d488b878594aabc3aed21 \
+    --hash=sha256:d54452aedebb4b650254ca092f9f4f5df947cb1de6ab245d817b08b4f4156249 \
+    # via -r requirements.txt
+ecdsa==0.14.1 \
+    --hash=sha256:64c613005f13efec6541bb0a33290d0d03c27abab5f15fbab20fb0ee162bdd8e \
+    --hash=sha256:e108a5fe92c67639abae3260e43561af914e7fd0d27bae6d2ec1312ae7934dfe \
+    # via -r requirements.txt, python-jose
 et-xmlfile==1.0.1 \
     --hash=sha256:614d9722d572f6246302c4491846d2c393c199cfa4edc9af593437691683335b \
     # via -r requirements.txt, openpyxl
@@ -304,6 +316,10 @@ libcst==0.3.10 \
     --hash=sha256:b0dccbfc1cff7bfa3214980e1d2d90b4e00b2fed002d4b276a8a411217738df3 \
     --hash=sha256:e9395d952a490e6fc160f2bea8df139bdf1fdcb3fe4c01b88893da279eff00de \
     # via -r requirements.txt, google-cloud-secret-manager
+markdown==3.3.1 \
+    --hash=sha256:10db1204a6c4aff7c7cf3cf25cc02761703baea54b6fb5e2b9ce2c186d81116f \
+    --hash=sha256:c3ce9ebb035c078cac0f2036068d054e7dc34354eeecc49c173c33c96b124af6 \
+    # via -r requirements.txt
 mypy-extensions==0.4.3 \
     --hash=sha256:090fedd75945a69ae91ce1303b5824f428daf5a028d2f6ab8a299250a846f15d \
     --hash=sha256:2d82818f5bb3e369420cb3c4060a7970edba416647068eb4c5343488a6c604a8 \
@@ -422,7 +438,7 @@ pyasn1-modules==0.2.8 \
 pyasn1==0.4.8 \
     --hash=sha256:39c7e2ec30515947ff4e87fb6f456dfc6e84857d34be479c9d4a4ba4bf46aa5d \
     --hash=sha256:aef77c9fb94a3ac588e87841208bdec464471d9871bd5050a287cc9a475cd0ba \
-    # via -r requirements.txt, pyasn1-modules, rsa
+    # via -r requirements.txt, pyasn1-modules, python-jose, rsa
 pycountry==19.8.18 \
     --hash=sha256:3c57aa40adcf293d59bebaffbe60d8c39976fba78d846a018dc0c2ec9c6cb3cb \
     # via -r requirements.txt
@@ -449,6 +465,10 @@ python-dateutil==2.8.1 \
 python-dotenv==0.11.0 \
     --hash=sha256:8429f459fc041237d98c9ff32e1938e7e5535b5ff24388876315a098027c3a57 \
     --hash=sha256:ca9f3debf2262170d6f46571ce4d6ca1add60bb93b69c3a29dcb3d1a00a65c93 \
+    # via -r requirements.txt
+python-jose==3.2.0 \
+    --hash=sha256:4e4192402e100b5fb09de5a8ea6bcc39c36ad4526341c123d401e2561720335b \
+    --hash=sha256:67d7dfff599df676b04a996520d9be90d6cdb7e6dd10b4c7cacc0c3e2e92f2be \
     # via -r requirements.txt
 python3-openid==3.2.0 \
     --hash=sha256:33fbf6928f401e0b790151ed2b5290b02545e8775f982485205a066f874aaeaf \
@@ -478,11 +498,11 @@ requests-oauthlib==1.3.0 \
 requests==2.24.0 \
     --hash=sha256:b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b \
     --hash=sha256:fe75cc94a9443b9246fc7049224f75604b113c36acb93f87b80ed42c44cbb898 \
-    # via -r requirements.txt, google-api-core, requests-oauthlib, social-auth-core
+    # via -r requirements.txt, algoliasearch, google-api-core, requests-oauthlib, social-auth-core
 rsa==4.6 \
     --hash=sha256:109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa \
     --hash=sha256:6166864e23d6b5195a5cfed6cd9fed0fe774e226d8f854fcb23b7bbef0350233 \
-    # via -r requirements.txt, google-auth
+    # via -r requirements.txt, google-auth, python-jose
 rx==1.6.1 \
     --hash=sha256:13a1d8d9e252625c173dc795471e614eadfe1cf40ffc684e08b8fff0d9748c23 \
     --hash=sha256:7357592bc7e881a95e0c2013b73326f704953301ab551fbc8133a6fadab84105 \
@@ -494,7 +514,7 @@ singledispatch==3.4.0.3 \
 six==1.15.0 \
     --hash=sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259 \
     --hash=sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced \
-    # via -r requirements.txt, cryptography, google-api-core, google-auth, graphene, graphene-django, graphene-file-upload, graphql-core, graphql-relay, grpcio, promise, protobuf, pyopenssl, python-dateutil, singledispatch, snapshottest, social-auth-app-django, social-auth-core
+    # via -r requirements.txt, cryptography, ecdsa, google-api-core, google-auth, graphene, graphene-django, graphene-file-upload, graphql-core, graphql-relay, grpcio, promise, protobuf, pyopenssl, python-dateutil, python-jose, singledispatch, snapshottest, social-auth-app-django, social-auth-core
 snapshottest==0.5.1 \
     --hash=sha256:2cc7157e77674ea8ebeb2351466ff50cd4b5ad8e213adc06df9c16a75ab5bafc \
     # via -r requirements.txt
@@ -537,6 +557,10 @@ unidecode==1.1.1 \
     --hash=sha256:1d7a042116536098d05d599ef2b8616759f02985c85b4fef50c78a5aaf10822a \
     --hash=sha256:2b6aab710c2a1647e928e36d69c21e76b453cd455f4e2621000e54b2a9b8cce8 \
     # via -r requirements.txt, graphene-django
+uritemplate==3.0.1 \
+    --hash=sha256:07620c3f3f8eed1f12600845892b0e036a2420acf513c53f7de0abd911a5894f \
+    --hash=sha256:5af8ad10cec94f215e3f48112de2022e1d5a37ed427fbd88652fa908f2ab7cae \
+    # via -r requirements.txt
 urllib3==1.25.10 \
     --hash=sha256:91056c15fa70756691db97756772bb1eb9678fa585d9184f24534b100dc60f4a \
     --hash=sha256:e7983572181f5e1522d9c98453462384ee92a0be7fac5f1413a1e35c56cc0461 \

@@ -30,7 +30,19 @@ py_library(
 py_library(
     name = "views",
     srcs = ["views.py"],
-    deps = [requirement("django")],
+    deps = [
+        requirement("django"),
+        requirement("djangorestframework"),
+        ":serializer",
+        ],
+)
+
+py_library(
+    name = "serializer",
+    srcs = ["serializer.py"],
+    deps = [
+        requirement("djangorestframework"),
+        ],
 )
 
 py_library(
