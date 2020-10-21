@@ -17,10 +17,18 @@ py_library(
     name = "settings",
     srcs = ["settings.py"],
     deps = [
+        requirement("django-extensions"),
+        requirement("social-auth-app-django"),
+        requirement("graphene-django"),
+        requirement("django-guardian"),
+        requirement("djangorestframework"),
         ":gae_settings",
         ":schema",
+        ":utils",
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
+        "//apps/auth_zero:apps",
+        "//:__init__",
     ],
     srcs_version="PY3",
 )
@@ -35,13 +43,23 @@ py_library(
 )
 
 py_library(
+    name = "utils",
+    srcs = ["utils.py"],
+    deps = [],
+)
+
+py_library(
     name = "urls",
     srcs = ["urls.py"],
     deps = [
         requirement("django"),
         requirement("graphene-django"),
+        requirement("djangorestframework"),
+        ":utils",
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
+        "//apps/auth_zero:apps",
+        "//apps/auth_zero:urls",
     ],
     srcs_version="PY3",
 )

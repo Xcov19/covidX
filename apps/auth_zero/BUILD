@@ -8,14 +8,20 @@ py_library(
 )
 
 py_library(
-    name = "admin",
-    srcs = ["admin.py"],
-    deps = [],
+    name = "apps",
+    srcs = ["apps.py"],
+    deps = [
+      ":auth0backend"
+    ],
 )
 
 py_library(
-    name = "apps",
-    srcs = ["apps.py"],
+  name = "auth0backend",
+  srcs = ["auth0backend.py"],
+  deps = [
+    requirement("python-jose"),
+    requirement("social-auth-core"),
+  ],
 )
 
 py_library(
@@ -31,16 +37,14 @@ py_library(
     name = "views",
     srcs = ["views.py"],
     deps = [
-        requirement("django"),
-        ":models",
-    ],
+      requirement("django"),
+      ],
+    data = [":auth_zero_tmpl"],
 )
 
-py_library(
-    name = "models",
-    srcs = ["models.py"],
-    deps = [
-        requirement("django"),
-        "//covidX:utils",
-    ],
+filegroup(
+    name = "auth_zero_tmpl",
+    srcs = glob([
+        "templates/**",
+    ]),
 )
