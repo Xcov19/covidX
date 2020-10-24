@@ -8,3 +8,5 @@ echo "SOCIAL_AUTH_AUTH0_DOMAIN=$(gcloud secrets versions access latest --secret=
 echo "SOCIAL_AUTH_AUTH0_KEY=$(gcloud secrets versions access latest --secret='SOCIAL_AUTH_AUTH0_KEY')" >> .env
 echo "SOCIAL_AUTH_AUTH0_SECRET=$(gcloud secrets versions access latest --secret='SOCIAL_AUTH_AUTH0_SECRET')" >> .env
 echo "ACCESS_TOKEN_METHOD=POST" >> .env
+echo "ALGOLIA_API_KEY=$(gcloud secrets versions access latest --secret='ALGOLIA_API_KEY')" >> .env
+echo "ALGOLIA_APPLICATION_ID=$(gcloud secrets versions access latest --secret='ALGOLIA_APPLICATION_ID')" >> .env
