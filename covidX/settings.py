@@ -232,8 +232,6 @@ REST_FRAMEWORK = {
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 AUTH_REDIRECT_URI = "/auth0/complete/auth0"
-# SESSION_COOKIE_SECURE = True
-# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403
