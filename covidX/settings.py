@@ -188,13 +188,15 @@ SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
 JWT_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
 if AUDIENCE := (
-    os.getenv("AUTH0_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
+    os.getenv("JWT_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
 ):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
 
 # Set JWT_AUDIENCE to API identifier and the JWT_ISSUER to Auth0 domain
 JWT_AUTH = {
-    "JWT_PAYLOAD_GET_USERNAME_HANDLER": "apps.auth_zero.auth0backend.jwt_get_username_from_payload_handler",
+    "JWT_PAYLOAD_GET_USERNAME_HANDLER": (
+        "apps.auth_zero.auth0backend." "jwt_get_username_from_payload_handler"
+    ),
     "JWT_DECODE_HANDLER": "apps.auth_zero.auth0backend.jwt_decode_token",
     "JWT_ALGORITHM": "RS256",
     "JWT_AUDIENCE": JWT_AUDIENCE,
@@ -229,6 +231,9 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
+AUTH_REDIRECT_URI = "/auth0/complete/auth0"
+# SESSION_COOKIE_SECURE = True
+# SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403

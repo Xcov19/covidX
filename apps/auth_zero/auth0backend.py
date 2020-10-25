@@ -1,5 +1,9 @@
 import functools
 import json
+import operator
+import random
+import sys
+from typing import Dict
 
 import requests
 from django.conf import settings
@@ -21,19 +25,23 @@ class Auth0(BaseOAuth2):
     REDIRECT_STATE = False
     EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
-    def authorization_url(self):
+    @staticmethod
+    def authorization_url():
         return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
 
-    def access_token_url(self):
+    @staticmethod
+    def access_token_url():
         return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
 
-    def get_user_id(self, details, response):
+    @staticmethod
+    def get_user_id(details, response):
         """Return current user id."""
         LOGGER.info(f"{response}")
         return details["user_id"]
 
-    def get_user_details(self, response):
-        # Obtain JWT and the keys to validate the signature
+    @staticmethod
+    def get_user_details(response):
+        """Obtain JWT and the keys to validate the signature."""
         id_token = response.get("id_token")
         jwks = requests.get(
             f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
@@ -54,6 +62,67 @@ class Auth0(BaseOAuth2):
             "user_id": payload["sub"],
             "email": payload["email"],
         }
+
+
+class Auth0CodeFlow(Auth0):
+    """Custom Web to Server Auth0 flow.
+
+    See: https://auth0.com/docs/flows/call-your-api-using-the-authorization-code-flow#example-post-to-token-url
+    """
+
+    audience = settings.AUDIENCE
+    # TODO(@codecakes): add scope later.
+    # scope = settings.AUTH_SCOPE
+    client_id = settings.SOCIAL_AUTH_AUTH0_KEY
+    client_secret = settings.SOCIAL_AUTH_AUTH0_SECRET
+    redirect_uri = settings.AUTH_REDIRECT_URI
+
+    @staticmethod
+    def authorization_url():
+        """Request user's authorization and return an authorization code.
+
+        The format is like:
+            https://domain/authorize?
+            response_type=code&
+            client_id=client_id&
+            redirect_uri=http://localhost:8090/redirect_uri/&
+            scope=SCOPE&
+            audience=API_AUDIENCE&
+            state=STATE
+
+        Returns:
+            HTTP 302 response.
+        """
+        authorization_url = super().authorization_url()
+        payload = {
+            "response_type": "code",
+            "client_id": Auth0CodeFlow.client_id,
+            "redirect_uri": Auth0CodeFlow.redirect_uri,
+            # TODO(@codecakes): add scope later.
+            # 'scope': Auth0CodeFlow.scope,
+            "audience": Auth0CodeFlow.audience,
+            "state": gen_state(),
+        }
+        return requests.get(authorization_url, data=payload)
+
+    @staticmethod
+    def access_token_url(**kwargs: Dict[str, str]):
+        """Exchange your authorization code for tokens.
+        Args:
+            **kwargs: dict, keyword parameters like auth code.
+        Returns:
+            HTTP 200 response with a payload containing access_token, refresh_token, id_token, and token_type values.
+        """
+        access_token_url = super().access_token_url(**kwargs)
+        headers = {"content-type": "application/x-www-form-urlencoded"}
+        payload = {
+            "grant_type": "authorization_code",
+            "client_id": Auth0CodeFlow.client_id,
+            "client_secret": Auth0CodeFlow.client_secret,
+            "redirect_uri": Auth0CodeFlow.redirect_uri,
+            **kwargs,
+        }
+        return requests.post(access_token_url, data=payload, headers=headers)
 
 
 def jwt_get_username_from_payload_handler(payload):
@@ -141,3 +210,11 @@ def get_token_auth_header(request):
     token = parts[1]
 
     return token
+
+
+def gen_state():
+    """Create a random state token from first ten characters."""
+    rand = random.Random()
+    _, arr, _ = rand.getstate()
+    arr_sum = functools.reduce(operator.add, arr)
+    return arr_sum.to_bytes(arr_sum.bit_length(), sys.byteorder, signed=True).hex()[:10]
