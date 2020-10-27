@@ -4,6 +4,14 @@
 #
 #    pip-compile --allow-unsafe --generate-hashes requirements.txt
 #
+algoliasearch-django==1.7.1 \
+    --hash=sha256:c25b49b7df3d410625f983bbf907b063796d57c6021e1643987900e72d07906d \
+    --hash=sha256:c64dc2dab76ade6b05638a188e4a4af1ec952d5aa407aeab3ce6cbaed082d4c5 \
+    # via -r requirements.txt
+algoliasearch==1.20.0 \
+    --hash=sha256:48460675555e6effab946adc58b7483bb88a5a68ddc4bdebee09d93e9253318c \
+    --hash=sha256:842fb3e2fb57dc0daa2e97bf0d2e8191498781540901da118e98c24048d8d812 \
+    # via -r requirements.txt, algoliasearch-django
 aniso8601==7.0.0 \
     --hash=sha256:513d2b6637b7853806ae79ffaca6f3e8754bdd547048f5ccc1420aec4b714f1e \
     --hash=sha256:d10a4bf949f619f719b227ef5386e31f49a2b6d453004b21f02661ccc8670c7b \
@@ -53,11 +61,15 @@ cffi==1.14.2 \
     --hash=sha256:e4b9b7af398c32e408c00eb4e0d33ced2f9121fd9fb978e6c1b57edd014a7d15 \
     --hash=sha256:e613514a82539fc48291d01933951a13ae93b6b444a88782480be32245ed4afa \
     --hash=sha256:f5033952def24172e60493b68717792e3aebb387a8d186c43c020d9363ee7281 \
-    # via -r requirements.txt, cryptography
+    # via -r requirements.txt, cryptography, gevent
 chardet==3.0.4 \
     --hash=sha256:84ab92ed1c4d4f16916e05906b6b75a6c0fb5db821cc65e70cbd64a3e2a5eaae \
     --hash=sha256:fc323ffcaeaed0e0a02bf4d117757b98aed530d9ed4531e3e15460124c106691 \
     # via -r requirements.txt, requests
+colorama==0.4.4 \
+    --hash=sha256:5941b2b48a20143d2267e95b1c2a7603ce057ee39fd88e7329b0c292aa16869b \
+    --hash=sha256:9f47eda37229f68eee03b24b9748937c7dc3868f906e8ba69fbcbdd3bc5dc3e2 \
+    # via -r requirements.txt, ipython
 cryptography==3.1 \
     --hash=sha256:10c9775a3f31610cf6b694d1fe598f2183441de81cedcf1814451ae53d71b13a \
     --hash=sha256:180c9f855a8ea280e72a5d61cf05681b230c2dce804c48e9b2983f491ecc44ed \
@@ -117,7 +129,7 @@ django-phonenumber-field==5.0.0 \
 django==3.0.7 \
     --hash=sha256:5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2 \
     --hash=sha256:e1630333248c9b3d4e38f02093a26f1e07b271ca896d73097457996e0fae12e8 \
-    # via -r requirements.txt, django-cors-headers, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, drf-jwt, graphene-django
+    # via -r requirements.txt, algoliasearch-django, django-cors-headers, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, graphene-django
 djangorestframework==3.12.1 \
     --hash=sha256:5c5071fcbad6dce16f566d492015c829ddb0df42965d488b878594aabc3aed21 \
     --hash=sha256:d54452aedebb4b650254ca092f9f4f5df947cb1de6ab245d817b08b4f4156249 \
@@ -331,7 +343,7 @@ parso==0.7.1 \
 pexpect==4.8.0 \
     --hash=sha256:0b48a55dcb3c05f3329815901ea4fc1537514d6ba867a152b581d69ae3710937 \
     --hash=sha256:fc65a43959d153d0114afe13997d439c22823a27cefceb5ff35c2178c6784c0c \
-    # via -r requirements.txt, ipython
+    # via -r requirements.txt
 phonenumbers==8.12.9 \
     --hash=sha256:b8644c1dccd45d4c0f54c5b10effcc8c3f733e6a3c2caf40c9175fabc5010ffe \
     --hash=sha256:f887eceb3d9db17ec479a85245bd0ebe74c5f43489217784215ffb231f8c9e88 \
@@ -491,7 +503,7 @@ requests-oauthlib==1.3.0 \
 requests==2.24.0 \
     --hash=sha256:b3559a131db72c33ee969480840fff4bb6dd111de7dd27c8ee1f820f4f00231b \
     --hash=sha256:fe75cc94a9443b9246fc7049224f75604b113c36acb93f87b80ed42c44cbb898 \
-    # via -r requirements.txt, google-api-core, requests-oauthlib, social-auth-core
+    # via -r requirements.txt, algoliasearch, google-api-core, requests-oauthlib, social-auth-core
 rsa==4.6 \
     --hash=sha256:109ea5a66744dd859bf16fe904b8d8b627adafb9408753161e766a92e7d681fa \
     --hash=sha256:6166864e23d6b5195a5cfed6cd9fed0fe774e226d8f854fcb23b7bbef0350233 \
@@ -566,7 +578,7 @@ wasmer==0.4.1 \
     --hash=sha256:d5a58b318628bd48605a4810ee9ba030ec4423dee730d45f031bd082cf36ad8b \
     --hash=sha256:f864b1e910e6803aa8f3ed9c371b145f0b6fd191f5fbefea011ac7ed4258734d \
     --hash=sha256:fa1c8479781c91e6b814ef006f6e099b6550eba12601a8617475fb514fc09365 \
-    # via -r requirements.txt, fastdiff
+    # via -r requirements.txt
 wcwidth==0.2.5 \
     --hash=sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784 \
     --hash=sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83 \
