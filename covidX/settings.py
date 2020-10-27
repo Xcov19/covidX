@@ -25,13 +25,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.expanduser(BASE_DIR)
 join_project_path = functools.partial(os.path.join, PROJECT_ROOT)
 
+# load LOGGER
+LOGGER = utils.createLogger(join_project_path("logs.log"))
+
 # load variables values into ENV
 ENV = join_project_path(".env")
-load_dotenv(ENV)
+load_dotenv(ENV, verbose=True, override=True)
 
 sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
 
-LOGGER = utils.createLogger(join_project_path("logs.log"))
 LOGGER.info(f"Starting {PROJECT_NAME} app")
 LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
 
