@@ -67,7 +67,9 @@ class Auth0(BaseOAuth2):
 class Auth0CodeFlow(Auth0):
     """Custom Web to Server Auth0 flow.
 
-    See: https://auth0.com/docs/flows/call-your-api-using-the-authorization-code-flow#example-post-to-token-url
+    See:
+    https://auth0.com/docs/flows/call-your-api-using-the-authorization-code-flow
+    #example-post-to-token-url
     """
 
     audience = settings.AUDIENCE
@@ -111,7 +113,8 @@ class Auth0CodeFlow(Auth0):
         Args:
             **kwargs: dict, keyword parameters like auth code.
         Returns:
-            HTTP 200 response with a payload containing access_token, refresh_token, id_token, and token_type values.
+            HTTP 200 response with a payload containing access_token,
+            refresh_token, id_token, and token_type values.
         """
         access_token_url = super().access_token_url(**kwargs)
         headers = {"content-type": "application/x-www-form-urlencoded"}
