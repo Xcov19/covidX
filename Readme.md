@@ -92,6 +92,9 @@ CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m p
 
 ```
 
+### Common issues:
+* [Error when building local machine developer setup via docker image (ERROR: no such package @my_deps//)](https://github.com/Xcov19/covidX/issues/50)
+
 ### TODO/TBA:
     How to contribute. Coming soon.
     Project Roadmap
