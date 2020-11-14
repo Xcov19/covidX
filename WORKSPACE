@@ -84,7 +84,7 @@ pip_repositories()
 # requirements.txt.
 pip_import(
    name = "my_deps",
-   requirements = "//:requirements.txt",
+   requirements = ":requirements.txt",
    timeout=3600,
    compile=True,
    python_interpreter="python3",
