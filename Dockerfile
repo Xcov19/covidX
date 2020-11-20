@@ -35,6 +35,14 @@ RUN bazel version
 
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
+
+# Prepare for pyenv
+RUN apt-get install make build-essential libssl-dev zlib1g-dev \
+ libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev\
+ libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl\
+ git
+RUN curl https://pyenv.run | bash
+RUN exec $SHELL && pyenv install 3.8.5 && pyenv virtualenv 3.8.5 venv && pyenv virtualenv activate venv
 RUN python -m pip install cython
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements.txt
 
