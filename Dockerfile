@@ -43,11 +43,6 @@ RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
  git
 RUN curl https://pyenv.run | bash
 RUN export PATH="/root/.pyenv/bin:$PATH"
-RUN eval "$(pyenv init -)"
-RUN eval "$(pyenv virtualenv-init -)"
-RUN echo "export PATH="/root/.pyenv/bin:$PATH"" >> ~/.bashrc
-RUN echo "eval "$(pyenv init -)"" >> ~/.bashrc
-RUN echo "eval "$(pyenv virtualenv-init -)"" >> ~/.bashrc
 
 # Setup celery project dir
 ARG PROJECT=app
