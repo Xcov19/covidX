@@ -67,7 +67,7 @@ RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `wh
 # Calls for a random number to break the caching of step
 # https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN su postgres -c "postgres -D /usr/local/pgsql/data >logfile 2>&1 &"
+RUN su postgres -c "postgres -D /usr/local/pgsql/data &"
 
 ## Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
