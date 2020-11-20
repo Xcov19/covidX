@@ -37,7 +37,7 @@ COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
 # Prepare for pyenv
-RUN apt-get install make build-essential libssl-dev zlib1g-dev \
+RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
  libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev\
  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl\
  git
