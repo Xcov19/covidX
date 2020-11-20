@@ -1,16 +1,21 @@
-FROM alpine:3.12.1
+FROM ubuntu:focal-20201008
 
 # See: https://stackoverflow.com/questions/45028650/docker-image-with-python-alpine-failure-due-missing-compiler-error
-RUN apk --update add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev libxml2 libxslt libxml2-dev libxslt-dev gcc build-base postgresql-libs musl-dev postgresql-dev postgresql-client postgresql redis
-#Add bazel
-RUN apk --no-cache add ca-certificates wget
-ADD https://raw.githubusercontent.com/davido/bazel-alpine-package/master/david@ostrovsky.org-5a0369d6.rsa.pub \
-    /etc/apk/keys/david@ostrovsky.org-5a0369d6.rsa.pub
-ADD https://github.com/davido/bazel-alpine-package/releases/download/0.26.1/bazel-0.26.1-r0.apk \
-    /tmp/bazel-0.26.1-r0.apk
-RUN apk add /tmp/bazel-0.26.1-r0.apk
-#Add sudo
-RUN set -ex && apk --no-cache add sudo
+RUN apt install build-essential python3-dev libffi-dev libxml2 libxslt libxml2-dev libxslt-dev gcc build-base postgresql-libs musl-dev postgresql-dev postgresql-client postgresql redis
+
+#Add npm
+# add `/app/node_modules/.bin` to $PATH
+ENV PATH /app/node_modules/.bin:$PATH
+
+# install curl
+RUN apt-get update && apt-get install -y --no-install-recommends curl && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Add bazel using bazelisk
+RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64
+RUN chmod +x /usr/local/bin/bazel
+RUN export PATH=$PATH:/usr/local/bin/
+RUN alias bazel=/usr/local/bin/bazel
+RUN bazel version
 
 RUN ln -s `which python3` /usr/bin/python
 
@@ -64,7 +69,15 @@ COPY . $PROJECT_DIR
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ && rm -rf static; fi;
 RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `whoami` $PROJECT_DIR/logs.log
 
+RUN (addgroup -S postgres && adduser -S postgres -G postgres || true)
+RUN mkdir -p /var/lib/postgresql/data
+RUN mkdir -p /run/postgresql/
+RUN chown -R postgres:postgres /run/postgresql/
+RUN chmod -R 777 /var/lib/postgresql/data
+RUN chown -R postgres:postgres /var/lib/postgresql/data
 # Calls for a random number to break the caching of step
 # https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN su postgres -c "postgres -D /usr/local/pgsql/data &"
+RUN su - postgres -c "initdb /var/lib/postgresql/data"
+RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
+RUN su - postgres -c "pg_ctl start -D /var/lib/postgresql/data -l /var/lib/postgresql/log.log && psql --command \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres';\" && psql --command \"CREATE DATABASE postgres;\""
