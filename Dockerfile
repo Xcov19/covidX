@@ -65,7 +65,8 @@ RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ 
 RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `whoami` $PROJECT_DIR/logs.log
 
 
+RUN su postgres -c "postgres -D /usr/local/pgsql/data >logfile 2>&1 &"
 RUN sudo -u postgres psql -c"ALTER user postgres WITH PASSWORD postgres"
-RUN sudo service postgresql restart
+RUN su postgres -c "service postgresql restart"
 
 RUN if [ -n "$IS_WAIT" ]; then echo "/wait && sh pre_start.sh"; fi;
