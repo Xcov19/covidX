@@ -64,7 +64,9 @@ COPY . $PROJECT_DIR
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ && rm -rf static; fi;
 RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `whoami` $PROJECT_DIR/logs.log
 
-
+# Calls for a random number to break the caching of step
+# https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213
+ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN su postgres -c "postgres -D /usr/local/pgsql/data >logfile 2>&1 &"
 RUN sudo -u postgres psql -c"ALTER user postgres WITH PASSWORD postgres"
 RUN su postgres -c "service postgresql restart"
