@@ -1,8 +1,8 @@
 FROM alpine:3.12.1
 
 # See: https://stackoverflow.com/questions/45028650/docker-image-with-python-alpine-failure-due-missing-compiler-error
-RUN apk --update add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev libxml2 libxslt libxml2-dev libxslt-dev gcc build-base postgresql-libs musl-dev postgresql-dev postgresql-client postgresql redis bazel
-
+RUN apk --update add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev libxml2 libxslt libxml2-dev libxslt-dev gcc build-base postgresql-libs musl-dev postgresql-dev postgresql-client postgresql redis
+RUN apk --update add bazel
 RUN ln -s `which python3` /usr/bin/python
 
 # symlink python to /usr/bin/python3
