@@ -2,7 +2,14 @@ FROM alpine:3.12.1
 
 # See: https://stackoverflow.com/questions/45028650/docker-image-with-python-alpine-failure-due-missing-compiler-error
 RUN apk --update add --no-cache --virtual .pynacl_deps build-base python3-dev libffi-dev libxml2 libxslt libxml2-dev libxslt-dev gcc build-base postgresql-libs musl-dev postgresql-dev postgresql-client postgresql redis
-RUN apk --update add bazel
+#Add bazel
+RUN apk --no-cache add ca-certificates wget
+ADD https://raw.githubusercontent.com/davido/bazel-alpine-package/master/david@ostrovsky.org-5a0369d6.rsa.pub \
+    /etc/apk/keys/david@ostrovsky.org-5a0369d6.rsa.pub
+ADD https://github.com/davido/bazel-alpine-package/releases/download/0.26.1/bazel-0.26.1-r0.apk \
+    /tmp/bazel-0.26.1-r0.apk
+RUN apk add /tmp/bazel-0.26.1-r0.apk
+
 RUN ln -s `which python3` /usr/bin/python
 
 # symlink python to /usr/bin/python3
