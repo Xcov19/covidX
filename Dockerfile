@@ -1,8 +1,3 @@
-# Use phusion/baseimage as base image. To make your builds
-# reproducible, make sure you lock down to a specific version, not
-# to `latest`! See
-# https://github.com/phusion/baseimage-docker/blob/master/Changelog.md
-# for a list of version numbers.
 FROM codecakes/buster_py:latest
 
 # Use baseimage-docker's init system.
@@ -16,9 +11,9 @@ RUN chown -R postgres:postgres /run/postgresql/
 RUN chmod -R 777 /var/lib/postgresql/data
 RUN chown -R postgres:postgres /var/lib/postgresql/data
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
-RUN apt-get update -y && apt-get install -y lsb-release
+RUN apt-get update -y
 
-RUN apt-get install -y ca-certificates curl software-properties-common wget
+RUN apt-get install -y –no-install-recommends lsb-release ca-certificates curl software-properties-common wget
 
 # Import the repository signing key:
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
