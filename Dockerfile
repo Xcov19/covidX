@@ -9,6 +9,8 @@ ADD https://raw.githubusercontent.com/davido/bazel-alpine-package/master/david@o
 ADD https://github.com/davido/bazel-alpine-package/releases/download/0.26.1/bazel-0.26.1-r0.apk \
     /tmp/bazel-0.26.1-r0.apk
 RUN apk add /tmp/bazel-0.26.1-r0.apk
+#Add sudo
+RUN set -ex && apk --no-cache add sudo
 
 RUN ln -s `which python3` /usr/bin/python
 
