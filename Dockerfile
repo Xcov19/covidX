@@ -88,7 +88,7 @@ RUN bazel version
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 RUN python -m pip install cython
-RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements_dev.txt
+RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements.txt
 
 # Setup celery project dir
 ARG PROJECT=app
