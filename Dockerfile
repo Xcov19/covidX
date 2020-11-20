@@ -42,7 +42,13 @@ RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
  libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl\
  git
 RUN curl https://pyenv.run | bash
-RUN exec $SHELL && pyenv install 3.8.5 && pyenv virtualenv 3.8.5 venv && pyenv virtualenv activate venv
+RUN export PATH="/root/.pyenv/bin:$PATH"
+RUN eval "$(pyenv init -)"
+RUN eval "$(pyenv virtualenv-init -)"
+RUN echo "export PATH="/root/.pyenv/bin:$PATH"" >> ~/.bashrc
+RUN echo "eval "$(pyenv init -)"" >> ~/.bashrc
+RUN echo "eval "$(pyenv virtualenv-init -)"" >> ~/.bashrc
+RUN pyenv install 3.8.5 && pyenv virtualenv 3.8.5 venv && pyenv virtualenv activate venv
 RUN python -m pip install cython
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements.txt
 
