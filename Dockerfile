@@ -29,54 +29,7 @@ RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
 ENV LANG C.UTF-8
-
-#ENV PYTHON_VERSION 3.8.5
-#RUN set -ex \
-#	&& curl -fSL "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
-#	&& curl -fSL "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" -o python.tar.xz.asc \
-#	&& export GNUPGHOME="$(mktemp -d)" \
-#	&& gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
-#	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
-#	&& rm -r "$GNUPGHOME" python.tar.xz.asc \
-#	&& mkdir -p /usr/src/python \
-#	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
-#	&& rm python.tar.xz \
-#	\
-#	&& cd /usr/src/python \
-#	&& ./configure --enable-shared --enable-unicode=ucs4 \
-#	&& make -j$(nproc) \
-#	&& make install \
-#	&& ldconfig
-
-# symlink python to /usr/bin/python3
 ENV PATH /usr/bin:$PATH
-#RUN ln -s `which python3` /usr/bin/python
-
-# if this is called "PIP_VERSION", pip explodes with "ValueError: invalid truth value '<VERSION>'"
-#ENV PYTHON_PIP_VERSION 20.2.3
-## https://github.com/pypa/get-pip
-#ENV PYTHON_GET_PIP_URL https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
-#ENV PYTHON_GET_PIP_SHA256 6e0bb0a2c2533361d7f297ed547237caf1b7507f197835974c0dd7eba998c53c
-#
-#RUN set -ex; \
-#	\
-#	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
-#	# echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
-#	\
-#	python get-pip.py \
-#		--disable-pip-version-check \
-#		--no-cache-dir \
-#		"pip==$PYTHON_PIP_VERSION" \
-#	; \
-#	pip --version; \
-#	\
-#	find /usr/local -depth \
-#		\( \
-#			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-#			-o \
-#			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
-#		\) -exec rm -rf '{}' +; \
-#	rm -f get-pip.py
 
 # Add bazel using bazelisk
 RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64
@@ -102,12 +55,13 @@ COPY . $PROJECT_DIR
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ && rm -rf static; fi;
 RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `whoami` $PROJECT_DIR/logs.log
 
-# Calls for a random number to break the caching of step
-# https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213
-ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
-RUN su - postgres -c "initdb /var/lib/postgresql/data"
-RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
-RUN su - postgres -c "pg_ctl start -D /var/lib/postgresql/data -l /var/lib/postgresql/log.log && psql --command \"ALTER USER postgres WITH ENCRYPTED PASSWORD 'postgres';\" && psql --command \"CREATE DATABASE postgres;\""
-
+ENV MAIN_USER=$(whoami)
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+USER postgres
+RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
+# Expose the PostgreSQL port
+EXPOSE 5432
+RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
+RUN /etc/init.d/postgresql start;
+ENTRYPOINT /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf
