@@ -68,22 +68,3 @@ RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `wh
 # https://stackoverflow.com/questions/35134713/disable-cache-for-specific-run-commands/58801213#58801213
 ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 RUN su postgres -c "postgres -D /usr/local/pgsql/data &"
-
-## Add the wait script to the image
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait /wait
-RUN chmod +x /wait
-
-#For wait to run it needs these vars
-ENV POSTGRES_HOST_AUTH_METHOD "trust"
-ENV POSTGRES_DB "postgres"
-ENV WAIT_HOSTS "localhost:5432"
-ENV WAIT_HOSTS_TIMEOUT 300
-ENV WAIT_SLEEP_INTERVAL 30
-ENV WAIT_HOST_CONNECT_TIMEOUT 30
-
-RUN /wait
-
-RUN sudo -u postgres psql -c "ALTER user postgres WITH PASSWORD postgres"
-RUN su postgres -c "service postgresql restart"
-
-RUN if [ -n "$IS_WAIT" ]; then echo "runs like fine"; fi;
