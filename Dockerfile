@@ -120,3 +120,4 @@ USER root
 RUN echo "postgres:postgres" | chpasswd
 # Make runnable by anyone
 RUN chmod -R 777 /var/run/postgresql
+RUN if [ ! -f ".env" ]; then touch .env; fi;
