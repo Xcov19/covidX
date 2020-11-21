@@ -75,7 +75,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "guardian",
     "graphene_django",
-    "algoliasearch_django",
+    # TODO(@codecakes): add "algoliasearch_django" when needed,
     "corsheaders",
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
@@ -98,7 +98,7 @@ ROOT_URLCONF = "covidX.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": glob.glob(os.path.join(os.getcwd(), "apps/*/templates")),
+        "DIRS": glob.glob(join_project_path("apps/*/templates")),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -134,12 +134,12 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "HOST": "localhost",
-            "PORT": os.getenv("DB_PORT", "5432"),
-            "NAME": "covidx",
-            "USER": "covidx",
-            "PASSWORD": "covidx",
-        }
+            "HOST": os.getenv("POSTGRES_DB_HOST", "localhost"),
+            "PORT": os.getenv("POSTGRES_DB_PORT", "5432"),
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+        },
     }
 
 # Password validation

@@ -67,8 +67,7 @@ _py3_image_repos()
 
 http_archive(
     name = "rules_python",
-    url = "https://github.com/bazelbuild/rules_python/releases/download/0.0.3/rules_python-0.0.3.tar.gz",
-    sha256 = "e46612e9bb0dae8745de6a0643be69e8665a03f63163ac6610c210e80d14c3e4",
+    url = "https://github.com/bazelbuild/rules_python/archive/master.zip",
 )
 
 load("@rules_python//python:repositories.bzl",
@@ -82,18 +81,24 @@ pip_repositories()
 
 # Create a central repo that knows about the dependencies needed for
 # requirements.txt.
-pip_import(
-   name = "my_deps",
-   requirements = "//:requirements.txt",
-   timeout=3600,
-   compile=True,
-   python_interpreter="python3",
-)
-
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
-load("@my_deps//:requirements.bzl", "pip_install")
-pip_install()
+rules_python_external_version = "0.1.5"
+http_archive(
+    name = "rules_python_external",
+    sha256 = "", # Fill in with correct sha256 of your COMMIT_SHA version
+    strip_prefix = "rules_python_external-{version}".format(version = rules_python_external_version),
+    url = "https://github.com/dillon-giacoppo/rules_python_external/archive/v{version}.zip".format(version = rules_python_external_version),
+)
+# Install the rule dependencies
+load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
+rules_python_external_dependencies()
+load("@rules_python_external//:defs.bzl", "pip_install")
+pip_install(
+    # Uses the default repository name "pip"
+    name = "my_deps",
+    requirements = "//:requirements.txt",
+)
 
 
 # Invoke buildifier via the Bazel rule
