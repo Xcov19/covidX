@@ -10,10 +10,10 @@ RUN mkdir -p /run/postgresql/
 RUN chown -R postgres:postgres /run/postgresql/
 RUN chmod -R 777 /var/lib/postgresql/data
 RUN chown -R postgres:postgres /var/lib/postgresql/data
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
-RUN apt-get update -y
 
+RUN apt-get update -y
 RUN apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
 
 # Import the repository signing key:
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
