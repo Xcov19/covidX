@@ -84,7 +84,7 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git
 
 # For gevent
-RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev
+RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev
 RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements.txt
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
