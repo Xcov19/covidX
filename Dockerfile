@@ -117,8 +117,6 @@ RUN /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config
 RUN update-rc.d postgresql defaults
 
 USER "$(MAIN_USER)"
-# Update password
-RUN echo 'postgres:postgres' | chpasswd
 # Make runnable by anyone
 RUN chmod -R 777 /var/run/postgresql
 RUN usermod -a -G gitpod postgres
