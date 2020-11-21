@@ -53,8 +53,6 @@ ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:
 ENV GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568
 ENV PYTHON_VERSION=3.8.6
 RUN which python3
-RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
-RUN ln -s `which python3` /usr/bin/python;
 
 ENV PYTHON_PIP_VERSION=20.2.3
 ENV PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
@@ -65,7 +63,7 @@ RUN set -ex; \
 	wget -O get-pip.py "$PYTHON_GET_PIP_URL"; \
 	echo "$PYTHON_GET_PIP_SHA256 *get-pip.py" | sha256sum --check --strict -; \
 	\
-	python get-pip.py \
+	python3 get-pip.py \
 		--disable-pip-version-check \
 		--no-cache-dir \
 		"pip==$PYTHON_PIP_VERSION" \
@@ -80,23 +78,17 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-# Prepare for pyenv
 RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev \
  libncursesw5-dev xz-utils libffi-dev liblzma-dev \
  libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git
 
-##Setup git
-#RUN wget https://github.com/git/git/archive/v2.29.2.zip && unzip v2.29.2.zip
-#RUN cd git-* && make prefix=/usr/local all && make prefix=/usr/local install
-#RUN git --version
-
-RUN curl https://pyenv.run | bash
-RUN export PATH="/root/.pyenv/bin:$PATH"
-
 # For gevent
 RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev
-RUN python -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements.txt
+RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements.txt
+
+RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
+RUN ln -s `which python3` /usr/bin/python;
 
 # Setup celery project dir
 ARG PROJECT=app
