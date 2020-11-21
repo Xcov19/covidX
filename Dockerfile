@@ -1,25 +1,18 @@
-FROM ubuntu:focal
+FROM gitpod/workspace-postgres
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
-# Create the file repository configuration:
-RUN (addgroup --system postgres && adduser --system postgres && usermod -a -G postgres postgres)
-RUN mkdir -p /var/lib/postgresql/data
-RUN mkdir -p /run/postgresql/
-RUN chown -R postgres:postgres /run/postgresql/
-RUN chmod -R 777 /var/lib/postgresql/data
-RUN chown -R postgres:postgres /var/lib/postgresql/data
 
 RUN apt-get update -y
 RUN apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2
-RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
+#RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
 
 # Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+#RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+#RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN apt-get update -y
-RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
+#RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
@@ -106,18 +99,4 @@ ENV MAIN_USER=$(whoami)
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-USER postgres
-RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
-# Expose the PostgreSQL port
-EXPOSE 5432
-RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
-RUN /etc/init.d/postgresql start;
-RUN /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf &
-
-RUN update-rc.d postgresql defaults
-
-USER root
-RUN echo "postgres:postgres" | chpasswd
-# Make runnable by anyone
-RUN chmod -R 777 /var/run/postgresql
 RUN if [ ! -f ".env" ]; then touch .env; fi;
