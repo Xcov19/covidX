@@ -94,6 +94,9 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
 RUN curl https://pyenv.run | bash
 RUN export PATH="/root/.pyenv/bin:$PATH"
 
+# For gevent
+RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev
+
 # Setup celery project dir
 ARG PROJECT=app
 ARG PROJECT_DIR=/${PROJECT}

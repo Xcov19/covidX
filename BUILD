@@ -18,7 +18,7 @@ REQS = [
     "social-auth-core",
     "django-extensions",
     "django-cors-headers",
-    "psycopg2",
+    "psycopg2-binary",
     "werkzeug",
     ]
 
