@@ -118,4 +118,4 @@ RUN /etc/init.d/postgresql start;
 RUN /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf &
 RUN service postgresql start
 
-RUN update-rc.d postgresql-service defaults
+RUN update-rc.d postgresql defaults
