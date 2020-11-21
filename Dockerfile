@@ -96,6 +96,7 @@ RUN export PATH="/root/.pyenv/bin:$PATH"
 
 # For gevent
 RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev
+RUN python -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python -m pip install -r requirements.txt
 
 # Setup celery project dir
 ARG PROJECT=app
