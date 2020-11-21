@@ -1,4 +1,4 @@
-FROM ubuntu:focal
+FROM janitortechnology/ubuntu-dev:branch-major-upgrades
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
