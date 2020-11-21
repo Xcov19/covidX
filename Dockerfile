@@ -94,8 +94,9 @@ ENV PYTHON_VERSION=3.8.6
 #RUN cd /usr/local/bin && ln -s idle3 idle && ln -s pydoc3 pydoc && ln -s python3 python && \
 #ln -s python3-config python-config
 
-#RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
-RUN ln -s /usr/local/bin/python3 /usr/bin/python;
+RUN which python3
+RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
+RUN ln -s `which python3` /usr/bin/python;
 
 ENV PYTHON_PIP_VERSION=20.2.3
 ENV PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
