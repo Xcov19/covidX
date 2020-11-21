@@ -105,10 +105,14 @@ RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `wh
 ENV MAIN_USER=$(whoami)
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+# Update password
+echo 'postgres:postgres' | chpasswd
+
 USER postgres
 RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
 # Expose the PostgreSQL port
 EXPOSE 5432
 RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
 RUN /etc/init.d/postgresql start;
-ENTRYPOINT /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf
+RUN /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf
