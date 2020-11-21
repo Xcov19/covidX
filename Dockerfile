@@ -120,4 +120,3 @@ USER root
 RUN echo "postgres:postgres" | chpasswd
 # Make runnable by anyone
 RUN chmod -R 777 /var/run/postgresql
-RUN usermod -a -G gitpod postgres
