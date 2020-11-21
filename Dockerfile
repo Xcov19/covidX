@@ -1,4 +1,4 @@
-FROM gitpod/workspace-postgres
+FROM ubuntu:focal
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
@@ -6,13 +6,12 @@ CMD ["/sbin/my_init"]
 
 RUN apt-get update -y
 RUN apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2
-#RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 7FCC7D46ACCC4CF8
 
 # Import the repository signing key:
-#RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-#RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
 RUN apt-get update -y
-#RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
+RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
