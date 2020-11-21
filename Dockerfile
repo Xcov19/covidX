@@ -52,48 +52,6 @@ ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:
 
 ENV GPG_KEY=E3FF2839C048B25C084DEBE9B26995E310250568
 ENV PYTHON_VERSION=3.8.6
-#RUN set -ex \
-#	\
-#	&& wget -O python.tar.xz "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" \
-#	&& wget -O python.tar.xz.asc "https://www.python.org/ftp/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz.asc" \
-#	&& export GNUPGHOME="$(mktemp -d)" \
-#	&& gpg --batch --keyserver ha.pool.sks-keyservers.net --recv-keys "$GPG_KEY" \
-#	&& gpg --batch --verify python.tar.xz.asc python.tar.xz \
-#	&& { command -v gpgconf > /dev/null && gpgconf --kill all || :; } \
-#	&& rm -rf "$GNUPGHOME" python.tar.xz.asc \
-#	&& mkdir -p /usr/src/python \
-#	&& tar -xJC /usr/src/python --strip-components=1 -f python.tar.xz \
-#	&& rm python.tar.xz \
-#	\
-#	&& cd /usr/src/python \
-#	&& gnuArch="$(dpkg-architecture --query DEB_BUILD_GNU_TYPE)" \
-#	&& ./configure \
-#		--build="$gnuArch" \
-#		--enable-loadable-sqlite-extensions \
-#		--enable-optimizations \
-#		--enable-option-checking=fatal \
-#		--enable-shared \
-#		--with-system-expat \
-#		--with-system-ffi \
-#		--without-ensurepip \
-#	&& make -j "$(nproc)" \
-#	&& make install \
-#	&& rm -rf /usr/src/python \
-#	\
-#	&& find /usr/local -depth \
-#		\( \
-#			\( -type d -a \( -name test -o -name tests -o -name idle_test \) \) \
-#			-o \( -type f -a \( -name '*.pyc' -o -name '*.pyo' -o -name '*.a' \) \) \
-#			-o \( -type f -a -name 'wininst-*.exe' \) \
-#		\) -exec rm -rf '{}' + \
-#	\
-#	&& ldconfig \
-#	\
-#	&& python3 --version
-
-#RUN cd /usr/local/bin && ln -s idle3 idle && ln -s pydoc3 pydoc && ln -s python3 python && \
-#ln -s python3-config python-config
-
 RUN which python3
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
 RUN ln -s `which python3` /usr/bin/python;
@@ -123,7 +81,7 @@ RUN set -ex; \
 	rm -f get-pip.py
 
 # Prepare for pyenv
-RUN apt-get install -y make libssl-dev zlib1g-dev \
+RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev \
  libncursesw5-dev xz-utils libffi-dev liblzma-dev \
  libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
