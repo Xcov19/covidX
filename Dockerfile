@@ -113,6 +113,8 @@ USER postgres
 RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
 # Expose the PostgreSQL port
 EXPOSE 5432
+# Make runnable by anyone
+RUN chmod -R 777 /var/run/postgresql
 RUN echo "listen_addresses='*'" >> /etc/postgresql/13/main/postgresql.conf
 RUN /etc/init.d/postgresql start;
 RUN /usr/lib/postgresql/13/bin/postgres -D /var/lib/postgresql/13/main -c config_file=/etc/postgresql/13/main/postgresql.conf &
