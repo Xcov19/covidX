@@ -107,7 +107,7 @@ ENV MAIN_USER=$(whoami)
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Update password
-echo 'postgres:postgres' | chpasswd
+RUN echo 'postgres:postgres' | chpasswd
 
 USER postgres
 RUN echo "host all  all    0.0.0.0/0  md5" >> /var/lib/postgresql/data/pg_hba.conf
