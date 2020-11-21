@@ -84,12 +84,12 @@ RUN set -ex; \
 RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev \
  libncursesw5-dev xz-utils libffi-dev liblzma-dev \
- libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip
+ libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git
 
-#Setup git
-RUN wget https://github.com/git/git/archive/v2.29.2.zip && unzip v2.29.2.zip
-RUN cd git-* && make prefix=/usr/local all && make prefix=/usr/local install
-RUN git --version
+##Setup git
+#RUN wget https://github.com/git/git/archive/v2.29.2.zip && unzip v2.29.2.zip
+#RUN cd git-* && make prefix=/usr/local all && make prefix=/usr/local install
+#RUN git --version
 
 RUN curl https://pyenv.run | bash
 RUN export PATH="/root/.pyenv/bin:$PATH"
