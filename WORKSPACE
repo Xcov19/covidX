@@ -67,7 +67,6 @@ _py3_image_repos()
 
 http_archive(
     name = "rules_python",
-    #url = "https://github.com/bazelbuild/rules_python/releases/download/0.1.0/rules_python-0.1.0.tar.gz",
     url = "https://github.com/bazelbuild/rules_python/archive/master.zip",
 )
 
@@ -94,7 +93,6 @@ http_archive(
 # Install the rule dependencies
 load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
 rules_python_external_dependencies()
-# load("@my_deps//:requirements.bzl", "pip_install")
 load("@rules_python_external//:defs.bzl", "pip_install")
 pip_install(
     # Uses the default repository name "pip"
