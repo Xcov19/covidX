@@ -93,6 +93,10 @@ ENV PYTHON_VERSION=3.8.6
 
 #RUN cd /usr/local/bin && ln -s idle3 idle && ln -s pydoc3 pydoc && ln -s python3 python && \
 #ln -s python3-config python-config
+
+#RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
+RUN ln -s /usr/local/bin/python3 /usr/bin/python;
+
 ENV PYTHON_PIP_VERSION=20.2.3
 ENV PYTHON_GET_PIP_URL=https://github.com/pypa/get-pip/raw/fa7dc83944936bf09a0e4cb5d5ec852c0d256599/get-pip.py
 ENV PYTHON_GET_PIP_SHA256=6e0bb0a2c2533361d7f297ed547237caf1b7507f197835974c0dd7eba998c53c
@@ -116,9 +120,6 @@ RUN set -ex; \
 			\( -type f -a \( -name '*.pyc' -o -name '*.pyo' \) \) \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
-
-RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
-RUN ln -s /usr/local/bin/python3 /usr/bin/python;
 
 # Prepare for pyenv
 RUN apt-get install -y make build-essential libssl-dev zlib1g-dev \
