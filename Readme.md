@@ -33,7 +33,7 @@ Then,
 - Pre-requisites:
 ```bash
 export DEBUG_ENV=1
-    export SECRET_KEY=<YOUR_SECRET>
+export SECRET_KEY=<YOUR_SECRET>
 CPPFLAGS="$(pg_config --cppflags)"
 LDFLAGS="$(pg_config --ldflags)"
 ```
@@ -67,7 +67,7 @@ Make sure to follow the steps above. Then follow these steps:
 
 - Create a local docker bazel image
 ```shell
-PULLER_TIMEOUT=3600 DOCKER_REPO_CACHE=$(pwd)/docker_repo_cache DEBUG_ENV=1 CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" SECRET_ID="SECRET_KEY" BUCKET_NAME="gae-bizlead" DJANGO_SETTINGS_MODULE="covidX.settings" WSGI_APPLICATION="covidX.wsgi.application" bazel run --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)" --force_python=py3 --incompatible_use_python_toolchains=false  --loading_phase_threads=1 --http_CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements_dev.txt timeout_scaling=2 :covidx_manage
+PULLER_TIMEOUT=3600 DOCKER_REPO_CACHE=$(pwd)/docker_repo_cache DEBUG_ENV=1 CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" SECRET_ID="SECRET_KEY" BUCKET_NAME="gae-bizlead" DJANGO_SETTINGS_MODULE="covidX.settings" WSGI_APPLICATION="covidX.wsgi.application" bazel run --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)" --force_python=py3 --incompatible_use_python_toolchains=false  --loading_phase_threads=1 --http_timeout_scaling=2 :covidx_manage
 ```
 
 - Run bazel image using docker
