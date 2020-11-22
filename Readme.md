@@ -22,7 +22,6 @@ covidX will be run on python *3.7.6* and *3.8.5*
 docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e BUCKET_NAME="gae-bizlead" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined codecakes/covidx_manage:bazel runserver_plus
 ```
 
-
 ### How to Setup for Development
 Setup a virtualenv and run:
 
@@ -85,6 +84,13 @@ docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="
 
 This should set you up for local development.
 
+### Installing Developer Packages
+Setup a virtualenv and run:
+
+```shell script
+CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements_dev.txt 
+```
+
 #### Google Cloud Deployment
 
 DEPLOY like:
@@ -94,6 +100,7 @@ Enable following options on GAE:
 ```python
 gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
 ```
+
 
 ### Common Issues:
 * [Error when building local machine developer setup via docker image](https://github.com/Xcov19/covidX/issues/50)
