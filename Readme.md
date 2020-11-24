@@ -88,7 +88,7 @@ This should set you up for local development.
 Setup a virtualenv and run:
 
 ```shell script
-CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements_dev.txt 
+python3 -m pip install -r requirements_dev.txt 
 ```
 
 #### Google Cloud Deployment
