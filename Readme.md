@@ -104,6 +104,7 @@ gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
 
 ### Common Issues:
 * [Error when building local machine developer setup via docker image](https://github.com/Xcov19/covidX/issues/50)
+* [No matching distribution found for ipython==7.18.1](https://github.com/Xcov19/covidX/issues/57)
 
 ### TODO/TBA:
     How to contribute. Coming soon.
