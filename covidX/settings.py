@@ -55,14 +55,11 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
-
-if DEBUG is True:
-    ALLOWED_HOSTS = [os.getenv("DJANGO_ALLOWED_HOST")]
-else: 
-    ALLOWED_HOSTS = ['0.0.0.0']
-
-
-
+ALLOWED_HOSTS = [
+    allowed_host
+    if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
+    else "0.0.0.0"
+]
 # Application definition
 
 INSTALLED_APPS = [
