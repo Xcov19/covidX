@@ -38,6 +38,6 @@ urlpatterns = [
     ),
     re_path(r"^apihealth/?$", include("apps.apihealth.urls")),
     path("admin/", admin.site.urls),
-    re_path("^auth0/?$", include("apps.auth_zero.urls")),
+    re_path(r"^auth0/?", include("apps.auth_zero.urls")),
     re_path(r"^api/graphql/?$", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]

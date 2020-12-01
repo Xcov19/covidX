@@ -22,6 +22,7 @@ py_library(
         requirement("graphene-django"),
         requirement("django-guardian"),
         requirement("djangorestframework"),
+        requirement("python-dotenv"),
         ":gae_settings",
         ":schema",
         ":utils",

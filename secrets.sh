@@ -14,6 +14,8 @@ echo "SOCIAL_AUTH_AUTH0_SECRET=$(gcloud secrets versions access latest --secret=
 echo "" >> .env
 echo "ACCESS_TOKEN_METHOD=POST" >> .env
 echo "" >> .env
+echo "JWT_AUDIENCE=$(gcloud secrets versions access latest --secret='JWT_AUDIENCE')" >> .env
+echo "" >> .env
 echo "ALGOLIA_API_KEY=$(gcloud secrets versions access latest --secret='ALGOLIA_API_KEY')" >> .env
 echo "" >> .env
 echo "ALGOLIA_APPLICATION_ID=$(gcloud secrets versions access latest --secret='ALGOLIA_APPLICATION_ID')" >> .env

@@ -87,6 +87,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Map username from the Access Token payload to
+    # Django authentication system
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -183,15 +186,29 @@ SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
 SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
 SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
+JWT_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
 if AUDIENCE := (
     os.getenv("AUTH0_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
 ):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
 
+# Set JWT_AUDIENCE to API identifier and the JWT_ISSUER to Auth0 domain
+JWT_AUTH = {
+    "JWT_PAYLOAD_GET_USERNAME_HANDLER": (
+        "apps.auth_zero.auth0backend." "jwt_get_username_from_payload_handler"
+    ),
+    "JWT_DECODE_HANDLER": "apps.auth_zero.auth0backend.jwt_decode_token",
+    "JWT_ALGORITHM": "RS256",
+    "JWT_AUDIENCE": JWT_AUDIENCE,
+    "JWT_ISSUER": "https://dev-mavl72j2.eu.auth0.com/",
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
+
 AUTHENTICATION_BACKENDS = {
     "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.RemoteUserBackend",
     "guardian.backends.ObjectPermissionBackend",
 }
 
@@ -202,6 +219,11 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
         "rest_framework.permissions.AllowAny",
     ],
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ),
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework.renderers.JSONOpenAPIRenderer",
@@ -210,6 +232,7 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
+AUTH_REDIRECT_URI = "/auth0/complete/auth0"
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403

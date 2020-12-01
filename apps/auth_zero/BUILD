@@ -19,9 +19,19 @@ py_library(
   name = "auth0backend",
   srcs = ["auth0backend.py"],
   deps = [
+    requirement("django"),
     requirement("python-jose"),
     requirement("social-auth-core"),
+    requirement("requests"),
   ],
+)
+
+py_library(
+    name = "serializer",
+    srcs = ["serializer.py"],
+    deps = [
+        requirement("djangorestframework"),
+        ],
 )
 
 py_library(
@@ -38,6 +48,8 @@ py_library(
     srcs = ["views.py"],
     deps = [
       requirement("django"),
+      requirement("djangorestframework"),
+      ":serializer",
       ],
     data = [":auth_zero_tmpl"],
 )
