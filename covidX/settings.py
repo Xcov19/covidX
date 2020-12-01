@@ -56,7 +56,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
 ALLOWED_HOSTS = [
-    allowed_host # pylint: disable=used-before-assignment
+    allowed_host  # pylint: disable=used-before-assignment
     if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
     else "0.0.0.0"
 ]
