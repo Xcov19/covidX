@@ -5,6 +5,9 @@ load("@my_deps//:requirements.bzl", "requirement")
 py_library(
     name = "__init__",
     srcs = ["__init__.py"],
+    deps = [
+      ":apps",
+    ],
 )
 
 py_library(
@@ -46,4 +49,12 @@ py_library(
         requirement("django"),
         "//covidX:utils",
     ],
+    data = [":migrations",],
+)
+
+filegroup(
+    name = "migrations",
+    srcs = glob([
+        "migrations/**",
+    ]),
 )

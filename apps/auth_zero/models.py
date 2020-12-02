@@ -4,13 +4,9 @@ from django.db import models
 
 class User(AbstractUser):
     email = models.EmailField(blank=False, verbose_name="email", unique=True)
-    username = models.CharField(blank=False, unique=True)
-    is_authenticated = models.BooleanField(blank=False, default=False)
+    username = models.CharField(blank=False, unique=True, max_length=256)
     is_active = models.BooleanField(blank=False, default=False)
     USERNAME_FIELD = "username"
-    REQUIRED_FIELDS = [
-        "email",
-        "is_authenticated",
-        "is_active",
-    ]
-    app_label = "auth_zero"
+
+    class Meta:
+        app_label = "auth_zero"

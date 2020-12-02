@@ -19,49 +19,32 @@ LOGGER = settings.LOGGER
 class Auth0(Auth0OAuth2):
     """Auth0 OAuth authentication backend"""
 
-    name = "covidx"
-    SCOPE_SEPARATOR = " "
-    ACCESS_TOKEN_METHOD = settings.SOCIAL_AUTH_ACCESS_TOKEN_METHOD
-    # REDIRECT_STATE = False
-    # EXTRA_DATA = [("picture", "picture"), ("email", "email")]
+    REDIRECT_STATE = False
+    EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
     # @staticmethod
-    # def authorization_url():
-    #     return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
-
-    # @staticmethod
-    # def access_token_url():
-    #     return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
-
-    @staticmethod
-    def get_user_id(details, response):
-        """Return current user id."""
-        LOGGER.info(f"{response}")
-        return details["user_id"]
-
-    @staticmethod
-    def get_user_details(response):
-        """Obtain JWT and the keys to validate the signature."""
-        id_token = response.get("id_token")
-        jwks = requests.get(
-            f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
-        )
-        issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
-        audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
-        payload = jwt.decode(
-            id_token,
-            jwks.content,
-            algorithms=["RS256"],
-            audience=audience,
-            issuer=issuer,
-        )
-        return {
-            "username": payload["nickname"],
-            "first_name": payload["name"],
-            "picture": payload["picture"],
-            "user_id": payload["sub"],
-            "email": payload["email"],
-        }
+    # def get_user_details(response):
+    #     """Obtain JWT and the keys to validate the signature."""
+    #     id_token = response.get("id_token")
+    #     jwks = requests.get(
+    #         f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
+    #     )
+    #     issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
+    #     audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
+    #     payload = jwt.decode(
+    #         id_token,
+    #         jwks.content,
+    #         algorithms=["RS256"],
+    #         audience=audience,
+    #         issuer=issuer,
+    #     )
+    #     return {
+    #         "username": payload["nickname"],
+    #         "first_name": payload["name"],
+    #         "picture": payload["picture"],
+    #         "user_id": payload["sub"],
+    #         "email": payload["email"],
+    #     }
 
     @staticmethod
     def process_roles(details, user, **kwargs):
@@ -72,6 +55,7 @@ class Auth0(Auth0OAuth2):
             user.save()
 
 
+# TODO(codecakes): Implement after web flow successful run
 class Auth0CodeFlow(Auth0):
     """Custom Web to Server Auth0 flow.
 
@@ -85,7 +69,7 @@ class Auth0CodeFlow(Auth0):
     # scope = settings.AUTH_SCOPE
     client_id = settings.SOCIAL_AUTH_AUTH0_KEY
     client_secret = settings.SOCIAL_AUTH_AUTH0_SECRET
-    redirect_uri = settings.AUTH_REDIRECT_URI
+    # redirect_uri = settings.AUTH_REDIRECT_URI
 
     @staticmethod
     def authorization_url():
@@ -107,7 +91,7 @@ class Auth0CodeFlow(Auth0):
         payload = {
             "response_type": "code",
             "client_id": Auth0CodeFlow.client_id,
-            "redirect_uri": Auth0CodeFlow.redirect_uri,
+            # "redirect_uri": Auth0CodeFlow.redirect_uri,
             # TODO(@codecakes): add scope later.
             # 'scope': Auth0CodeFlow.scope,
             "audience": Auth0CodeFlow.audience,
@@ -130,7 +114,7 @@ class Auth0CodeFlow(Auth0):
             "grant_type": "authorization_code",
             "client_id": Auth0CodeFlow.client_id,
             "client_secret": Auth0CodeFlow.client_secret,
-            "redirect_uri": Auth0CodeFlow.redirect_uri,
+            # "redirect_uri": Auth0CodeFlow.redirect_uri,
             **kwargs,
         }
         return requests.post(access_token_url, data=payload, headers=headers)

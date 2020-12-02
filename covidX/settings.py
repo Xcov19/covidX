@@ -32,8 +32,6 @@ LOGGER = utils.createLogger(join_project_path("logs.log"))
 ENV = join_project_path(".env")
 load_dotenv(ENV, verbose=True, override=True)
 
-sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
-
 LOGGER.info(f"Starting {PROJECT_NAME} app")
 LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
 
@@ -82,9 +80,9 @@ PLUGIN_APPS = [
 
 MODULES = [
     # TODO(codecakes): add "algoliasearch_django" when needed,
-    "apps.hrm.apps.HrmConfig",
-    "apps.apihealth.apps.APIHealthConfig",
-    "apps.auth_zero.apps.Auth0LoginConfig",
+    "apps.hrm",
+    "apps.apihealth",
+    "apps.auth_zero",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PLUGIN_APPS + MODULES
@@ -222,6 +220,8 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+AUTH_REDIRECT_URI = "/auth0/complete/auth0/"
 
 AUTH_USER_MODEL = "auth_zero.User"
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
@@ -233,9 +233,10 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_uid",
     "social_core.pipeline.social_auth.social_user",
     "social_core.pipeline.user.get_username",
+    # TODO(codecakes): add when auth0 has process roles function
     # '<APP_NAME>.authentication.authorization.process_roles',
     "social_core.pipeline.social_auth.associate_user",
-    "social_core.piTEMPLATESpeline.social_auth.load_extra_data",
+    "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
 )
 
