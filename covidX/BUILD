@@ -28,6 +28,7 @@ py_library(
         "//apps/apihealth:apps",
         "//apps/hrm:apps",
         "//apps/auth_zero:apps",
+        "//apps/auth_zero:models",
         "//:__init__",
     ],
     srcs_version="PY3",

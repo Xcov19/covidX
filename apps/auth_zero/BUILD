@@ -21,6 +21,7 @@ py_library(
   deps = [
     requirement("python-jose"),
     requirement("social-auth-core"),
+    requirement("social-auth-app-django"),
   ],
 )
 
@@ -40,6 +41,23 @@ py_library(
       requirement("django"),
       ],
     data = [":auth_zero_tmpl"],
+)
+
+py_library(
+    name = "models",
+    srcs = ["models.py"],
+    deps = [
+        requirement("django"),
+    ],
+)
+
+py_library(
+    name = "admin",
+    srcs = ["admin.py"],
+    deps = [
+        requirement("django"),
+        ":models",
+    ],
 )
 
 filegroup(

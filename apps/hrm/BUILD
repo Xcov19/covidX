@@ -10,7 +10,10 @@ py_library(
 py_library(
     name = "admin",
     srcs = ["admin.py"],
-    deps = [],
+    deps = [
+        requirement("django"),
+        ":models",
+    ],
 )
 
 py_library(

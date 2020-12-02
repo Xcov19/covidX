@@ -1,6 +1,16 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    pass
+    email = models.EmailField(blank=False, verbose_name="email", unique=True)
+    username = models.CharField(blank=False, unique=True)
+    is_authenticated = models.BooleanField(blank=False, default=False)
+    is_active = models.BooleanField(blank=False, default=False)
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = [
+        "email",
+        "is_authenticated",
+        "is_active",
+    ]
+    app_label = "auth_zero"

@@ -60,26 +60,34 @@ ALLOWED_HOSTS = [
     if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
     else "0.0.0.0"
 ]
-# Application definition
 
-INSTALLED_APPS = [
+# Application definition
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
+
+PLUGIN_APPS = [
+    "corsheaders",
     "social_django",
     "django_extensions",
     "guardian",
     "graphene_django",
-    # TODO(@codecakes): add "algoliasearch_django" when needed,
-    "corsheaders",
+    "rest_framework",
+]
+
+MODULES = [
+    # TODO(codecakes): add "algoliasearch_django" when needed,
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
     "apps.auth_zero.apps.Auth0LoginConfig",
-    "rest_framework",
 ]
+
+INSTALLED_APPS = DJANGO_APPS + PLUGIN_APPS + MODULES
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -104,6 +112,10 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # See:
+                # https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#template-context-processors
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ]
         },
     },
@@ -210,6 +222,22 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
+
+AUTH_USER_MODEL = "auth_zero.User"
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+
+SOCIAL_AUTH_PIPELINE = (
+    "social_core.pipeline.social_auth.social_details",
+    "social_core.pipeline.social_auth.social_uid",
+    "social_core.pipeline.social_auth.social_user",
+    "social_core.pipeline.user.get_username",
+    # '<APP_NAME>.authentication.authorization.process_roles',
+    "social_core.pipeline.social_auth.associate_user",
+    "social_core.piTEMPLATESpeline.social_auth.load_extra_data",
+    "social_core.pipeline.user.user_details",
+)
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403

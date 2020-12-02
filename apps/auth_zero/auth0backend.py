@@ -11,27 +11,27 @@ from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from jose import jwk as jose_jwk
 from jose import jwt
-from social_core.backends.oauth import BaseOAuth2
+from social_core.backends.auth0 import Auth0OAuth2
 
 LOGGER = settings.LOGGER
 
 
-class Auth0(BaseOAuth2):
+class Auth0(Auth0OAuth2):
     """Auth0 OAuth authentication backend"""
 
-    name = "auth0"
+    name = "covidx"
     SCOPE_SEPARATOR = " "
     ACCESS_TOKEN_METHOD = settings.SOCIAL_AUTH_ACCESS_TOKEN_METHOD
-    REDIRECT_STATE = False
-    EXTRA_DATA = [("picture", "picture"), ("email", "email")]
+    # REDIRECT_STATE = False
+    # EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
-    @staticmethod
-    def authorization_url():
-        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
+    # @staticmethod
+    # def authorization_url():
+    #     return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
 
-    @staticmethod
-    def access_token_url():
-        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
+    # @staticmethod
+    # def access_token_url():
+    #     return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
 
     @staticmethod
     def get_user_id(details, response):
@@ -62,6 +62,14 @@ class Auth0(BaseOAuth2):
             "user_id": payload["sub"],
             "email": payload["email"],
         }
+
+    @staticmethod
+    def process_roles(details, user, **kwargs):
+        """Make django aware of role set by Auth0 Rule."""
+        if details["role"] == "admin":
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
 
 
 class Auth0CodeFlow(Auth0):
