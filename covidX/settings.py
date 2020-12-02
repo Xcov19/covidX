@@ -25,13 +25,15 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.expanduser(BASE_DIR)
 join_project_path = functools.partial(os.path.join, PROJECT_ROOT)
 
+# load LOGGER
+LOGGER = utils.createLogger(join_project_path("logs.log"))
+
 # load variables values into ENV
 ENV = join_project_path(".env")
-load_dotenv(ENV)
+load_dotenv(ENV, verbose=True, override=True)
 
 sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
 
-LOGGER = utils.createLogger(join_project_path("logs.log"))
 LOGGER.info(f"Starting {PROJECT_NAME} app")
 LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
 
@@ -54,12 +56,10 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
 ALLOWED_HOSTS = [
-    "*",
-    os.getenv("DJANGO_ALLOWED_HOST", "127.0.0.1"),
-    "localhost",
+    allowed_host  # pylint: disable=used-before-assignment
+    if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
+    else "0.0.0.0"
 ]
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "django_extensions",
     "guardian",
     "graphene_django",
+    # TODO(@codecakes): add "algoliasearch_django" when needed,
     "corsheaders",
     "apps.hrm.apps.HrmConfig",
     "apps.apihealth.apps.APIHealthConfig",
@@ -95,7 +96,7 @@ ROOT_URLCONF = "covidX.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": glob.glob(os.path.join(os.getcwd(), "apps/*/templates")),
+        "DIRS": glob.glob(join_project_path("apps/*/templates")),
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -131,12 +132,12 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "HOST": "localhost",
-            "PORT": os.getenv("DB_PORT", "5432"),
-            "NAME": "covidx",
-            "USER": "covidx",
-            "PASSWORD": "covidx",
-        }
+            "HOST": os.getenv("POSTGRES_DB_HOST", "localhost"),
+            "PORT": os.getenv("POSTGRES_DB_PORT", "5432"),
+            "NAME": "postgres",
+            "USER": "postgres",
+            "PASSWORD": "postgres",
+        },
     }
 
 # Password validation
@@ -218,4 +219,8 @@ GRAPHENE = {
     "SCHEMA": "covidX.schema.schema",
     "SCHEMA_OUTPUT": "schema.json",
     "SCHEMA_INDENT": 2,
+}
+ALGOLIA = {
+    "APPLICATION_ID": os.getenv("ALGOLIA_APPLICATION_ID"),
+    "API_KEY": os.getenv("ALGOLIA_API_KEY"),
 }
