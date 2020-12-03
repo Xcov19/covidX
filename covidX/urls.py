@@ -32,8 +32,8 @@ SCHEMA_META = dict(
 )
 
 # Secure Django's admin login screen
-# admin.autodiscover()
-# admin.site.login = login_required(admin.site.login)
+admin.autodiscover()
+admin.site.login = login_required(admin.site.login)
 
 urlpatterns = [
     path("openapi-schema/", get_schema_view(**SCHEMA_META), name="openapi-schema"),
@@ -43,6 +43,6 @@ urlpatterns = [
     ),
     re_path(r"^apihealth/?$", include("apps.apihealth.urls")),
     path("admin/", admin.site.urls),
-    re_path(r"^auth0/", include("apps.auth_zero.urls")),
+    path("auth0/", include("apps.auth_zero.urls")),
     re_path(r"^api/graphql/?$", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]

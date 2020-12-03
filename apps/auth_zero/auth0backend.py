@@ -19,32 +19,51 @@ LOGGER = settings.LOGGER
 class Auth0(Auth0OAuth2):
     """Auth0 OAuth authentication backend"""
 
-    REDIRECT_STATE = False
+    # REDIRECT_STATE = False
     EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
-    # @staticmethod
-    # def get_user_details(response):
-    #     """Obtain JWT and the keys to validate the signature."""
-    #     id_token = response.get("id_token")
-    #     jwks = requests.get(
-    #         f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
-    #     )
-    #     issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
-    #     audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
-    #     payload = jwt.decode(
-    #         id_token,
-    #         jwks.content,
-    #         algorithms=["RS256"],
-    #         audience=audience,
-    #         issuer=issuer,
-    #     )
-    #     return {
-    #         "username": payload["nickname"],
-    #         "first_name": payload["name"],
-    #         "picture": payload["picture"],
-    #         "user_id": payload["sub"],
-    #         "email": payload["email"],
-    #     }
+    @staticmethod
+    def authorization_url():
+        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
+
+    @staticmethod
+    def access_token_url():
+        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
+
+    @staticmethod
+    def get_user_id(details, response):
+        """Return current user id."""
+        LOGGER.info(f"{response}")
+        return details["user_id"]
+
+    def get_user_details(self, response):
+        """Obtain JWT and the keys to validate the signature."""
+        id_token = response.get("id_token")
+        jwks = requests.get(
+            f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
+        ).json()
+        issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
+        audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
+        payload = jwt.decode(
+            id_token,
+            jwks,
+            algorithms=["RS256"],
+            audience=audience,
+            issuer=issuer,
+        )
+        fullname, first_name, last_name = self.get_user_names(payload["name"])
+        response = {
+            "username": payload["nickname"],
+            "fullname": fullname,
+            "first_name": first_name,
+            "last_name": last_name,
+            "picture": payload["picture"],
+            "user_id": payload["sub"],
+            "email": payload["email"],
+            "email_verified": payload.get("email_verified", False),
+        }
+        LOGGER.info(f"{response}")
+        return response
 
     @staticmethod
     def process_roles(details, user, **kwargs):

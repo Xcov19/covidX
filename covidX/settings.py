@@ -202,6 +202,7 @@ if AUDIENCE := (
 AUTHENTICATION_BACKENDS = {
     "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.RemoteUserBackend",
     "guardian.backends.ObjectPermissionBackend",
 }
 
@@ -210,9 +211,13 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "rest_framework.permissions.IsAuthenticated",
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework.renderers.JSONOpenAPIRenderer",
     ],
@@ -221,10 +226,14 @@ REST_FRAMEWORK = {
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-AUTH_REDIRECT_URI = "/auth0/complete/auth0/"
+# AUTH_REDIRECT_URI = "/auth0/complete/auth0/"
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = LOGIN_REDIRECT_URL
+SOCIAL_AUTH_LOGIN_URL = LOGIN_URL
 
 AUTH_USER_MODEL = "auth_zero.User"
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 
 SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
