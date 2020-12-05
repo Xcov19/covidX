@@ -22,14 +22,6 @@ class Auth0(Auth0OAuth2):
     REDIRECT_STATE = False
     EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
-    @staticmethod
-    def authorization_url():
-        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/authorize"
-
-    @staticmethod
-    def access_token_url():
-        return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
-
     def get_user_details(self, response):
         """Obtain JWT and the keys to validate the signature."""
         id_token = response.get("id_token")
@@ -130,7 +122,7 @@ class Auth0CodeFlow(Auth0):
             "grant_type": "authorization_code",
             "client_id": Auth0CodeFlow.client_id,
             "client_secret": Auth0CodeFlow.client_secret,
-            # "redirect_uri": Auth0CodeFlow.redirect_uri,
+            "redirect_uri": Auth0CodeFlow.redirect_uri,
             **kwargs,
         }
         return requests.post(access_token_url, data=payload, headers=headers)
