@@ -33,7 +33,6 @@ class Auth0(Auth0OAuth2):
     @staticmethod
     def get_user_id(details, response):
         """Return current user id."""
-        LOGGER.info(f"{response}")
         return details["user_id"]
 
     def get_user_details(self, response):
@@ -62,7 +61,7 @@ class Auth0(Auth0OAuth2):
             "email": payload["email"],
             "email_verified": payload.get("email_verified", False),
         }
-        LOGGER.info(f"{response}")
+        LOGGER.info(f"User login details: {response}")
         return response
 
     @staticmethod
@@ -88,7 +87,7 @@ class Auth0CodeFlow(Auth0):
     # scope = settings.AUTH_SCOPE
     client_id = settings.SOCIAL_AUTH_AUTH0_KEY
     client_secret = settings.SOCIAL_AUTH_AUTH0_SECRET
-    # redirect_uri = settings.AUTH_REDIRECT_URI
+    redirect_uri = settings.AUTH_REDIRECT_URI
 
     @staticmethod
     def authorization_url():
@@ -110,7 +109,7 @@ class Auth0CodeFlow(Auth0):
         payload = {
             "response_type": "code",
             "client_id": Auth0CodeFlow.client_id,
-            # "redirect_uri": Auth0CodeFlow.redirect_uri,
+            "redirect_uri": Auth0CodeFlow.redirect_uri,
             # TODO(@codecakes): add scope later.
             # 'scope': Auth0CodeFlow.scope,
             "audience": Auth0CodeFlow.audience,
