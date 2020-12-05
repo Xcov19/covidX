@@ -1,3 +1,4 @@
+"""Auth0 based models."""
 from django.contrib.auth.models import AbstractUser
 
 

@@ -30,11 +30,6 @@ class Auth0(Auth0OAuth2):
     def access_token_url():
         return f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/oauth/token"
 
-    @staticmethod
-    def get_user_id(details, response):
-        """Return current user id."""
-        return details["user_id"]
-
     def get_user_details(self, response):
         """Obtain JWT and the keys to validate the signature."""
         id_token = response.get("id_token")
@@ -64,8 +59,9 @@ class Auth0(Auth0OAuth2):
         LOGGER.info(f"User login details: {response}")
         return response
 
+    # TODO(codecakes): add auth0 roles rule
     @staticmethod
-    def process_roles(details, user, **kwargs):
+    def process_roles(details, user, _):
         """Make django aware of role set by Auth0 Rule."""
         if details["role"] == "admin":
             user.is_staff = True
@@ -80,6 +76,7 @@ class Auth0CodeFlow(Auth0):
     See:
     https://auth0.com/docs/flows/call-your-api-using-the-authorization-code-flow
     #example-post-to-token-url
+
     """
 
     audience = settings.AUDIENCE
@@ -120,6 +117,7 @@ class Auth0CodeFlow(Auth0):
     @staticmethod
     def access_token_url(**kwargs: Dict[str, str]):
         """Exchange your authorization code for tokens.
+
         Args:
             **kwargs: dict, keyword parameters like auth code.
         Returns:

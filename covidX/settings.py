@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import functools
 import glob
 import os
-import sys
 
 from dotenv import load_dotenv
 
