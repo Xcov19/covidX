@@ -93,6 +93,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Map username from the Access Token payload to
+    # Django authentication system
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -113,7 +116,6 @@ TEMPLATES = [
                 # See:
                 # https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#template-context-processors
                 "social_django.context_processors.backends",
-                "social_django.context_processors.login_redirect",
             ]
         },
     },
@@ -193,11 +195,27 @@ SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
 SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
 SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
+JWT_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
-if AUDIENCE := (
-    os.getenv("AUTH0_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
-):
+if AUTH0_DOMAIN := os.getenv("SOCIAL_AUTH_AUTH0_DOMAIN"):
+    JWT_ISSUER = f"https://{AUTH0_DOMAIN}/"
+
+if AUDIENCE := os.getenv("JWT_AUDIENCE"):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
+
+# TODO(codecakes): enable logic once code auth flow tested.
+# Set JWT_AUDIENCE to API identifier and
+# the JWT_ISSUER to Auth0 domain
+JWT_AUTH = {
+    "JWT_PAYLOAD_GET_USERNAME_HANDLER": (
+        "apps.auth_zero.auth0backend." "jwt_get_username_from_payload_handler"
+    ),
+    "JWT_DECODE_HANDLER": "apps.auth_zero.auth0backend.jwt_decode_token",
+    "JWT_ALGORITHM": "RS256",
+    "JWT_AUDIENCE": JWT_AUDIENCE,
+    "JWT_ISSUER": JWT_ISSUER,
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
 
 AUTHENTICATION_BACKENDS = {
     "apps.auth_zero.auth0backend.Auth0",
@@ -226,11 +244,7 @@ REST_FRAMEWORK = {
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
-# AUTH_REDIRECT_URI = "/auth0/complete/auth0/"
-
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = LOGIN_REDIRECT_URL
-SOCIAL_AUTH_LOGIN_URL = LOGIN_URL
-
+AUTH_REDIRECT_URI = "/auth0/complete/auth0"
 AUTH_USER_MODEL = "auth_zero.User"
 SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True

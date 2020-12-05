@@ -19,7 +19,7 @@ LOGGER = settings.LOGGER
 class Auth0(Auth0OAuth2):
     """Auth0 OAuth authentication backend"""
 
-    # REDIRECT_STATE = False
+    REDIRECT_STATE = False
     EXTRA_DATA = [("picture", "picture"), ("email", "email")]
 
     @staticmethod

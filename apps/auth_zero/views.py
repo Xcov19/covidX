@@ -11,14 +11,12 @@ from django.shortcuts import render
 
 def index(request):
     user = request.user
-    settings.LOGGER.info("user.is_authenticated %s >>>>", user.is_authenticated)
-    # if user.get_username() and (auth0user := user.social_auth.get(provider="auth0")) and auth0user.email_verified:
     if user.is_authenticated:
         return redirect(dashboard)
     return render(request, "index.html")
 
 
-# @login_required
+@login_required
 def dashboard(request):
     user = request.user
     auth0user = user.social_auth.get(provider="auth0")
@@ -28,8 +26,8 @@ def dashboard(request):
         "picture": auth0user.extra_data["picture"],
         "email": auth0user.extra_data["email"],
     }
-    # if user.is_staff:
-    #     return HttpResponseRedirect("/admin")
+    if user.is_staff:
+        return HttpResponseRedirect("/admin")
     return render(
         request,
         "dashboard.html",

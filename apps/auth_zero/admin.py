@@ -6,5 +6,5 @@ from apps.auth_zero import models
 
 @admin.register(models.User)
 class CustomUserAdmin(UserAdmin):
-    # TODO(codecakes): add later
+    # TODO(codecakes): add on proper user model design
     pass
