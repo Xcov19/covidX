@@ -26,6 +26,10 @@ class User(AbstractUser):
         """Set user type then save."""
         if not self.id:
             self.user_type = self.default_user_type
+        if self.is_staff:
+            self.user_type = UserTypes.STAFF
+        if self.is_superuser:
+            self.user_type = UserTypes.ADMIN
         return super().save(*args, **kwargs)
 
 
