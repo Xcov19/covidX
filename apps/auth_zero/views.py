@@ -35,6 +35,7 @@ def dashboard(request):
     )
 
 
+@login_required
 def logout(request):
     log_out(request)
     return_to = urlencode({"returnTo": request.build_absolute_uri("/")})

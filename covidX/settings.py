@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import functools
 import glob
 import os
-import sys
 
 from dotenv import load_dotenv
 
@@ -31,8 +30,6 @@ LOGGER = utils.createLogger(join_project_path("logs.log"))
 # load variables values into ENV
 ENV = join_project_path(".env")
 load_dotenv(ENV, verbose=True, override=True)
-
-sys.path.extend(map(join_project_path, ("apps/", PROJECT_NAME)))
 
 LOGGER.info(f"Starting {PROJECT_NAME} app")
 LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
@@ -60,26 +57,34 @@ ALLOWED_HOSTS = [
     if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
     else "0.0.0.0"
 ]
-# Application definition
 
-INSTALLED_APPS = [
+# Application definition
+DJANGO_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+]
+
+PLUGIN_APPS = [
+    "corsheaders",
     "social_django",
     "django_extensions",
     "guardian",
     "graphene_django",
-    # TODO(@codecakes): add "algoliasearch_django" when needed,
-    "corsheaders",
-    "apps.hrm.apps.HrmConfig",
-    "apps.apihealth.apps.APIHealthConfig",
-    "apps.auth_zero.apps.Auth0LoginConfig",
     "rest_framework",
 ]
+
+MODULES = [
+    # TODO(codecakes): add "algoliasearch_django" when needed,
+    "apps.hrm",
+    "apps.apihealth",
+    "apps.auth_zero",
+]
+
+INSTALLED_APPS = DJANGO_APPS + PLUGIN_APPS + MODULES
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -87,6 +92,9 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    # Map username from the Access Token payload to
+    # Django authentication system
+    "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -104,6 +112,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                # See:
+                # https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#template-context-processors
+                "social_django.context_processors.backends",
             ]
         },
     },
@@ -183,15 +194,32 @@ SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
 SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
 SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
+JWT_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
-if AUDIENCE := (
-    os.getenv("AUTH0_AUDIENCE") or f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/userinfo"
-):
+if AUTH0_DOMAIN := os.getenv("SOCIAL_AUTH_AUTH0_DOMAIN"):
+    JWT_ISSUER = f"https://{AUTH0_DOMAIN}/"
+
+if AUDIENCE := os.getenv("JWT_AUDIENCE"):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
+
+# TODO(codecakes): enable logic once code auth flow tested.
+# Set JWT_AUDIENCE to API identifier and
+# the JWT_ISSUER to Auth0 domain
+JWT_AUTH = {
+    "JWT_PAYLOAD_GET_USERNAME_HANDLER": (
+        "apps.auth_zero.auth0backend." "jwt_get_username_from_payload_handler"
+    ),
+    "JWT_DECODE_HANDLER": "apps.auth_zero.auth0backend.jwt_decode_token",
+    "JWT_ALGORITHM": "RS256",
+    "JWT_AUDIENCE": JWT_AUDIENCE,
+    "JWT_ISSUER": JWT_ISSUER,
+    "JWT_AUTH_HEADER_PREFIX": "Bearer",
+}
 
 AUTHENTICATION_BACKENDS = {
     "apps.auth_zero.auth0backend.Auth0",
     "django.contrib.auth.backends.ModelBackend",
+    "django.contrib.auth.backends.RemoteUserBackend",
     "guardian.backends.ObjectPermissionBackend",
 }
 
@@ -200,9 +228,13 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
+        "rest_framework.permissions.IsAuthenticated",
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_RENDERER_CLASSES": [
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework.renderers.JSONOpenAPIRenderer",
     ],
@@ -210,6 +242,14 @@ REST_FRAMEWORK = {
 
 LOGIN_URL = "/auth0/login/auth0"
 LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+AUTH_REDIRECT_URI = "/auth0/complete/auth0"
+
+AUTH_USER_MODEL = "auth_zero.User"
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403

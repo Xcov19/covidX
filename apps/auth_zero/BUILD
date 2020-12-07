@@ -5,6 +5,9 @@ load("@my_deps//:requirements.bzl", "requirement")
 py_library(
     name = "__init__",
     srcs = ["__init__.py"],
+    deps = [
+      ":apps",
+    ],
 )
 
 py_library(
@@ -21,6 +24,7 @@ py_library(
   deps = [
     requirement("python-jose"),
     requirement("social-auth-core"),
+    requirement("social-auth-app-django"),
   ],
 )
 
@@ -39,12 +43,37 @@ py_library(
     deps = [
       requirement("django"),
       ],
-    data = [":auth_zero_tmpl"],
+    data = [":auth_zero_tmpl",],
+)
+
+py_library(
+    name = "models",
+    srcs = ["models.py"],
+    deps = [
+        requirement("django"),
+    ],
+    data = [":migrations",],
+)
+
+py_library(
+    name = "admin",
+    srcs = ["admin.py"],
+    deps = [
+        requirement("django"),
+        ":models",
+    ],
 )
 
 filegroup(
     name = "auth_zero_tmpl",
     srcs = glob([
         "templates/**",
+    ]),
+)
+
+filegroup(
+    name = "migrations",
+    srcs = glob([
+        "migrations/**",
     ]),
 )
