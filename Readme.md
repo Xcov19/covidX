@@ -17,6 +17,13 @@ We are an open community of volunteers without a commercial purpose. We believe 
 #### Python Version
 covidX will be run on python *3.7.6* and *3.8.5*
 
+#### Pre-requisite Services
+The following steps are necessary in order to ensure that you are able to run the project smoothly:
+* Install [PostgreSQL](https://www.postgresql.org/download/)
+* Install [Bazel](https://docs.bazel.build/versions/master/install.html)
+* Install [Docker Desktop](https://www.docker.com/get-started)
+* [Sign up](https://hub.docker.com/signup) to Docker Hub
+
 #### How to Run Locally Using Docker
 ```shell
 docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e BUCKET_NAME="gae-bizlead" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined codecakes/covidx_manage:bazel runserver_plus
