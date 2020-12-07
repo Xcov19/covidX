@@ -26,6 +26,7 @@ class User(AbstractUser):
         """Set user type then save."""
         if not self.id:
             self.user_type = self.default_user_type
+        # Refer to auth0backend.Auth0.process_roles to see why
         if self.is_staff:
             self.user_type = UserTypes.STAFF
         if self.is_superuser:
