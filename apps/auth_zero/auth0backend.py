@@ -4,6 +4,7 @@ import operator
 import random
 import sys
 from typing import Dict
+from typing import Union
 
 import requests
 from django.conf import settings
@@ -13,7 +14,11 @@ from jose import jwk as jose_jwk
 from jose import jwt
 from social_core.backends.auth0 import Auth0OAuth2
 
+from apps.auth_zero.apps import Store
+
 LOGGER = settings.LOGGER
+
+CACHE_TOKEN = Store(**dict())
 
 
 class Auth0(Auth0OAuth2):
@@ -25,15 +30,13 @@ class Auth0(Auth0OAuth2):
     def get_user_details(self, response):
         """Obtain JWT and the keys to validate the signature."""
         id_token = response.get("id_token")
-        jwks = requests.get(
-            f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
-        ).json()
-        issuer = f"https://{settings.SOCIAL_AUTH_AUTH0_DOMAIN}/"
+        jwks = settings.AUTH0_JWKS
+        issuer = settings.JWT_ISSUER
         audience = settings.SOCIAL_AUTH_AUTH0_KEY  # CLIENT_ID
         payload = jwt.decode(
             id_token,
             jwks,
-            algorithms=["RS256"],
+            algorithms=settings.AUTH0_ALGORITHMS,
             audience=audience,
             issuer=issuer,
         )
@@ -71,153 +74,109 @@ class Auth0CodeFlow(Auth0):
 
     """
 
-    audience = settings.AUDIENCE
-    # TODO(@codecakes): add scope later.
-    # scope = settings.AUTH_SCOPE
+    audience = settings.JWT_AUDIENCE
+    scope = settings.SOCIAL_AUTH_AUTH0_DOMAIN
     client_id = settings.SOCIAL_AUTH_AUTH0_KEY
     client_secret = settings.SOCIAL_AUTH_AUTH0_SECRET
     redirect_uri = settings.AUTH_REDIRECT_URI
 
     @staticmethod
-    def authorization_url():
-        """Request user's authorization and return an authorization code.
-
-        The format is like:
-            https://domain/authorize?
-            response_type=code&
-            client_id=client_id&
-            redirect_uri=http://localhost:8090/redirect_uri/&
-            scope=SCOPE&
-            audience=API_AUDIENCE&
-            state=STATE
-
-        Returns:
-            HTTP 302 response.
-        """
-        authorization_url = super().authorization_url()
-        payload = {
-            "response_type": "code",
-            "client_id": Auth0CodeFlow.client_id,
-            "redirect_uri": Auth0CodeFlow.redirect_uri,
-            # TODO(@codecakes): add scope later.
-            # 'scope': Auth0CodeFlow.scope,
-            "audience": Auth0CodeFlow.audience,
-            "state": gen_state(),
-        }
-        return requests.get(authorization_url, data=payload)
+    def jwt_get_username_from_payload_handler(payload) -> Union[None, str]:
+        """Authenticates from RemoteUserBackend and create remote django user."""
+        # pylint: disable=used-before-assignment
+        if (subject := payload.get("sub")) and (username := subject.replace("|", ".")):
+            authenticate(remote_user=username)
+            return username
+        return None
 
     @staticmethod
-    def access_token_url(**kwargs: Dict[str, str]):
-        """Exchange your authorization code for tokens.
+    def requires_scope(required_scope):
+        """Determines if the required scope is present in the Access Token.
 
         Args:
-            **kwargs: dict, keyword parameters like auth code.
+            required_scope (str): The scope required to access the resource
         Returns:
-            HTTP 200 response with a payload containing access_token,
-            refresh_token, id_token, and token_type values.
+            Function decorator.
         """
-        access_token_url = super().access_token_url(**kwargs)
-        headers = {"content-type": "application/x-www-form-urlencoded"}
-        payload = {
-            "grant_type": "authorization_code",
-            "client_id": Auth0CodeFlow.client_id,
-            "client_secret": Auth0CodeFlow.client_secret,
-            "redirect_uri": Auth0CodeFlow.redirect_uri,
-            **kwargs,
-        }
-        return requests.post(access_token_url, data=payload, headers=headers)
 
+        def require_scope(f):
+            @functools.wraps(f)
+            def decorated(*args, **kwargs):
+                token = Auth0CodeFlow.get_token_auth_header(args[0])
+                decoded = Auth0CodeFlow.jwt_decode_token(
+                    token, **dict(verify_signature=False)
+                )
+                if decoded.get("scope"):
+                    token_scopes = decoded["scope"].split()
+                    for token_scope in token_scopes:
+                        if token_scope == required_scope:
+                            return f(*args, **kwargs)
+                response = JsonResponse(
+                    {"message": "You don't have access to this resource"}
+                )
+                response.status_code = 403
+                return response
 
-def jwt_get_username_from_payload_handler(payload):
-    """Authenticates from RemoteUserBackend and create remote django user."""
-    username = payload.get("sub").replace("|", ".")
-    authenticate(remote_user=username)
-    return username
+            return decorated
 
+        return require_scope
 
-def requires_scope(required_scope):
-    """Determines if the required scope is present in the Access Token.
+    @staticmethod
+    def jwt_decode_token(token, **options):
+        """Fetch JWKS from Auth0, verify and decode the incoming Access Token.
 
-    Args:
-        required_scope (str): The scope required to access the resource
-    Returns:
-        Function decorator.
-    """
+        Args:
+            token: str, access token.
+            **options: dict, jwt decode options.
+        Returns:
+            dict: The dict representation of the claims set, assuming the signature is valid
+                and all requested data validation passes.
+        Raises:
+            JWTError: If the signature is invalid in any way.
+            ExpiredSignatureError: If the signature has expired.
+            JWTClaimsError: If any claim is invalid in any way.
+        """
+        audience = settings.JWT_AUDIENCE
+        domain = settings.SOCIAL_AUTH_AUTH0_DOMAIN
+        header = jwt.get_unverified_header(token)
+        public_key = None
+        key_data = None
+        jwks = settings.AUTH0_JWKS
 
-    def require_scope(f):
-        @functools.wraps(f)
-        def decorated(*args, **kwargs):
-            token = get_token_auth_header(args[0])
-            decoded = jwt_decode_token(token, **dict(verify_signature=False))
-            if decoded.get("scope"):
-                token_scopes = decoded["scope"].split()
-                for token_scope in token_scopes:
-                    if token_scope == required_scope:
-                        return f(*args, **kwargs)
-            response = JsonResponse(
-                {"message": "You don't have access to this resource"}
-            )
-            response.status_code = 403
-            return response
+        for jwk in jwks["keys"]:
+            if jwk["kid"] == header["kid"]:
+                key_data = json.dumps(jwk)
+                rsa_key_obj = jose_jwk.construct(key_data)
+                public_key = rsa_key_obj.public_key()
 
-        return decorated
+        if public_key is None:
+            raise Exception("Public key not found.")
 
-    return require_scope
+        issuer = settings.JWT_ISSUER
+        return jwt.decode(
+            token,
+            public_key,
+            audience=audience,
+            issuer=issuer,
+            algorithms=settings.AUTH0_ALGORITHMS,
+            options=options,
+        )
 
+    @staticmethod
+    def get_token_auth_header(request) -> Union[None, str]:
+        """Obtains the Access Token from the Authorization Header."""
+        if auth := request.META.get("HTTP_AUTHORIZATION", None):
+            parts = auth.split()
+            token = parts[1]
+            return token
+        return None
 
-def jwt_decode_token(token, **options):
-    """Fetch JWKS from Auth0, verify and decode the incoming Access Token.
-
-    Args:
-        token: str, access token.
-        **options: dict, jwt decode options.
-    Returns:
-        dict: The dict representation of the claims set, assuming the signature is valid
-            and all requested data validation passes.
-    Raises:
-        JWTError: If the signature is invalid in any way.
-        ExpiredSignatureError: If the signature has expired.
-        JWTClaimsError: If any claim is invalid in any way.
-    """
-    audience = settings.JWT_AUDIENCE
-    domain = settings.SOCIAL_AUTH_AUTH0_DOMAIN
-    header = jwt.get_unverified_header(token)
-    public_key = None
-    key_data = None
-    jwks = requests.get("https://{}/.well-known/jwks.json".format(domain)).json()
-
-    for jwk in jwks["keys"]:
-        if jwk["kid"] == header["kid"]:
-            key_data = json.dumps(jwk)
-            rsa_key_obj = jose_jwk.construct(key_data)
-            public_key = rsa_key_obj.public_key()
-
-    if public_key is None:
-        raise Exception("Public key not found.")
-
-    issuer = "https://{}/".format(domain)
-    return jwt.decode(
-        token,
-        public_key,
-        audience=audience,
-        issuer=issuer,
-        algorithms=["RS256"],
-        options=options,
-    )
-
-
-def get_token_auth_header(request):
-    """Obtains the Access Token from the Authorization Header."""
-    auth = request.META.get("HTTP_AUTHORIZATION", None)
-    parts = auth.split()
-    token = parts[1]
-
-    return token
-
-
-def gen_state():
-    """Create a random state token from first ten characters."""
-    rand = random.Random()
-    _, arr, _ = rand.getstate()
-    arr_sum = functools.reduce(operator.add, arr)
-    return arr_sum.to_bytes(arr_sum.bit_length(), sys.byteorder, signed=True).hex()[:10]
+    @staticmethod
+    def gen_state():
+        """Create a random state token from first ten characters."""
+        rand = random.Random()
+        _, arr, _ = rand.getstate()
+        arr_sum = functools.reduce(operator.add, arr)
+        return arr_sum.to_bytes(arr_sum.bit_length(), sys.byteorder, signed=True).hex()[
+            :10
+        ]

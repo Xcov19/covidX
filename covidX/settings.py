@@ -13,6 +13,7 @@ import functools
 import glob
 import os
 
+import requests
 from dotenv import load_dotenv
 
 import covidX.gae_settings as gae  # pylint: disable=no-name-in-module
@@ -75,6 +76,8 @@ PLUGIN_APPS = [
     "guardian",
     "graphene_django",
     "rest_framework",
+    "rest_framework_jwt",
+    "rest_framework_jwt.blacklist",
 ]
 
 MODULES = [
@@ -97,6 +100,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.RemoteUserMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
 ]
 
 ROOT_URLCONF = "covidX.urls"
@@ -115,6 +119,7 @@ TEMPLATES = [
                 # See:
                 # https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#template-context-processors
                 "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ]
         },
     },
@@ -194,22 +199,46 @@ SOCIAL_AUTH_AUTH0_SECRET = os.environ.get("SOCIAL_AUTH_AUTH0_SECRET")
 SOCIAL_AUTH_AUTH0_SCOPE = ["openid", "profile", "email"]
 SOCIAL_AUTH_AUTH0_DOMAIN = os.environ.get("SOCIAL_AUTH_AUTH0_DOMAIN")
 SOCIAL_AUTH_ACCESS_TOKEN_METHOD = os.getenv("ACCESS_TOKEN_METHOD")
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+SOCIAL_AUTH_POSTGRES_JSONFIELD = True
+SOCIAL_AUTH_REVOKE_TOKENS_ON_DISCONNECT = True
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = [
+    "username",
+    "first_name",
+    "last_name",
+    "email",
+]
+AUTH_USER_MODEL = "auth_zero.User"
+SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
+
 JWT_AUDIENCE = os.getenv("JWT_AUDIENCE")
 
+LOGIN_URL = "/auth0/login/auth0"
+LOGIN_REDIRECT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+AUTH_REDIRECT_URI = "/auth0/complete/auth0"
+
+# auth0 settings
+AUTH0_ALGORITHMS = ["RS256"]
 if AUTH0_DOMAIN := os.getenv("SOCIAL_AUTH_AUTH0_DOMAIN"):
     JWT_ISSUER = f"https://{AUTH0_DOMAIN}/"
-
 if AUDIENCE := os.getenv("JWT_AUDIENCE"):
     SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
+AUTH0_JWKS = requests.get(
+    f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
+).json()
 
 # TODO(codecakes): enable logic once code auth flow tested.
 # Set JWT_AUDIENCE to API identifier and
 # the JWT_ISSUER to Auth0 domain
 JWT_AUTH = {
     "JWT_PAYLOAD_GET_USERNAME_HANDLER": (
-        "apps.auth_zero.auth0backend." "jwt_get_username_from_payload_handler"
+        "apps.auth_zero.auth0backend."
+        "Auth0CodeFlow.jwt_get_username_from_payload_handler"
     ),
-    "JWT_DECODE_HANDLER": "apps.auth_zero.auth0backend.jwt_decode_token",
+    "JWT_DECODE_HANDLER": (
+        "apps.auth_zero.auth0backend.Auth0CodeFlow.jwt_decode_token"
+    ),
     "JWT_ALGORITHM": "RS256",
     "JWT_AUDIENCE": JWT_AUDIENCE,
     "JWT_ISSUER": JWT_ISSUER,
@@ -223,33 +252,24 @@ AUTHENTICATION_BACKENDS = {
     "guardian.backends.ObjectPermissionBackend",
 }
 
+# rest framework settings from drf-jwt
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly",
         "rest_framework.permissions.IsAuthenticated",
-        "rest_framework.permissions.AllowAny",
     ],
-    "DEFAULT_RENDERER_CLASSES": [
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
+    ],
+    "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.BrowsableAPIRenderer",
         "rest_framework.renderers.JSONOpenAPIRenderer",
     ],
 }
 
-LOGIN_URL = "/auth0/login/auth0"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
-AUTH_REDIRECT_URI = "/auth0/complete/auth0"
-
-AUTH_USER_MODEL = "auth_zero.User"
-SOCIAL_AUTH_USER_MODEL = AUTH_USER_MODEL
-SOCIAL_AUTH_RAISE_EXCEPTIONS = True
-
-SOCIAL_AUTH_POSTGRES_JSONFIELD = True
 
 # See: https://django-guardian.readthedocs.io/en/stable/\
 # configuration.html#guardian-raise-403
@@ -260,6 +280,7 @@ GRAPHENE = {
     "SCHEMA_OUTPUT": "schema.json",
     "SCHEMA_INDENT": 2,
 }
+
 ALGOLIA = {
     "APPLICATION_ID": os.getenv("ALGOLIA_APPLICATION_ID"),
     "API_KEY": os.getenv("ALGOLIA_API_KEY"),

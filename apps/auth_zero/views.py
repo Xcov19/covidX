@@ -1,12 +1,15 @@
 import json
 from urllib.parse import urlencode
 
+import rest_framework_jwt.views as drf_jwt_views
 from django.conf import settings
 from django.contrib.auth import logout as log_out
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.shortcuts import render
+from rest_framework import permissions
+from rest_framework.decorators import permission_classes
 
 
 def index(request):
@@ -16,6 +19,7 @@ def index(request):
     return render(request, "index.html")
 
 
+@permission_classes((permissions.IsAdminUser,))
 @login_required
 def dashboard(request):
     user = request.user
