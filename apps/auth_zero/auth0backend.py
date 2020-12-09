@@ -3,10 +3,8 @@ import json
 import operator
 import random
 import sys
-from typing import Dict
 from typing import Union
 
-import requests
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -137,7 +135,6 @@ class Auth0CodeFlow(Auth0):
             JWTClaimsError: If any claim is invalid in any way.
         """
         audience = settings.JWT_AUDIENCE
-        domain = settings.SOCIAL_AUTH_AUTH0_DOMAIN
         header = jwt.get_unverified_header(token)
         public_key = None
         key_data = None
