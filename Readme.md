@@ -17,12 +17,13 @@ We are an open community of volunteers without a commercial purpose. We believe 
 #### Python Version
 covidX will be run on python *3.7.6* and *3.8.5*
 
-#### Pre-requisite Services
-The following steps are necessary in order to ensure that you are able to run the project smoothly:
+#### Required Services for Self-Hosting
+The following steps are necessary in order to ensure that you are able to self-host your own instance of the project smoothly:
 * Install [PostgreSQL](https://www.postgresql.org/download/)
 * Install [Bazel](https://docs.bazel.build/versions/master/install.html)
-* Install [Docker Desktop](https://www.docker.com/get-started)
-* [Sign up](https://hub.docker.com/signup) to Docker Hub
+* Sign up to [Docker Hub](https://hub.docker.com/signup) and install [Docker Desktop](https://www.docker.com/get-started)
+* Sign up to [Auth0](https://auth0.com/) (obtain domain, client id, and client secret)
+* Sign up to [Algolia](https://www.algolia.com/users/sign_up) (obtain application id and admin API key)
 
 #### How to Run Locally Using Docker
 ```shell
