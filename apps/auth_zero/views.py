@@ -1,7 +1,6 @@
 import json
 from urllib.parse import urlencode
 
-import rest_framework_jwt.views as drf_jwt_views
 from django.conf import settings
 from django.contrib.auth import logout as log_out
 from django.contrib.auth.decorators import login_required
