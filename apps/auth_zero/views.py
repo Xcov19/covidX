@@ -1,4 +1,3 @@
-import json
 from urllib.parse import urlencode
 
 from django.conf import settings
@@ -28,13 +27,14 @@ def dashboard(request):
         "name": user.first_name,
         "picture": auth0user.extra_data["picture"],
         "email": auth0user.extra_data["email"],
+        "account_types": user.account_types.values_list("user_type_level", flat=True),
     }
     if user.is_staff:
         return HttpResponseRedirect("/admin")
     return render(
         request,
         "dashboard.html",
-        {"auth0User": auth0user, "userdata": json.dumps(userdata, indent=4)},
+        {"auth0User": auth0user, "userdata": userdata},
     )
 
 

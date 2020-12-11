@@ -91,3 +91,11 @@ filegroup(
         ".env",
         ],
 )
+
+filegroup(
+    name = "static",
+    srcs = glob([
+        "static/**",
+    ]),
+    visibility = ["//covidX:__pkg__"],
+)

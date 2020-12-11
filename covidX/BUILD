@@ -24,6 +24,7 @@ py_library(
         requirement("django-guardian"),
         requirement("djangorestframework"),
         requirement("drf-jwt"),
+        requirement("django-debug-toolbar"),
         ":gae_settings",
         ":schema",
         ":utils",
@@ -39,6 +40,7 @@ py_library(
         "//:__init__",
     ],
     srcs_version="PY3",
+    data = ["//:static",],
 )
 
 py_library(
@@ -63,6 +65,7 @@ py_library(
         requirement("django"),
         requirement("graphene-django"),
         requirement("djangorestframework"),
+        requirement("django-debug-toolbar"),
         ":utils",
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",
