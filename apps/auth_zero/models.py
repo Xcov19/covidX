@@ -30,7 +30,6 @@ class User(AbstractUser):
     class Meta:
         app_label = "auth_zero"
 
-    # user_type = models.CharField(blank=False, max_length=20, default=default_user_type)
     @property
     def user_types(self):
         return self.account_types  # pylint: disable=no-member
