@@ -93,7 +93,7 @@ cryptography==3.2 \
     --hash=sha256:f0e3986f6cce007216b23c490f093f35ce2068f3c244051e559f647f6731b7ae \
     --hash=sha256:f2aa3f8ba9e2e3fd49bd3de743b976ab192fbf0eb0348cebde5d2a9de0090a9f \
     --hash=sha256:fb70a4cedd69dc52396ee114416a3656e011fb0311fca55eb55c7be6ed9c8aef \
-    # via -r requirements.txt, pyopenssl, social-auth-core
+    # via -r requirements.txt, pyjwt, pyopenssl, social-auth-core
 decorator==4.4.2 \
     --hash=sha256:41fa54c2a0cc4ba648be4fd43cff00aedf5b9465c9bf18d64325bc225f08f760 \
     --hash=sha256:e3a62f0520172440ca0dcc823749319382e377f37f140a0b99ef45fecb84bfe7 \
@@ -105,6 +105,10 @@ defusedxml==0.6.0 \
 django-cors-headers==3.5.0 \
     --hash=sha256:9322255c296d5f75089571f29e520c83ff9693df17aa3cf9f6a4bea7c6740169 \
     --hash=sha256:db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a \
+    # via -r requirements.txt
+django-debug-toolbar==3.2 \
+    --hash=sha256:84e2607d900dbd571df0a2acf380b47c088efb787dce9805aefeb407341961d2 \
+    --hash=sha256:9e5a25d0c965f7e686f6a8ba23613ca9ca30184daa26487706d4829f5cfb697a \
     # via -r requirements.txt
 django-extensions==3.0.9 \
     --hash=sha256:6809c89ca952f0e08d4e0766bc0101dfaf508d7649aced1180c091d737046ea7 \
@@ -129,10 +133,14 @@ django-phonenumber-field==5.0.0 \
 django==3.0.7 \
     --hash=sha256:5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2 \
     --hash=sha256:e1630333248c9b3d4e38f02093a26f1e07b271ca896d73097457996e0fae12e8 \
-    # via -r requirements.txt, algoliasearch-django, django-cors-headers, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, graphene-django
+    # via -r requirements.txt, algoliasearch-django, django-cors-headers, django-debug-toolbar, django-filter, django-guardian, django-model-utils, django-phonenumber-field, djangorestframework, drf-jwt, graphene-django
 djangorestframework==3.12.1 \
     --hash=sha256:5c5071fcbad6dce16f566d492015c829ddb0df42965d488b878594aabc3aed21 \
     --hash=sha256:d54452aedebb4b650254ca092f9f4f5df947cb1de6ab245d817b08b4f4156249 \
+    # via -r requirements.txt, drf-jwt
+drf-jwt==1.17.2 \
+    --hash=sha256:27ca9f3fbc1d1594d6dba423bf3162ee3b7590b7444029074c3076d15e608d92 \
+    --hash=sha256:2eabeeccb4d2374fcb00e0e3c88459ee8796e7979ee24749814d2fe8e69b6035 \
     # via -r requirements.txt
 ecdsa==0.14.1 \
     --hash=sha256:64c613005f13efec6541bb0a33290d0d03c27abab5f15fbab20fb0ee162bdd8e \
@@ -435,10 +443,10 @@ pygments==2.7.1 \
     --hash=sha256:307543fe65c0947b126e83dd5a61bd8acbd84abec11f43caebaf5534cbc17998 \
     --hash=sha256:926c3f319eda178d1bd90851e4317e6d8cdb5e292a3386aac9bd75eca29cf9c7 \
     # via -r requirements.txt, ipython
-pyjwt==1.7.1 \
+pyjwt[crypto]==1.7.1 \
     --hash=sha256:5c6eca3c2940464d106b99ba83b00c6add741c9becaec087fb7ccdefea71350e \
     --hash=sha256:8d59a976fb773f3e6a39c85636357c4f0e242707394cadadd9814f5cbaa20e96 \
-    # via -r requirements.txt, social-auth-core
+    # via -r requirements.txt, drf-jwt, social-auth-core
 pyopenssl==19.1.0 \
     --hash=sha256:621880965a720b8ece2f1b2f54ea2071966ab00e2970ad2ce11d596102063504 \
     --hash=sha256:9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507 \
@@ -516,7 +524,7 @@ social-auth-core==3.3.3 \
 sqlparse==0.3.0 \
     --hash=sha256:40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177 \
     --hash=sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873 \
-    # via -r requirements.txt, django
+    # via -r requirements.txt, django, django-debug-toolbar
 termcolor==1.1.0 \
     --hash=sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b \
     # via -r requirements.txt, snapshottest

@@ -23,6 +23,8 @@ py_library(
         requirement("graphene-django"),
         requirement("django-guardian"),
         requirement("djangorestframework"),
+        requirement("drf-jwt"),
+        requirement("django-debug-toolbar"),
         ":gae_settings",
         ":schema",
         ":utils",
@@ -34,9 +36,11 @@ py_library(
         "//apps/auth_zero:__init__",
         "//apps/auth_zero:apps",
         "//apps/auth_zero:models",
+        "//apps/auth_zero:auth0backend",
         "//:__init__",
     ],
     srcs_version="PY3",
+    data = ["//:static",],
 )
 
 py_library(
@@ -61,6 +65,7 @@ py_library(
         requirement("django"),
         requirement("graphene-django"),
         requirement("djangorestframework"),
+        requirement("django-debug-toolbar"),
         ":utils",
         "//apps/apihealth:apps",
         "//apps/apihealth:urls",

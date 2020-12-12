@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+import debug_toolbar
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import include
@@ -42,7 +44,12 @@ urlpatterns = [
         r"^rest-auth/?$", include("rest_framework.urls", namespace="rest_framework")
     ),
     re_path(r"^apihealth/?$", include("apps.apihealth.urls")),
-    path("admin/", admin.site.urls),
     path("auth0/", include("apps.auth_zero.urls")),
+    path("admin/", admin.site.urls),
     re_path(r"^api/graphql/?$", csrf_exempt(GraphQLView.as_view(graphiql=True))),
 ]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("__debug__/", include(debug_toolbar.urls)),
+    ]

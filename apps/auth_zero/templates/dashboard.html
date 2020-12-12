@@ -5,6 +5,10 @@
     <div class="logged-in-box auth0-box logged-in">
         <h2>Welcome {{ user.username }}</h2>
         <pre>Contact Admin to grant permission</pre>
+        <article>Your role types are:</article>
+        {% for acc_type in userdata.account_types %}
+            <p>{{ acc_type }}</p>
+        {% endfor %}
         <a id="qsLogoutBtn" class="btn btn-primary btn-lg btn-logout btn-block" href="/logout">Logout</a>
     </div>
 </div>

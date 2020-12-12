@@ -13,18 +13,19 @@ py_library(
 py_library(
     name = "apps",
     srcs = ["apps.py"],
-    deps = [
-      ":auth0backend"
-    ],
+    deps = [],
 )
 
 py_library(
   name = "auth0backend",
   srcs = ["auth0backend.py"],
   deps = [
+    requirement("requests"),
+    requirement("django"),
     requirement("python-jose"),
     requirement("social-auth-core"),
     requirement("social-auth-app-django"),
+    ":apps",
   ],
 )
 
@@ -41,7 +42,9 @@ py_library(
     name = "views",
     srcs = ["views.py"],
     deps = [
-      requirement("django"),
+        requirement("django"),
+        requirement("djangorestframework"),
+        requirement("drf-jwt"),
       ],
     data = [":auth_zero_tmpl",],
 )
@@ -60,6 +63,7 @@ py_library(
     srcs = ["admin.py"],
     deps = [
         requirement("django"),
+        requirement("django-guardian"),
         ":models",
     ],
 )
