@@ -119,5 +119,5 @@ gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
     Project Roadmap
 
 ### Credits
-
-    @codecakes
+* [@codecakes](https://github.com/codecakes)
+* [@milan-tom](https://github.com/milan-tom)
