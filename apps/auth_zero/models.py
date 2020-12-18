@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.db import transaction
 from django.db.models import Q
+from django.core.validators import RegexValidator
 
 UserTypes_T = TypeVar("UserTypes_T", bound="UserTypes")
 User_T = TypeVar("User_T", bound="User")
@@ -26,6 +27,14 @@ class User(AbstractUser):
     """Custom Auth User model."""
 
     default_user_type = UserTypes.PATIENT
+    phone_regex = RegexValidator(
+        regex=r"^\+?1?\d{9,15}$",
+        message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.",
+    )
+    mobile = models.CharField(validators=[phone_regex], max_length=17)
+    mobile_is_verified = models.BooleanField(default=False)
+    last_otp = models.CharField(blank=False, null=True, max_length=20)
+    otp_verified = models.BooleanField(default=False)
 
     class Meta:
         app_label = "auth_zero"
