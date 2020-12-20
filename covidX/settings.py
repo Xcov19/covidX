@@ -80,6 +80,7 @@ PLUGIN_APPS = [
     "rest_framework",
     "rest_framework_jwt",
     "rest_framework_jwt.blacklist",
+    "phonenumber_field",
 ]
 
 MODULES = [
@@ -152,6 +153,7 @@ if GAE_APPLICATION := os.getenv("GAE_APPLICATION", None) and (
         }
     }
 else:
+    print('yay')
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
