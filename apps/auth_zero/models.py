@@ -36,6 +36,10 @@ class User(AbstractUser):
         app_label = "auth_zero"
 
     @property
+    def is_verified(self):
+        return self.otp_verified and self.email_verified
+        
+    @property
     def user_types(self):
         return self.account_types  # pylint: disable=no-member
 
