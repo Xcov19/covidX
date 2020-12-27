@@ -153,7 +153,6 @@ if GAE_APPLICATION := os.getenv("GAE_APPLICATION", None) and (
         }
     }
 else:
-    print('yay')
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",

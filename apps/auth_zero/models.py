@@ -28,7 +28,7 @@ class User(AbstractUser):
     """Custom Auth User model."""
 
     default_user_type = UserTypes.PATIENT
-    mobile = PhoneNumberField()
+    mobile = PhoneNumberField(blank=True)
     last_otp = models.CharField(blank=False, null=True, max_length=20)
     otp_verified = models.BooleanField(default=False)
 
