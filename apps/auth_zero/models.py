@@ -31,6 +31,7 @@ class User(AbstractUser):
     mobile = PhoneNumberField(blank=True)
     last_otp = models.CharField(blank=False, null=True, max_length=20)
     otp_verified = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default= False)
 
     class Meta:
         app_label = "auth_zero"
