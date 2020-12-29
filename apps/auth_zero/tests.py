@@ -38,4 +38,16 @@ class UserTestCase(TestCase):
         self.assertFalse(only_email_verified_user.otp_verified)
         self.assertTrue(only_email_verified_user.email_verified)
         self.assertFalse(only_email_verified_user.is_verified)
-        
+
+    def test_fully_verified_user(self):
+        fully_verified_user = self.user_model.objects.create_user(
+            username="fullyVerifiedUser",
+            email="fullyVerifiedUser@mail.com",
+            password="fullyVerifiedUserPassword"
+        )
+        fully_verified_user.save()
+        fully_verified_user.otp_verified = fully_verified_user.email_verified = True
+        self.assertTrue(fully_verified_user.otp_verified)
+        self.assertTrue(fully_verified_user.email_verified)
+        self.assertTrue(fully_verified_user.is_verified)
+
