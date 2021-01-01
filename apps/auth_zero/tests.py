@@ -20,10 +20,10 @@ class UserTestCase(TestCase):
         only_otp_verified_user = self.user_model.objects.create_user(
             username="onlyOTPVerifiedUser",
             email="onlyOTPVerifiedUser@mail.com",
-            password="onlyOTPVerifiedUserPassword"
+            password="onlyOTPVerifiedUserPassword",
+            otp_verified=True
         )
         only_otp_verified_user.save()
-        only_otp_verified_user.otp_verified = True
         self.assertTrue(only_otp_verified_user.otp_verified)
         self.assertFalse(only_otp_verified_user.email_verified)
         self.assertFalse(only_otp_verified_user.is_verified)
@@ -31,10 +31,10 @@ class UserTestCase(TestCase):
         only_email_verified_user = self.user_model.objects.create_user(
             username="onlyEmailVerifiedUser",
             email="onlyEmailVerifiedUser@mail.com",
-            password="onlyEmailVerifiedUserPassword"
+            password="onlyEmailVerifiedUserPassword",
+            email_verified=True
         )
         only_email_verified_user.save()
-        only_email_verified_user.email_verified = True
         self.assertFalse(only_email_verified_user.otp_verified)
         self.assertTrue(only_email_verified_user.email_verified)
         self.assertFalse(only_email_verified_user.is_verified)
@@ -43,11 +43,11 @@ class UserTestCase(TestCase):
         fully_verified_user = self.user_model.objects.create_user(
             username="fullyVerifiedUser",
             email="fullyVerifiedUser@mail.com",
-            password="fullyVerifiedUserPassword"
+            password="fullyVerifiedUserPassword",
+            otp_verified=True,
+            email_verified=True
         )
         fully_verified_user.save()
-        fully_verified_user.otp_verified = fully_verified_user.email_verified = True
         self.assertTrue(fully_verified_user.otp_verified)
         self.assertTrue(fully_verified_user.email_verified)
         self.assertTrue(fully_verified_user.is_verified)
-
