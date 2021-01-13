@@ -34,7 +34,7 @@ class ConfigByteLoader():
             otp_verified=config_settings_for_verification_status.getboolean("otp_verified"),
             email_verified=config_settings_for_verification_status.getboolean("email_verified")
         )
-        
+    
 
 class ConfigFileLoader:
     def __init__(self, config_file: str):
