@@ -1,53 +1,29 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from common.config import Credentials, ConfigFileLoader, CredentialsFactoryLoader
 
 
 class UserTestCase(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
+        config_file = "apps/auth_zero/config/test_config.ini"
+        self.creds_obj = CredentialsFactoryLoader(config_file, Credentials, ConfigFileLoader)
+        self.users = {
+            verification_status: self.user_model.objects.create_user(**self.creds_obj.read_config(verification_status))
+            for verification_status in [
+                "fully_unverified",
+                "only_otp_verified",
+                "only_email_verified",
+                "fully_verified",
+            ]
+        }
 
     def test_fully_unverified_user(self):
-        fully_unverified_user = self.user_model.objects.create_user(
-            username="fullyUnverifiedUser",
-            email="fullyUnverifiedUser@mail.com",
-            password="fullyUnverifiedUserPassword")
-        fully_unverified_user.save()
-        self.assertFalse(fully_unverified_user.otp_verified)
-        self.assertFalse(fully_unverified_user.email_verified)
-        self.assertFalse(fully_unverified_user.is_verified)
+        self.assertFalse(self.users["fully_unverified"].is_verified)
 
     def test_partially_verfied_users(self):
-        only_otp_verified_user = self.user_model.objects.create_user(
-            username="onlyOTPVerifiedUser",
-            email="onlyOTPVerifiedUser@mail.com",
-            password="onlyOTPVerifiedUserPassword"
-        )
-        only_otp_verified_user.save()
-        only_otp_verified_user.otp_verified = True
-        self.assertTrue(only_otp_verified_user.otp_verified)
-        self.assertFalse(only_otp_verified_user.email_verified)
-        self.assertFalse(only_otp_verified_user.is_verified)
-
-        only_email_verified_user = self.user_model.objects.create_user(
-            username="onlyEmailVerifiedUser",
-            email="onlyEmailVerifiedUser@mail.com",
-            password="onlyEmailVerifiedUserPassword"
-        )
-        only_email_verified_user.save()
-        only_email_verified_user.email_verified = True
-        self.assertFalse(only_email_verified_user.otp_verified)
-        self.assertTrue(only_email_verified_user.email_verified)
-        self.assertFalse(only_email_verified_user.is_verified)
+        self.assertFalse(self.users["only_otp_verified"].is_verified)
+        self.assertFalse(self.users["only_email_verified"].is_verified)
 
     def test_fully_verified_user(self):
-        fully_verified_user = self.user_model.objects.create_user(
-            username="fullyVerifiedUser",
-            email="fullyVerifiedUser@mail.com",
-            password="fullyVerifiedUserPassword"
-        )
-        fully_verified_user.save()
-        fully_verified_user.otp_verified = fully_verified_user.email_verified = True
-        self.assertTrue(fully_verified_user.otp_verified)
-        self.assertTrue(fully_verified_user.email_verified)
-        self.assertTrue(fully_verified_user.is_verified)
-
+        self.assertTrue(self.users["fully_verified"].is_verified)
