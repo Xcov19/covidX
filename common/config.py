@@ -13,7 +13,14 @@ class Credentials:
 
 
 class CredentialsLoader:
-    def __init__(self, config_file, credentials_class: TypeVar("Credentials") = None, loader_class=None):
+    """Loads credentials from config file using custom credentials and loader classes"""
+    
+    def __init__(
+        self, 
+        config_file, 
+        credentials_class: TypeVar("Credentials") = None,
+        loader_class=None
+    ):
         self.credentials_class = credentials_class
         self.loader_class = loader_class(config_file)
 
@@ -21,33 +28,38 @@ class CredentialsLoader:
         return self.loader_class.read_config(verification_status)
 
 
-class ConfigByteLoader():
+class ConfigByteLoader:
+    """Loads data from byte stream input"""
+    
     def __init__(self, config_file: str):
         with open(config_file, "rb") as f:
             self.byte_stream = BytesIO(f.read())
 
     def read_config(self, verification_status: str) -> dict:
-        # config_settings_for_verification_status = not sure how to do
-        return dict(
-            username=force_text(config_settings_for_verification_status["username"]),
-            password=force_text(config_settings_for_verification_status["password"]),
-            email=force_text(config_settings_for_verification_status["email"]),
-            otp_verified=config_settings_for_verification_status.getboolean("otp_verified"),
-            email_verified=config_settings_for_verification_status.getboolean("email_verified")
-        )
-    
+        pass
+        # config_settings = not sure how to do
+        # return dict(
+        #     username=force_text(config_settings["username"]),
+        #     password=force_text(config_settings["password"]),
+        #     email=force_text(config_settings["email"]),
+        #     otp_verified=config_settings.getboolean("otp_verified"),
+        #     email_verified=config_settings.getboolean("email_verified")
+        # )
+
 
 class ConfigFileLoader:
+    """Loads data from .ini file"""
+
     def __init__(self, config_file: str):
         self.config = ConfigParser()
         self.config.read(config_file)
 
     def read_config(self, verification_status: str) -> dict:
-        config_settings_for_verification_status = self.config[verification_status]
+        config_settings = self.config[verification_status]
         return dict(
-            username=force_text(config_settings_for_verification_status["username"]),
-            password=force_text(config_settings_for_verification_status["password"]),
-            email=force_text(config_settings_for_verification_status["email"]),
-            otp_verified=config_settings_for_verification_status.getboolean("otp_verified"),
-            email_verified=config_settings_for_verification_status.getboolean("email_verified")
+            username=force_text(config_settings["username"]),
+            password=force_text(config_settings["password"]),
+            email=force_text(config_settings["email"]),
+            otp_verified=config_settings.getboolean("otp_verified"),
+            email_verified=config_settings.getboolean("email_verified")
         )
