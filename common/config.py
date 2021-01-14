@@ -4,6 +4,7 @@ from typing import TypeVar
 from io import BytesIO
 from django.utils.encoding import force_text
 
+
 @dataclass(frozen=True)
 class Credentials:
     user: str
@@ -11,7 +12,7 @@ class Credentials:
     email: str
 
 
-class CredentialsFactoryLoader:
+class CredentialsLoader:
     def __init__(self, config_file, credentials_class: TypeVar("Credentials") = None, loader_class=None):
         self.credentials_class = credentials_class
         self.loader_class = loader_class(config_file)

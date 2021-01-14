@@ -1,15 +1,17 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from common.config import Credentials, ConfigFileLoader, CredentialsFactoryLoader
+from common.config import Credentials, ConfigFileLoader, CredentialsLoader
 
 
 class UserTestCase(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
         config_file = "apps/auth_zero/config/test_config.ini"
-        self.creds_obj = CredentialsFactoryLoader(config_file, Credentials, ConfigFileLoader)
+        self.creds_obj = CredentialsLoader(config_file, Credentials, ConfigFileLoader)
         self.users = {
-            verification_status: self.user_model.objects.create_user(**self.creds_obj.read_config(verification_status))
+            verification_status: self.user_model.objects.create_user(
+                **self.creds_obj.read_config(verification_status)
+            ) 
             for verification_status in [
                 "fully_unverified",
                 "only_otp_verified",
