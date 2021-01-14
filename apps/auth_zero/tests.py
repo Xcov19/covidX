@@ -11,7 +11,7 @@ class UserTestCase(TestCase):
         self.users = {
             verification_status: self.user_model.objects.create_user(
                 **self.creds_obj.read_config(verification_status)
-            ) 
+            )
             for verification_status in [
                 "fully_unverified",
                 "only_otp_verified",
