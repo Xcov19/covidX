@@ -13,13 +13,14 @@ class Credentials:
 
 
 class CredentialsLoader:
+
     """Loads credentials from config file using custom credentials and loader classes"""
-    
+
     def __init__(
-        self, 
-        config_file, 
+        self,
+        config_file,
         credentials_class: TypeVar("Credentials") = None,
-        loader_class=None
+        loader_class=None,
     ):
         self.credentials_class = credentials_class
         self.loader_class = loader_class(config_file)
@@ -29,9 +30,11 @@ class CredentialsLoader:
 
 
 class ConfigByteLoader:
+
     """Loads data from byte stream input"""
-    
+
     def __init__(self, config_file: str):
+        """Reads byte stream input as binary file"""
         with open(config_file, "rb") as f:
             self.byte_stream = BytesIO(f.read())
 
@@ -48,9 +51,11 @@ class ConfigByteLoader:
 
 
 class ConfigFileLoader:
+
     """Loads data from .ini file"""
 
     def __init__(self, config_file: str):
+        """"Initialises ConfigParser instance and reads inputted config_ file"""
         self.config = ConfigParser()
         self.config.read(config_file)
 
@@ -61,5 +66,5 @@ class ConfigFileLoader:
             password=force_text(config_settings["password"]),
             email=force_text(config_settings["email"]),
             otp_verified=config_settings.getboolean("otp_verified"),
-            email_verified=config_settings.getboolean("email_verified")
+            email_verified=config_settings.getboolean("email_verified"),
         )
