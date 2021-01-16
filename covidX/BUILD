@@ -15,7 +15,7 @@ py_library(
 
 py_library(
     name = "settings",
-    srcs = ["settings.py"],
+    srcs = ["settings/base.py"],
     deps = [
         requirement("django-extensions"),
         requirement("social-auth-core"),

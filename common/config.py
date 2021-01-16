@@ -18,7 +18,7 @@ class CredentialsLoader:
         self,
         config_file,
         credentials_class: TypeVar("Credentials") = None,
-        loader_class=None,
+        loader_class: TypeVar("ConfigFileLoader") = None,
     ):
         """Initialises custom credentials and loader classes."""
         self.credentials_class = credentials_class
