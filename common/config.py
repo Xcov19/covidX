@@ -1,7 +1,6 @@
 from configparser import ConfigParser
 from dataclasses import dataclass
 from typing import TypeVar
-from io import BytesIO
 from django.utils.encoding import force_text
 
 
