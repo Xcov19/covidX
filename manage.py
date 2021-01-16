@@ -8,7 +8,6 @@ import dotenv
 
 def main():
     dotenv.load_dotenv()
-    settings = "covidX.settings.dev" if "test" in sys.argv else "covidX.settings.base"
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE",
         "covidX.settings.dev" if "test" in sys.argv else "covidX.settings.base",
