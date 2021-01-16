@@ -1,4 +1,4 @@
--r requirements.txt
+# -r requirements.txt
 
 # Automated checks related
 pip
