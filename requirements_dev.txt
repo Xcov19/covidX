@@ -1,5 +1,3 @@
-# -r requirements.txt
-
 # Automated checks related
 pip
 pre-commit
