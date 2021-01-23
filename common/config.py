@@ -1,27 +1,13 @@
 from configparser import ConfigParser
-from dataclasses import dataclass
 from typing import TypeVar
 from django.utils.encoding import force_text
 
 
-@dataclass(frozen=True)
-class Credentials:
-    user: str
-    password: str
-    email: str
-
-
 class CredentialsLoader:
-    """Loads credentials from config file using custom credentials and loader classes"""
+    """Loads credentials from config file using custom loader class"""
 
-    def __init__(
-        self,
-        config_file,
-        credentials_class: TypeVar("Credentials") = None,
-        loader_class: TypeVar("ConfigFileLoader") = None,
-    ):
-        """Initialises custom credentials and loader classes."""
-        self.credentials_class = credentials_class
+    def __init__(self, config_file: str, loader_class: TypeVar("ConfigFileLoader")):
+        """Initialises custom loader class."""
         self.loader_class = loader_class(config_file)
 
     def read_config(self, verification_status: str) -> dict:
