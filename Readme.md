@@ -27,8 +27,10 @@ The following steps are necessary in order to ensure that you are able to self-h
 
 #### How to Run Locally Using Docker
 ```shell
-docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e BUCKET_NAME="gae-bizlead" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined codecakes/covidx_manage:bazel runserver_plus
+docker run --rm -it -e SECRET_KEY=<YOUR_DJANGO_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e BUCKET_NAME="gae-bizlead" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined codecakes/covidx_manage:bazel runserver_plus
 ```
+
+For local development `YOUR_DJANGO_SECRET_KEY` can be an alphanumeric string of your choosing.
 
 ### How to Setup for Development
 Setup a virtualenv and run:
