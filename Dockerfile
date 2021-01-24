@@ -97,6 +97,7 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait
 RUN chmod +x ./wait
 
 RUN if [ ! -f ".env" ]; then touch .env; fi;
+COPY .env /.env
 COPY pre-start.sh /pre-start.sh
 COPY up-script.sh /up-script.sh
 RUN chmod +x /pre-start.sh && chmod +x /up-script.sh;
