@@ -34,7 +34,7 @@ ENV = join_project_path(".env")
 load_dotenv(ENV, verbose=True, override=True)
 
 LOGGER.info(f"Starting {PROJECT_NAME} app")
-LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
+LOGGER.info(f"PROJECT_ROOT= {PROJECT_ROOT}")
 
 CACHES = {
     "default": {
