@@ -1,8 +1,5 @@
 FROM ubuntu:focal
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
-
 
 RUN apt-get update -y
 RUN apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2
@@ -77,25 +74,34 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
 
 # For gevent
 RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev
-RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip install -r requirements.txt
+RUN mkdir -p .pip
+RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip
+RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
 RUN ln -s `which python3` /usr/bin/python;
 
 # Setup celery project dir
-ARG PROJECT=app
-ARG PROJECT_DIR=/${PROJECT}
-RUN mkdir -p $PROJECT_DIR
-
-# WORKDIR /app
-WORKDIR $PROJECT_DIR
-COPY . $PROJECT_DIR
+ARG PROJECT_DIR=/
+WORKDIR /
+COPY . .
 
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ && rm -rf static; fi;
-RUN touch $PROJECT_DIR/logs.log && chmod 0777 $PROJECT_DIR/logs.log && chown `whoami` $PROJECT_DIR/logs.log
+RUN touch logs.log && chmod 0777 logs.log && chown `whoami` logs.log
 
-ENV MAIN_USER=$(whoami)
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+## Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait ./wait
+RUN chmod +x ./wait
+
 RUN if [ ! -f ".env" ]; then touch .env; fi;
+COPY pre-start.sh /pre-start.sh
+COPY up-script.sh /up-script.sh
+RUN chmod +x /pre-start.sh && chmod +x /up-script.sh;
+ENV DEBUG_ENV=1
+ENV SECRET_KEY=dskaj343
+ENV CPPFLAGS="$(pg_config --cppflags)"
+ENV LDFLAGS="$(pg_config --ldflags)"
+COPY requirements.txt /requirements.txt

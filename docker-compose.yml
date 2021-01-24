@@ -1,0 +1,63 @@
+version: '3'
+
+services:
+  postgres:
+    restart: always
+    image: postgres:latest
+    # see: https://stackoverflow.com/a/60369496/2290820
+    env_file: .env
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+
+  redis:
+    restart: always
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+
+
+  backend:
+    container_name: django-api
+    command: sh -c "/wait && /pre-start.sh && /up-script.sh"
+    restart: always
+    build:
+      context: .
+      args:
+        - IS_WAIT=1
+        - WAIT_HOSTS=postgres:5432,redis:6379
+        - WAIT_HOSTS_TIMEOUT=300
+        - WAIT_SLEEP_INTERVAL=30
+        - WAIT_HOST_CONNECT_TIMEOUT=30
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    expose:
+    - 8000
+    ports:
+      - 8000:8000
+      - 8090:8090
+    links:
+      - postgres
+      - redis
+    volumes:
+      - ./django-api:/app
+    hostname: django-api
+    env_file: .env
+    environment:
+      - WAIT_HOSTS=postgres:5432,redis:6379
+      - WAIT_HOSTS_TIMEOUT=300
+      - WAIT_SLEEP_INTERVAL=30
+      - WAIT_HOST_CONNECT_TIMEOUT=30
+
+volumes:
+  django-api:
+  pgdata:
+  redisdata:
