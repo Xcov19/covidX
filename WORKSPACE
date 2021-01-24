@@ -84,9 +84,10 @@ pip_repositories()
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
 rules_python_external_version = "0.1.5"
+RULES_PY_COMMIT_SHA = "bc655e6d402915944e014c3b2cad23d0a97b83a66cc22f20db09c9f8da2e2789"
 http_archive(
     name = "rules_python_external",
-    sha256 = "", # Fill in with correct sha256 of your COMMIT_SHA version
+    sha256 = "{COMMIT_SHA}".format(COMMIT_SHA=RULES_PY_COMMIT_SHA), # Fill in with correct sha256 of your COMMIT_SHA version
     strip_prefix = "rules_python_external-{version}".format(version = rules_python_external_version),
     url = "https://github.com/dillon-giacoppo/rules_python_external/archive/v{version}.zip".format(version = rules_python_external_version),
 )
