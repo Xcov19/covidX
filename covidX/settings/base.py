@@ -54,13 +54,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
-ALLOWED_HOSTS = [
-    allowed_host  # pylint: disable=used-before-assignment
-    if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
-    else "0.0.0.0"
-]
-# Debug Toolbar is shown only if your IP address is listed in the INTERNAL_IPS
-INTERNAL_IPS = ["localhost:8090"]
+ALLOWED_HOSTS = "0.0.0.0"
 
 # Application definition
 DJANGO_APPS = [
@@ -92,10 +86,6 @@ MODULES = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PLUGIN_APPS + MODULES
-if DEBUG:
-    INSTALLED_APPS += [
-        "debug_toolbar",
-    ]
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
