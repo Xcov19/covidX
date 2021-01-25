@@ -8,8 +8,13 @@ https://docs.djangoproject.com/en/3.0/howto/deployment/wsgi/
 """
 import os
 
+import dotenv
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "covidX.settings")
+dotenv.load_dotenv()
+
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE", os.getenv("SETTINGS_ENV", "covidX.settings.dev")
+)
 
 application = get_wsgi_application()
