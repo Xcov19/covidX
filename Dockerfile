@@ -100,7 +100,7 @@ COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 RUN chmod +x /certificate && chmod +x /privateKey.key
 
-RUN apt-get install -y memcached libmemcached-tools
+RUN apt-get install -y memcached libmemcached-tools --no-install-recommends
 # Clean up APT when done.
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
