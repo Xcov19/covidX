@@ -2,6 +2,7 @@
 pip
 pre-commit
 pylint_django
+toml>=0.10.1
 black
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==50.3.0        # via -r requirements.txt, google-api-core, google-auth, gunicorn, ipdb, ipython, protobuf
