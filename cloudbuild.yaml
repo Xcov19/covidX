@@ -7,5 +7,6 @@ steps:
   args: ['./gen_static.sh']
   env:
     - 'SECRET_KEY=testsecret'
+    - 'SETTINGS_ENV=covidX.settings.base'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', '--verbosity=debug', '--stop-previous-version']
