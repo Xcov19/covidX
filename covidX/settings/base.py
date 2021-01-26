@@ -142,7 +142,7 @@ if not DEBUG:
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": f"/cloudsql/{CONNECTION_NAME}",
             "USER": f'{os.getenv("DB_USER")}',
-            "PASSWORD": f'{os.getenv("DB_PWD")}',
+            "PASSWORD": f'{os.getenv("POSTGRES_PASSWORD")}',
             "NAME": f'{os.getenv("DB_NAME")}',
         }
     }
