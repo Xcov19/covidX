@@ -14,7 +14,7 @@ DATABASES = {
 }
 
 # pylint:disable=E0601,E0602
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST") if DEBUG else ALLOWED_HOSTS
+ALLOWED_HOSTS = [os.getenv("DJANGO_ALLOWED_HOST")] if DEBUG else ALLOWED_HOSTS
 
 # Debug Toolbar is shown only if your IP address is listed in the INTERNAL_IPS
 INTERNAL_IPS = [f"{ALLOWED_HOSTS}:8090"]

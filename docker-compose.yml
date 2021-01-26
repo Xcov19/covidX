@@ -29,12 +29,6 @@ services:
     restart: always
     build:
       context: .
-      args:
-        - IS_WAIT=1
-        - WAIT_HOSTS=postgres:5432,redis:6379
-        - WAIT_HOSTS_TIMEOUT=300
-        - WAIT_SLEEP_INTERVAL=30
-        - WAIT_HOST_CONNECT_TIMEOUT=30
     deploy:
       replicas: 1
       restart_policy:

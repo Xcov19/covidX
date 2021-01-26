@@ -54,7 +54,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
-ALLOWED_HOSTS = "0.0.0.0"
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 # Application definition
 DJANGO_APPS = [
@@ -244,9 +244,7 @@ AUTHENTICATION_BACKENDS = {
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated",],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
