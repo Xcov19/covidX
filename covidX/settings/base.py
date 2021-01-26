@@ -142,7 +142,7 @@ if not DEBUG:
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": f"/cloudsql/{CONNECTION_NAME}",
             "USER": f'{os.getenv("DB_USER")}',
-            "PASSWORD": f'{os.getenv("DB_PWD")}',
+            "PASSWORD": f'{os.getenv("POSTGRES_PASSWORD")}',
             "NAME": f'{os.getenv("DB_NAME")}',
         }
     }
@@ -247,9 +247,7 @@ AUTHENTICATION_BACKENDS = {
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated",
-    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated",],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
         "rest_framework.authentication.SessionAuthentication",
