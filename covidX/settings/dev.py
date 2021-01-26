@@ -14,15 +14,30 @@ DATABASES = {
 }
 
 # pylint:disable=E0601,E0602
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOST") if DEBUG else ALLOWED_HOSTS
+ALLOWED_HOSTS = [os.getenv("DJANGO_ALLOWED_HOST")] if DEBUG else ALLOWED_HOSTS
 
 # Debug Toolbar is shown only if your IP address is listed in the INTERNAL_IPS
 INTERNAL_IPS = [f"{ALLOWED_HOSTS}:8090"]
+ALLOWED_HOST = f"{ALLOWED_HOSTS[0]}"
 
 if DEBUG:
     INSTALLED_APPS += [
         "debug_toolbar",
     ]
+
+CACHES = {
+    **CACHES,
+    "memcached": {
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": [
+            f"{ALLOWED_HOST}:11211",
+            f"{ALLOWED_HOST}:11212",
+            f"{ALLOWED_HOST}:11213",
+        ],
+    },
+}
+
+CACHE_MIDDLEWARE_ALIAS = "memcached"
 
 LOGGER.info("ALLOWED_HOSTS is %s", ALLOWED_HOSTS)
 LOGGER.info("DEBUG is %s", DEBUG)

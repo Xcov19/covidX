@@ -12,7 +12,5 @@ echo "===pip install========="
 python -m pip --cache-dir=.pip install -r requirements.txt;
 echo "=====drop db==========="
 python manage.py reset_db -c --noinput;
-echo "=====makemigrations & migrate====="
+echo "=====makemigrations====="
 python manage.py makemigrations;
-python manage.py migrate;
-python manage.py collectstatic --noinput;

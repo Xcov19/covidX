@@ -54,7 +54,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
-ALLOWED_HOSTS = "0.0.0.0"
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 # Application definition
 DJANGO_APPS = [
@@ -91,7 +91,10 @@ MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # Cache the entire site
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # Map username from the Access Token payload to
