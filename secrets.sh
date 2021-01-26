@@ -17,3 +17,8 @@ echo "" >> .env
 echo "ALGOLIA_API_KEY=$(gcloud secrets versions access latest --secret='ALGOLIA_API_KEY')" >> .env
 echo "" >> .env
 echo "ALGOLIA_APPLICATION_ID=$(gcloud secrets versions access latest --secret='ALGOLIA_APPLICATION_ID')" >> .env
+echo "" >> .env
+echo "DJANGO_ALLOWED_HOST=localhost" >> .env
+echo "" >> .env
+echo "SETTINGS_ENV=covidX.settings.base" >> .env
+echo "" >> .env
