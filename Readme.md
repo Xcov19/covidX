@@ -25,12 +25,29 @@ The following steps are necessary in order to ensure that you are able to self-h
 * Sign up to [Auth0](https://auth0.com/) (obtain domain, client id, and client secret)
 * Sign up to [Algolia](https://www.algolia.com/users/sign_up) (obtain application id and admin API key)
 
-#### How to Run Locally Using Docker
+#### How to Run Locally Using Docker (docker-compose)
+
+* Create your `.env` file from the sample:
 ```shell
-docker run --rm -it -e SECRET_KEY=<YOUR_DJANGO_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e BUCKET_NAME="gae-bizlead" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined codecakes/covidx_manage:bazel runserver_plus
+cp .env_sample .env
 ```
 
-For local development `YOUR_DJANGO_SECRET_KEY` can be an alphanumeric string of your choosing.
+* Fill in the details based on the Auth0 and Algolia sign-ups
+
+See https://github.com/Xcov19/covidX/issues/78
+
+* Build and start the app
+```shell
+docker-compose up
+```
+
+The app should be built automatically on first run.
+
+Note: to reflect changes made to `.env` after the application has been brought `up`, you need to force a rebuild:
+
+```shell
+docker-compose --build
+```
 
 ### How to Setup for Development
 Setup a virtualenv and run:
