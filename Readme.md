@@ -15,9 +15,11 @@ TL;DR Dive into coding right away by clicking here:
 We are an open community of volunteers without a commercial purpose. We believe that through a utilitarian approach, we can do the most good in the quickest time. Applying unused engineering we can help the world cope with the threat of COVID-19.
 
 #### Python Version
+
 covidX will be run on python *3.7.6* and *3.8.5*
 
 #### Required Services for Self-Hosting
+
 The following steps are necessary in order to ensure that you are able to self-host your own instance of the project smoothly:
 * Install [PostgreSQL](https://www.postgresql.org/download/)
 * Install [Bazel](https://docs.bazel.build/versions/master/install.html)
@@ -28,6 +30,7 @@ The following steps are necessary in order to ensure that you are able to self-h
 #### How to Run Locally Using Docker (docker-compose)
 
 * Create your `.env` file from the sample:
+
 ```shell
 cp .env_sample .env
 ```
@@ -36,7 +39,14 @@ cp .env_sample .env
 
 See https://github.com/Xcov19/covidX/issues/78
 
+* Generate a private / public key pair
+
+```shell
+openssl req -x509 -newkey rsa:4096 -keyout privateKey -out certificate -days 365 -nodes
+```
+
 * Build and start the app
+
 ```shell
 docker-compose up
 ```
@@ -50,6 +60,7 @@ docker-compose --build
 ```
 
 ### How to Setup for Development
+
 Setup a virtualenv and run:
 
 ```shell script
