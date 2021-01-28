@@ -22,8 +22,8 @@ REQS = [
     "werkzeug",
     ]
 
-LIBS = [
-    "//covidX:settings",
+DEPS = [
+    "//covidX/settings:dev",
     "//covidX:urls",
     "//covidX:asgi",
     "//covidX:wsgi",
@@ -41,7 +41,7 @@ py_binary(
     python_version="PY3",
     stamp=0,
     visibility=["//visibility:public"],
-    deps = LIBS,
+    deps = DEPS,
     data = [":envs"],
 )
 
@@ -79,7 +79,7 @@ py3_image(
     main="manage.py",
     stamp=0,
     visibility=["//visibility:public"],
-    layers = LIBS,
+    layers = DEPS,
     base = "@python3_image//image",
     srcs_version="PY3",
     data = [":envs"],
@@ -97,5 +97,5 @@ filegroup(
     srcs = glob([
         "static/**",
     ]),
-    visibility = ["//covidX:__pkg__"],
+    visibility = ["//covidX:__subpackages__"],
 )

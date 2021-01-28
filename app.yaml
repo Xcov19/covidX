@@ -3,7 +3,7 @@ runtime: python38
 env_variables:
   BUCKET_NAME: "gae-bizlead"
   SECRET_ID: "SECRET_KEY"
-  DJANGO_SETTINGS_MODULE: "covidX.settings"
+  DJANGO_SETTINGS_MODULE: "covidX.settings.base"
   WSGI_APPLICATION: "covidX.wsgi.application"
 resources:
   memory_gb: 4

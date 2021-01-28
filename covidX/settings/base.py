@@ -21,7 +21,8 @@ import covidX.utils as utils  # pylint: disable=no-name-in-module
 
 PROJECT_NAME = "covidX"
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SETTINGS_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(SETTINGS_DIR)
 PROJECT_ROOT = os.path.expanduser(BASE_DIR)
 join_project_path = functools.partial(os.path.join, PROJECT_ROOT)
 
@@ -33,7 +34,7 @@ ENV = join_project_path(".env")
 load_dotenv(ENV, verbose=True, override=True)
 
 LOGGER.info(f"Starting {PROJECT_NAME} app")
-LOGGER.info(f"BASE_DIR= {PROJECT_ROOT}")
+LOGGER.info(f"PROJECT_ROOT= {PROJECT_ROOT}")
 
 CACHES = {
     "default": {
@@ -53,13 +54,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", gae.access_secret_key_version())
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.getenv("DEBUG_ENV", None))
 
-ALLOWED_HOSTS = [
-    allowed_host  # pylint: disable=used-before-assignment
-    if DEBUG and (allowed_host := os.getenv("DJANGO_ALLOWED_HOST"))
-    else "0.0.0.0"
-]
-# Debug Toolbar is shown only if your IP address is listed in the INTERNAL_IPS
-INTERNAL_IPS = ["localhost:8090"]
+ALLOWED_HOSTS = ["0.0.0.0"]
 
 # Application definition
 DJANGO_APPS = [
@@ -80,6 +75,7 @@ PLUGIN_APPS = [
     "rest_framework",
     "rest_framework_jwt",
     "rest_framework_jwt.blacklist",
+    "phonenumber_field",
 ]
 
 MODULES = [
@@ -90,16 +86,15 @@ MODULES = [
 ]
 
 INSTALLED_APPS = DJANGO_APPS + PLUGIN_APPS + MODULES
-if DEBUG:
-    INSTALLED_APPS += [
-        "debug_toolbar",
-    ]
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    # Cache the entire site
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     # Map username from the Access Token payload to
@@ -139,28 +134,17 @@ ASGI_APPLICATION = "covidX.asgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-if GAE_APPLICATION := os.getenv("GAE_APPLICATION", None) and (
-    CONNECTION_NAME := os.getenv("CONNECTION_NAME", None)
-):
+if not DEBUG:
+    GAE_APPLICATION = os.getenv("GAE_APPLICATION")
+    CONNECTION_NAME = os.getenv("CONNECTION_NAME")
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "HOST": f"/cloudsql/{CONNECTION_NAME}",
             "USER": f'{os.getenv("DB_USER")}',
-            "PASSWORD": f'{os.getenv("DB_PWD")}',
+            "PASSWORD": f'{os.getenv("POSTGRES_PASSWORD")}',
             "NAME": f'{os.getenv("DB_NAME")}',
         }
-    }
-else:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "HOST": os.getenv("POSTGRES_DB_HOST", "localhost"),
-            "PORT": os.getenv("POSTGRES_DB_PORT", "5432"),
-            "NAME": "postgres",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-        },
     }
 
 # Password validation
@@ -229,8 +213,8 @@ AUTH_REDIRECT_URI = "/auth0/complete/auth0"
 AUTH0_ALGORITHMS = ["RS256"]
 if AUTH0_DOMAIN := os.getenv("SOCIAL_AUTH_AUTH0_DOMAIN"):
     JWT_ISSUER = f"https://{AUTH0_DOMAIN}/"
-if AUDIENCE := os.getenv("JWT_AUDIENCE"):
-    SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": AUDIENCE}
+if JWT_AUDIENCE:
+    SOCIAL_AUTH_AUTH0_AUTH_EXTRA_ARGUMENTS = {"audience": JWT_AUDIENCE}
 AUTH0_JWKS = requests.get(
     f"https://{SOCIAL_AUTH_AUTH0_DOMAIN}/.well-known/jwks.json"
 ).json()
