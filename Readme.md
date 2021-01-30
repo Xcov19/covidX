@@ -42,7 +42,7 @@ See https://github.com/Xcov19/covidX/issues/78
 * Generate a private / public key pair
 
 ```shell
-openssl req -x509 -newkey rsa:4096 -keyout privateKey -out certificate -days 365 -nodes
+openssl req -x509 -newkey rsa:4096 -keyout privateKey.key -out certificate -days 365 -nodes
 ```
 
 * Build and start the app
