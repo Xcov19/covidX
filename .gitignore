@@ -65,3 +65,6 @@ static/
 docker_repo_cache/
 apps/*/static/**
 profile.json
+
+privateKey.key
+certificate
