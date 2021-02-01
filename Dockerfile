@@ -1,14 +1,16 @@
 FROM ubuntu:focal
 
 
-RUN apt-get update -y
-RUN apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2
+RUN apt-get update -y \
+ && apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2 \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Import the repository signing key:
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update -y
-RUN apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib
+RUN apt-get update -y \
+ && apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
@@ -27,15 +29,16 @@ COPY requirements_dev.txt requirements_dev.txt
 
 # Setup python, pip & dependency libs
 RUN set -ex; if ! command -v gpg > /dev/null; then apt-get update; \
-apt-get install -y --no-install-recommends gnupg dirmngr git mercurial openssh-client subversion procp; \
-rm -rf /var/lib/apt/lists/*;fi
+apt-get install -y --no-install-recommends gnupg dirmngr git mercurial openssh-client subversion procp \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ; fi
 
 RUN set -ex;apt-get update && apt-get install -y --no-install-recommends autoconf automake bzip2 \
 dpkg-dev file g++ gcc imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev \
 libffi-dev libgdbm-dev libglib2.0-dev libgmp-dev libjpeg-dev libkrb5-dev liblzma-dev libmagickcore-dev \
 libmagickwand-dev libmaxminddb-dev libncurses5-dev libncursesw5-dev libpng-dev libpq-dev libreadline-dev \
 libsqlite3-dev libssl-dev libtool libwebp-dev libxml2-dev libxslt-dev libyaml-dev make patch unzip xz-utils \
-zlib1g-dev; rm -rf /var/lib/apt/lists/*
+zlib1g-dev \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 
@@ -70,10 +73,13 @@ RUN set -ex; \
 RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev \
  libncursesw5-dev xz-utils libffi-dev liblzma-dev \
- libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git
+ libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 
 # For gevent
-RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev
+RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 RUN mkdir -p .pip
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip
 RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
@@ -100,9 +106,8 @@ COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 RUN chmod +x /certificate && chmod +x /privateKey.key
 
-RUN apt-get install -y memcached libmemcached-tools --no-install-recommends
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update && apt-get install -y memcached libmemcached-tools --no-install-recommends \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #build
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY
