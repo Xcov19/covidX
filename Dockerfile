@@ -90,8 +90,8 @@ RUN mkdir -p .pip
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip
 RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
 
-RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
-RUN ln -s `which python3` /usr/bin/python;
+RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
+ && ln -s `which python3` /usr/bin/python;
 
 # Setup celery project dir
 ARG PROJECT_DIR=/
