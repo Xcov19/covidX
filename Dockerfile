@@ -75,7 +75,7 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
 
 # Install memcached
 RUN apt-get update \
- && apt-get install -y --no-install-recommend   \
+ && apt-get install -y --no-install-recommends   \
     memcached                                   \
     libmemcached-tools                          \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
