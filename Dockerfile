@@ -24,9 +24,6 @@ RUN export PATH=$PATH:/usr/local/bin/
 RUN alias bazel=/usr/local/bin/bazel
 RUN bazel version
 
-COPY requirements.txt requirements.txt
-COPY requirements_dev.txt requirements_dev.txt
-
 # Setup python, pip & dependency libs
 RUN set -ex; if ! command -v gpg > /dev/null; then apt-get update; \
 apt-get install -y --no-install-recommends gnupg dirmngr git mercurial openssh-client subversion procp \
@@ -76,6 +73,8 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+COPY requirements.txt requirements.txt
+COPY requirements_dev.txt requirements_dev.txt
 
 # For gevent
 RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev \
@@ -108,7 +107,6 @@ ENV DEBUG_ENV=1
 ENV SECRET_KEY=dskaj343
 ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
-COPY requirements.txt /requirements.txt
 COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 RUN chmod +x /certificate && chmod +x /privateKey.key
