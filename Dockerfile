@@ -73,6 +73,13 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
  libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install memcached
+RUN apt-get update \
+ && apt-get install -y --no-install-recommend   \
+    memcached                                   \
+    libmemcached-tools                          \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
@@ -85,13 +92,6 @@ RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS=
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
 RUN ln -s `which python3` /usr/bin/python;
-
-# Install memcached
-RUN apt-get update \
- && apt-get install -y --no-install-recommend   \
-    memcached                                   \
-    libmemcached-tools                          \
- && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Setup celery project dir
 ARG PROJECT_DIR=/
