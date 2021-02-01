@@ -88,7 +88,10 @@ RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
 RUN ln -s `which python3` /usr/bin/python;
 
 # Install memcached
-RUN apt-get update && apt-get install -y memcached libmemcached-tools --no-install-recommends \
+RUN apt-get update \
+ && apt-get install -y --no-install-recommend   \
+    memcached                                   \
+    libmemcached-tools                          \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Setup celery project dir
