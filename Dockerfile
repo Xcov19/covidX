@@ -87,6 +87,10 @@ RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS=
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi;
 RUN ln -s `which python3` /usr/bin/python;
 
+# Install memcached
+RUN apt-get update && apt-get install -y memcached libmemcached-tools --no-install-recommends \
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
 # Setup celery project dir
 ARG PROJECT_DIR=/
 WORKDIR /
@@ -105,9 +109,6 @@ COPY requirements.txt /requirements.txt
 COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 RUN chmod +x /certificate && chmod +x /privateKey.key
-
-RUN apt-get update && apt-get install -y memcached libmemcached-tools --no-install-recommends \
- && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 #build
 RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY
