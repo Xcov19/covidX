@@ -5,10 +5,9 @@ RUN apt-get update -y \
  && apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2 \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# Import the repository signing key:
-RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list
-RUN apt-get update -y \
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+ && echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+ && apt-get update -y \
  && apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
@@ -18,11 +17,11 @@ ENV LANG C.UTF-8
 ENV PATH /usr/bin:$PATH
 
 # Add bazel using bazelisk
-RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64
-RUN chmod +x /usr/local/bin/bazel
-RUN export PATH=$PATH:/usr/local/bin/
-RUN alias bazel=/usr/local/bin/bazel
-RUN bazel version
+RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/releases/download/v1.7.4/bazelisk-linux-amd64 \
+ && chmod +x /usr/local/bin/bazel       \
+ && export PATH=$PATH:/usr/local/bin/   \
+ && alias bazel=/usr/local/bin/bazel    \
+ && bazel version
 
 # Setup python, pip & dependency libs
 RUN set -ex; if ! command -v gpg > /dev/null; then apt-get update; \
@@ -85,10 +84,10 @@ COPY requirements_dev.txt requirements_dev.txt
 
 # For gevent
 RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev \
- && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-RUN mkdir -p .pip
-RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip
-RUN python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
+ && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+ && mkdir -p .pip \
+ && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip \
+ && python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
     ln -s `which python3` /usr/bin/python;
@@ -117,8 +116,8 @@ COPY pre-start.sh /pre-start.sh
 COPY up-script.sh /up-script.sh
 
 # Manually change the line format to UNIX format.
-RUN sed -i 's/\r$//' /pre-start.sh && chmod +x /pre-start.sh && \
-sed -i 's/\r$//' /up-script.sh && chmod +x /up-script.sh;
+RUN sed -i 's/\r$//' /pre-start.sh && chmod +x /pre-start.sh \
+ && sed -i 's/\r$//' /up-script.sh && chmod +x /up-script.sh
 
 ## Add the wait script to the image
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait ./wait
