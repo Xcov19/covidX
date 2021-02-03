@@ -11,9 +11,7 @@ def main():
     os.environ.setdefault(
         "DJANGO_SETTINGS_MODULE", os.getenv("SETTINGS_ENV", "covidX.settings.dev")
     )
-    os.environ.setdefault(
-        "SECRET_KEY", os.getenv("SECRET_KEY", "secret123")
-    )
+    os.environ.setdefault("SECRET_KEY", os.getenv("SECRET_KEY", "secret123"))
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:
