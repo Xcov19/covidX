@@ -97,8 +97,8 @@ ARG PROJECT_DIR=/
 WORKDIR /
 COPY . .
 
-RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R $(whoami) static/ && rm -rf static; fi;
-RUN touch logs.log && chmod 0777 logs.log && chown $(whoami) logs.log
+RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R $(whoami) static/ && rm -rf static; fi; \
+    touch logs.log && chmod 0777 logs.log && chown $(whoami) logs.log
 
 RUN if [ ! -f ".env" ]; then touch .env; fi;
 COPY .env .env
