@@ -121,7 +121,9 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            managers=[("objects", django.contrib.auth.models.UserManager()),],
+            managers=[
+                ("objects", django.contrib.auth.models.UserManager()),
+            ],
         ),
         migrations.CreateModel(
             name="AccountType",
@@ -160,25 +162,41 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name="AdminUser",
             fields=[],
-            options={"proxy": True, "indexes": [], "constraints": [],},
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
             bases=("auth_zero.user",),
         ),
         migrations.CreateModel(
             name="PatientUser",
             fields=[],
-            options={"proxy": True, "indexes": [], "constraints": [],},
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
             bases=("auth_zero.user",),
         ),
         migrations.CreateModel(
             name="StaffUser",
             fields=[],
-            options={"proxy": True, "indexes": [], "constraints": [],},
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
             bases=("auth_zero.user",),
         ),
         migrations.CreateModel(
             name="SupportUser",
             fields=[],
-            options={"proxy": True, "indexes": [], "constraints": [],},
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
             bases=("auth_zero.user",),
         ),
     ]
