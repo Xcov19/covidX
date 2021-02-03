@@ -90,7 +90,7 @@ RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev 
  && python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
-    ln -s `which python3` /usr/bin/python;
+    ln -s $(which python3) /usr/bin/python;
 
 # Setup celery project dir
 ARG PROJECT_DIR=/
