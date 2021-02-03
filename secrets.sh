@@ -5,7 +5,7 @@ touch .env
 export SECRET_KEY=$(gcloud secrets versions access latest --secret="SECRET_KEY")
 echo "DB_PORT=5432" > .env
 echo "" >> .env
-echo "SECRET_KEY=$(SECRET_KEY)" >> .env
+echo "SECRET_KEY=$SECRET_KEY" >> .env
 echo "" >> .env
 echo "SOCIAL_AUTH_TRAILING_SLASH=False  # Remove trailing slash from routes" >> .env
 echo "" >> .env
