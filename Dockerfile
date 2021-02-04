@@ -63,7 +63,7 @@ COPY requirements_dev.txt requirements_dev.txt
 # For gevent
 RUN mkdir -p .pip \
  && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip \
- && python3 -m pip install cython \
+ && python3 -m pip install cython==0.29.21 \
  && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt \
  && rm -rf .pip
 
