@@ -14,7 +14,7 @@ RUN apt-get update -y \
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
  && echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
  && apt-get update -y \
- && apt-get install -y \
+ && apt-get install -y --no-install-recommends \
     libpq-dev \
     postgresql \
     postgresql-client \
@@ -136,7 +136,7 @@ COPY requirements_dev.txt requirements_dev.txt
 
 # For gevent
 RUN apt-get update -y \
- && apt-get install -y \
+ && apt-get install -y --no-install-recommends \
     libevent-dev \
     file \
     make \
