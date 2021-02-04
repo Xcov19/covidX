@@ -2,13 +2,23 @@ FROM ubuntu:focal
 
 
 RUN apt-get update -y \
- && apt-get install -y --no-install-recommends lsb-release ca-certificates curl software-properties-common wget gnupg2 \
+ && apt-get install -y --no-install-recommends \
+    lsb-release \
+    ca-certificates \
+    curl \
+    software-properties-common \
+    wget \
+    gnupg2 \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
  && echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
  && apt-get update -y \
- && apt-get install -y libpq-dev postgresql postgresql-client postgresql-contrib \
+ && apt-get install -y \
+    libpq-dev \
+    postgresql \
+    postgresql-client \
+    postgresql-contrib \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # http://bugs.python.org/issue19846
@@ -25,15 +35,57 @@ RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/release
 
 # Setup python, pip & dependency libs
 RUN set -ex; if ! command -v gpg > /dev/null; then apt-get update; \
-apt-get install -y --no-install-recommends gnupg dirmngr git mercurial openssh-client subversion procp \
+    apt-get install -y --no-install-recommends \
+    gnupg \
+    dirmngr \
+    git \
+    mercurial \
+    openssh-client \
+    subversion \
+    procp \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* ; fi
 
-RUN set -ex;apt-get update && apt-get install -y --no-install-recommends autoconf automake bzip2 \
-dpkg-dev file g++ gcc imagemagick libbz2-dev libc6-dev libcurl4-openssl-dev libdb-dev libevent-dev \
-libffi-dev libgdbm-dev libglib2.0-dev libgmp-dev libjpeg-dev libkrb5-dev liblzma-dev libmagickcore-dev \
-libmagickwand-dev libmaxminddb-dev libncurses5-dev libncursesw5-dev libpng-dev libpq-dev libreadline-dev \
-libsqlite3-dev libssl-dev libtool libwebp-dev libxml2-dev libxslt-dev libyaml-dev make patch unzip xz-utils \
-zlib1g-dev \
+RUN set -ex;apt-get update && apt-get install -y --no-install-recommends \
+    autoconf \
+    automake \
+    bzip2 \
+    dpkg-dev \
+    file \
+    g++ \
+    gcc \
+    imagemagick \
+    libbz2-dev \
+    libc6-dev \
+    libcurl4-openssl-dev \
+    libdb-dev \
+    libevent-dev \
+    libffi-dev \
+    libgdbm-dev \
+    libglib2.0-dev \
+    libgmp-dev \
+    libjpeg-dev \
+    libkrb5-dev \
+    liblzma-dev \
+    libmagickcore-dev \
+    libmagickwand-dev \
+    libmaxminddb-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libpng-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
+    libtool \
+    libwebp-dev \
+    libxml2-dev \
+    libxslt-dev \
+    libyaml-dev \
+    make \
+    patch \
+    unzip \
+    xz-utils \
+    zlib1g-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ENV PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
@@ -74,7 +126,7 @@ RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
 
 # Install memcached
 RUN apt-get update \
- && apt-get install -y --no-install-recommends   \
+ && apt-get install -y --no-install-recommends  \
     memcached                                   \
     libmemcached-tools                          \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -83,11 +135,22 @@ COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
 # For gevent
-RUN apt-get update -y && apt-get install -y libevent-dev file make gcc musl-dev libffi-dev python-all-dev libpython3-dev python3-dev \
+RUN apt-get update -y \
+ && apt-get install -y \
+    libevent-dev \
+    file \
+    make \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    python-all-dev \
+    libpython3-dev \
+    python3-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
  && mkdir -p .pip \
  && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -U pip \
- && python3 -m pip install cython && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
+ && python3 -m pip install cython \
+ && CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m pip --cache-dir=.pip install -r requirements.txt
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
     ln -s $(which python3) /usr/bin/python;
