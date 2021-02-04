@@ -51,7 +51,7 @@ ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait
 RUN chmod +x ./wait
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
-    ln -s $(which python3) /usr/bin/python;
+    ln -s "$(which python3)" /usr/bin/python;
 
 # http://bugs.python.org/issue19846
 # > At the moment, setting "LANG=C" on a Linux system *fundamentally breaks Python 3*, and that's not OK.
