@@ -47,8 +47,8 @@ RUN curl -Lo /usr/local/bin/bazel https://github.com/bazelbuild/bazelisk/release
  && bazel version
 
 ## Add the wait script to the image
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait ./wait
-RUN chmod +x ./wait
+RUN curl -Lo ./wait https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait \
+ && chmod +x ./wait
 
 RUN if test -f "/usr/bin/python"; then rm /usr/bin/python; fi; \
     ln -s "$(which python3)" /usr/bin/python;
