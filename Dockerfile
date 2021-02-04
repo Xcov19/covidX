@@ -118,11 +118,26 @@ RUN set -ex; \
 		\) -exec rm -rf '{}' +; \
 	rm -f get-pip.py
 
-RUN apt-get update -y && apt-get install -y make libssl-dev zlib1g-dev \
- libbz2-dev libreadline-dev libsqlite3-dev libncurses5-dev \
- libncursesw5-dev xz-utils libffi-dev liblzma-dev \
- libghc-zlib-dev libcurl4-gnutls-dev libexpat1-dev gettext unzip git \
- && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apt-get update -y \
+&& apt-get install -y --no-install-recommends \
+ make \
+ libssl-dev \
+ zlib1g-dev \
+ libbz2-dev \
+ libreadline-dev \
+ libsqlite3-dev \
+ libncurses5-dev \
+ libncursesw5-dev \
+ xz-utils \
+ libffi-dev \
+ liblzma-dev \
+ libghc-zlib-dev \
+ libcurl4-gnutls-dev \
+ libexpat1-dev \
+ gettext \
+ unzip \
+ git \
+&& apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Install memcached
 RUN apt-get update \
