@@ -14,7 +14,7 @@
 .gitignore
 .github
 .pylintrc
-
+.gitpod.yml
 
 # Python pycache:
 __pycache__/
@@ -35,3 +35,8 @@ bazel-bin
 bazel-covidX
 bitbucket-pipelines.yml
 docker_repo_cache/
+docker-compose.yml
+secrets_test.sh
+pre-start.sh
+up-script.sh
+requirements_dev.txt

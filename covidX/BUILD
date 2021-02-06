@@ -91,6 +91,10 @@ py_library(
 py_library(
     name = "wsgi",
     srcs = ["wsgi.py"],
-    deps = [requirement("django")],
+    deps = [
+        requirement("django"),
+        requirement("python-dotenv"),
+        "//covidX/settings:dev",
+    ],
     srcs_version="PY3",
 )

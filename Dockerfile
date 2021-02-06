@@ -89,20 +89,31 @@ COPY . .
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R `whoami` static/ && rm -rf static; fi;
 RUN touch logs.log && chmod 0777 logs.log && chown `whoami` logs.log
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-## Add the wait script to the image
-ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait ./wait
-RUN chmod +x ./wait
-
 RUN if [ ! -f ".env" ]; then touch .env; fi;
 COPY .env .env
-COPY pre-start.sh /pre-start.sh
-COPY up-script.sh /up-script.sh
-RUN chmod +x /pre-start.sh && chmod +x /up-script.sh;
 ENV DEBUG_ENV=1
 ENV SECRET_KEY=dskaj343
 ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
 COPY requirements.txt /requirements.txt
+COPY privateKey.key /privateKey.key
+COPY certificate /certificate
+RUN chmod +x /certificate && chmod +x /privateKey.key
+
+RUN apt-get install -y memcached libmemcached-tools --no-install-recommends
+# Clean up APT when done.
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+#build
+RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY
+
+COPY pre-start.sh /pre-start.sh
+COPY up-script.sh /up-script.sh
+
+# Manually change the line format to UNIX format.
+RUN sed -i 's/\r$//' /pre-start.sh && chmod +x /pre-start.sh && \
+sed -i 's/\r$//' /up-script.sh && chmod +x /up-script.sh;
+
+## Add the wait script to the image
+ADD https://github.com/ufoscout/docker-compose-wait/releases/download/2.7.3/wait ./wait
+RUN chmod +x ./wait

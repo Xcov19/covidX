@@ -9,8 +9,7 @@ import dotenv
 def main():
     dotenv.load_dotenv()
     os.environ.setdefault(
-        "DJANGO_SETTINGS_MODULE",
-        "covidX.settings.dev" if "test" in sys.argv else "covidX.settings.base",
+        "DJANGO_SETTINGS_MODULE", os.getenv("SETTINGS_ENV", "covidX.settings.dev")
     )
     try:
         from django.core.management import execute_from_command_line
