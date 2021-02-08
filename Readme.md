@@ -21,6 +21,7 @@ covidX will be run on python *3.7.6* and *3.8.5*
 #### Required Services for Self-Hosting
 
 The following steps are necessary in order to ensure that you are able to self-host your own instance of the project smoothly:
+
 * Install [PostgreSQL](https://www.postgresql.org/download/)
 * Install [Bazel](https://docs.bazel.build/versions/master/install.html)
 * Sign up to [Docker Hub](https://hub.docker.com/signup) and install [Docker Desktop](https://www.docker.com/get-started)
@@ -73,26 +74,33 @@ CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" python3 -m p
 
 FIRST SEE HERE: https://forum.mycovidconnect.com/d/14-how-to-contribute-backenddjangopython-devs
 
-Then,
-- Clone this git repo. SECRET_KEY and DEBUG env vars are in settings.py.
-- Pre-requisites:
+Then:
+
+* Clone this git repo. SECRET_KEY and DEBUG env vars are in settings.py.
+
+* Pre-requisites:
+
 ```bash
 export DEBUG_ENV=1
 export SECRET_KEY=<YOUR_SECRET>
 CPPFLAGS="$(pg_config --cppflags)"
 LDFLAGS="$(pg_config --ldflags)"
 ```
-- and then build like:
+
+* and then build like:
+
 ```bash
 bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=20 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY
 
 ```
 
-- Collectstatic
+* Collectstatic
+
 ```bash
 bazel run -s :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=200 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY -- collectstatic
 ```
-- Then Run it like:
+
+* Then Run it like:
 
 With Debug Mode:
 
@@ -101,6 +109,7 @@ DEBUG_ENV=1 SECRET_KEY=dskaj343 CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg
 ```
 
 Without Debug Mode:
+
 ```bash
 bazel run :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=20 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY -- runserver_plus
 
@@ -110,12 +119,14 @@ bazel run :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_
 
 Make sure to follow the steps above. Then follow these steps:
 
-- Create a local docker bazel image
+* Create a local docker bazel image
+
 ```shell
 PULLER_TIMEOUT=3600 DOCKER_REPO_CACHE=$(pwd)/docker_repo_cache DEBUG_ENV=1 CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" SECRET_ID="SECRET_KEY" BUCKET_NAME="gae-bizlead" DJANGO_SETTINGS_MODULE="covidX.settings" WSGI_APPLICATION="covidX.wsgi.application" bazel run --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS="$(pg_config --ldflags)" --action_env=CPPFLAGS="$(pg_config --cppflags)" --force_python=py3 --incompatible_use_python_toolchains=false  --loading_phase_threads=1 --http_timeout_scaling=2 :covidx_manage
 ```
 
-- Run bazel image using docker
+* Run bazel image using docker
+
 ```shell
 docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="$(pg_config --cppflags)" -e LDFLAGS="$(pg_config --ldflags)" -e SECRET_ID="SECRET_KEY" -e DJANGO_SETTINGS_MODULE="covidX.settings" -e WSGI_APPLICATION="covidX.wsgi.application" --security-opt apparmor=unconfined bazel:covidx_manage runserver_plus
 ```
@@ -123,6 +134,7 @@ docker run --rm -it -e SECRET_KEY=<YOUR_SECRET_KEY> -e DEBUG_ENV=1 -e CPPFLAGS="
 This should set you up for local development.
 
 ### Installing Developer Packages
+
 Setup a virtualenv and run:
 
 ```shell script
@@ -139,16 +151,19 @@ Enable following options on GAE:
 gcloud app deploy app.yaml --verbosity=debug --stop-previous-version
 ```
 
-
 ### Common Issues:
+
 * [Error when building local machine developer setup via docker image](https://github.com/Xcov19/covidX/issues/50)
 * [No matching distribution found for ipython==7.18.1](https://github.com/Xcov19/covidX/issues/57)
 * [Windows: pre-start.sh not found](https://github.com/Xcov19/covidX/issues/80)
 
 ### TODO/TBA:
-    How to contribute. Coming soon.
-    Project Roadmap
+
+* How to contribute. Coming soon.
+* Project Roadmap
 
 ### Credits
 
-    @codecakes
+```text
+@codecakes
+```
