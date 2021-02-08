@@ -6,7 +6,7 @@ from apps.common.config import ConfigFileLoader, CredentialsLoader
 class UserTestCase(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
-        config_file = "apps/auth_zero/config/test_config.ini"
+        config_file = "config/data/test/test_config.ini"
         self.creds_obj = CredentialsLoader(config_file, ConfigFileLoader)
         self.users = {
             verification_status: self.user_model.objects.create_user(
