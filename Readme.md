@@ -117,6 +117,8 @@ bazel run :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_
 
 #### Create Docker Image: Local Machine Developer Setup
 
+(If you don't know bazel, don't bother with this section.)
+
 Make sure to follow the steps above. Then follow these steps:
 
 * Create a local docker bazel image
