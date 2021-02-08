@@ -1,6 +1,8 @@
-from django.test import TestCase
 from django.contrib.auth import get_user_model
-from apps.common.config import ConfigFileLoader, CredentialsLoader
+from django.test import TestCase
+
+from apps.common.config import ConfigFileLoader
+from apps.common.config import CredentialsLoader
 
 
 class UserTestCase(TestCase):
