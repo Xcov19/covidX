@@ -23,7 +23,9 @@ REQS = [
     ]
 
 DEPS = [
-    "//covidX/settings:dev",
+    "//covidX:settings",
+    # "//covidX/settings:base",
+    # "//covidX/settings:dev",
     "//covidX:urls",
     "//covidX:asgi",
     "//covidX:wsgi",

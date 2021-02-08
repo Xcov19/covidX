@@ -34,6 +34,7 @@ py_library(
     ],
     srcs_version="PY3",
     data = ["//:static",],
+    visibility=["//visibility:public"],
 )
 
 py_library(
@@ -43,4 +44,5 @@ py_library(
         ":base",
     ],
     srcs_version="PY3",
+    visibility=["//visibility:public"],
 )

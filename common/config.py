@@ -1,21 +1,47 @@
+import abc
 from configparser import ConfigParser
 from typing import TypeVar
 
 from django.utils.encoding import force_text
 
 
+class InterfaceConfigLoader(metaclass=abc.ABCMeta):
+    """Enforce abstract interface for class capability."""
+
+    impl_methods = ("read_config",)
+
+    @classmethod
+    def __subclasshook__(cls, subclass):
+        return all(map(cls.get_implementation, cls.impl_methods)) or NotImplemented
+
+    @staticmethod
+    def get_implementation(subclass, attr_name: str) -> bool:
+        """Fetch an implemented method."""
+        return hasattr(subclass, attr_name)
+
+    @abc.abstractmethod
+    def read_config(self, verification_status: str) -> dict:
+        raise NotImplementedError
+
+
+IConfigLoader_T = TypeVar("IConfigLoader_T", bound=InterfaceConfigLoader)
+
+
 class CredentialsLoader:
     """Loads credentials from config file using custom loader class"""
 
-    def __init__(self, config_file: str, loader_class: TypeVar("ConfigFileLoader")):
+    def __init__(
+        self, config_file: str, loader_class: TypeVar("ConfigFileLoader")
+    ) -> IConfigLoader_T:
         """Initialises custom loader class."""
         self.loader_class = loader_class(config_file)
 
-    def read_config(self, verification_status: str) -> dict:
-        return self.loader_class.read_config(verification_status)
+    @property
+    def loader_class(self):
+        return self.loader_class
 
 
-class ConfigFileLoader:
+class ConfigFileLoader(InterfaceConfigLoader):
     """Loads data from .ini file"""
 
     def __init__(self, config_file: str):
