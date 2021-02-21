@@ -80,9 +80,11 @@ ENV DEBUG_ENV=1
 ENV SECRET_KEY=dskaj343
 ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
+ENV BAZEL_CACHE="/bazel-cache"
 
 #build
-RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY
+RUN mkdir -p $BAZEL_CACHE
+RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY --disk_cache=$BAZEL_CACHE
 
 COPY privateKey.key /privateKey.key
 COPY certificate /certificate
