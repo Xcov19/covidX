@@ -39,11 +39,7 @@ class CredentialsLoader:
 
     @property
     def loader_class(self):
-<<<<<<< HEAD:apps/common/config.py
-        return self.loader_class
-=======
         return self.__loader_class
->>>>>>> 097fbdb4cf82cd02ab7596fd505985639a3429fd:common/config.py
 
 
 class ConfigFileLoader(InterfaceConfigLoader):
