@@ -11,7 +11,8 @@ class InterfaceConfigLoader(metaclass=abc.ABCMeta):
     impl_methods = ("read_config",)
 
     @classmethod
-    def __subclasshook__(cls, subclass):
+    def __subclasshook__(cls, subclass: object):
+        """A subclass hooks to methods in impl_methods or NotImplemented."""
         return all(map(cls.get_implementation, cls.impl_methods)) or NotImplemented
 
     @staticmethod
@@ -34,11 +35,11 @@ class CredentialsLoader:
         self, config_file: str, loader_class: TypeVar("ConfigFileLoader")
     ) -> IConfigLoader_T:
         """Initialises custom loader class."""
-        self.loader_class = loader_class(config_file)
+        self.__loader_class = loader_class(config_file)
 
     @property
     def loader_class(self):
-        return self.loader_class
+        return self.__loader_class
 
 
 class ConfigFileLoader(InterfaceConfigLoader):

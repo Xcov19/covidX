@@ -12,7 +12,7 @@ class UserTestCase(TestCase):
         self.creds_obj = CredentialsLoader(config_file, ConfigFileLoader)
         self.users = {
             verification_status: self.user_model.objects.create_user(
-                **self.creds_obj.read_config(verification_status)
+                **self.creds_obj.loader_class.read_config(verification_status)
             )
             for verification_status in [
                 "fully_unverified",
