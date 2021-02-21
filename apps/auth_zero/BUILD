@@ -68,6 +68,22 @@ py_library(
     ],
 )
 
+py_test(
+    name = "test",
+    srcs = [
+        "tests.py",
+    ],
+    # TODO(codecakes): include common in deps module once moved to apps/
+    deps = [
+        requirement("django"),
+    ],
+    # TODO(codecakes): include data to include data folder
+    #  that has config/test_config.ini
+    data = [],
+    main = "tests.py",
+    srcs_version = "PY3"
+)
+
 filegroup(
     name = "auth_zero_tmpl",
     srcs = glob([

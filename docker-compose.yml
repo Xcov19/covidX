@@ -43,6 +43,7 @@ services:
       - redis
     volumes:
       - ./django-api:/app
+      - ./bazel-cache:/bazel-cache
     hostname: django-api
     env_file: .env
     environment:
@@ -53,5 +54,6 @@ services:
 
 volumes:
   django-api:
+  bazel-cache:
   pgdata:
   redisdata:
