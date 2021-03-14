@@ -31,6 +31,7 @@ jobs:
         SOCIAL_AUTH_AUTH0_DOMAIN: ${{ secrets.SOCIAL_AUTH_AUTH0_DOMAIN }}
         SOCIAL_AUTH_AUTH0_KEY: ${{ secrets.SOCIAL_AUTH_AUTH0_KEY }}
         SOCIAL_AUTH_AUTH0_SECRET: ${{ secrets.SOCIAL_AUTH_AUTH0_SECRET }}
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -52,3 +53,8 @@ jobs:
     # Run gitops local secrets_test.sh
     - name: Secrets Test Env Runner
       run: ./secrets_test.sh
+#    TODO(codecakes): Enable once module imports are fixed.
+#    - name: "Upload coverage to Codecov"
+#      uses: codecov/codecov-action@v1
+#      with:
+#        fail_ci_if_error: true
