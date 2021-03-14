@@ -82,10 +82,6 @@ ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
 ENV BAZEL_CACHE="/bazel-cache"
 
-#build
-RUN mkdir -p $BAZEL_CACHE
-RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY --action_env=$BAZEL_CACHE --disk_cache=$BAZEL_CACHE
-
 COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 
@@ -95,3 +91,7 @@ COPY up-script.sh /up-script.sh
 # Manually change the line format to UNIX format.
 RUN sed -i 's/\r$//' /pre-start.sh && chmod +x /pre-start.sh \
  && sed -i 's/\r$//' /up-script.sh && chmod +x /up-script.sh
+
+#build
+RUN mkdir -p $BAZEL_CACHE
+RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY --action_env=$BAZEL_CACHE --disk_cache=$BAZEL_CACHE
