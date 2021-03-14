@@ -1,4 +1,4 @@
 #!/bin/bash
 
 python -m pip install -r requirements.txt;
-SECRET_KEY=$(SECRET_KEY) python manage.py collectstatic;
+SECRET_KEY=$(gcloud secrets versions access latest --secret='SECRET_KEY') python manage.py collectstatic;

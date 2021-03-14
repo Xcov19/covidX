@@ -2,10 +2,10 @@
 
 if [ -f ".env" ]; then rm .env; fi;
 touch .env
-export SECRET_KEY=$(gcloud secrets versions access latest --secret="SECRET_KEY")
-echo "DB_PORT=5432" > .env
+echo "SECRET_KEY=$(gcloud secrets versions access latest --secret='SECRET_KEY');" >> .env
 echo "" >> .env
-echo "SECRET_KEY=$SECRET_KEY" >> .env
+echo "DB_PORT=5432" >> .env
+export "SECRET_KEY=$SECRET_KEY";
 echo "" >> .env
 echo "SOCIAL_AUTH_TRAILING_SLASH=False  # Remove trailing slash from routes" >> .env
 echo "" >> .env
