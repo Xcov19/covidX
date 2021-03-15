@@ -8,6 +8,8 @@ from django.db import models
 from django.db import transaction
 from django.db.models import Q
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 UserTypes_T = TypeVar("UserTypes_T", bound="UserTypes")
 User_T = TypeVar("User_T", bound="User")
 AccountTypes_T = TypeVar("AccountTypes_T", bound="AccountType")
@@ -26,9 +28,17 @@ class User(AbstractUser):
     """Custom Auth User model."""
 
     default_user_type = UserTypes.PATIENT
+    mobile = PhoneNumberField(blank=True)
+    last_otp = models.CharField(blank=False, null=True, max_length=20)
+    otp_verified = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     class Meta:
         app_label = "auth_zero"
+
+    @property
+    def is_verified(self):
+        return self.otp_verified and self.email_verified
 
     @property
     def user_types(self):

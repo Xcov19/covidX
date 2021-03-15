@@ -1,3 +1,4 @@
+# pylint:disable=E0611
 from covidX.settings.base import *
 
 CONFIG_FILE = "apps/auth_zero/config/test_config.ini"
