@@ -84,8 +84,6 @@ ENV LDFLAGS="$(pg_config --ldflags)"
 ENV BAZEL_CACHE="/bazel-cache"
 
 RUN openssl req -x509 -newkey rsa:4096 -keyout privateKey.key -out certificate -days 365 -nodes -subj "/C=IN/ST=NCR/L=DEL/O=XCoV19/OU=DEV/CN=XCoV19"
-COPY ./privateKey.key /privateKey.key
-COPY ./certificate /certificate
 
 COPY pre-start.sh /pre-start.sh
 COPY up-script.sh /up-script.sh
