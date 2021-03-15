@@ -37,7 +37,7 @@ RUN apt-get update -y \
     zlib1g-dev \
     memcached \
     libmemcached-tools \
-    libssl-dev \  # openssl
+    libssl-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bazel using bazelisk
