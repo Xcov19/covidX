@@ -43,6 +43,7 @@ venv.bak/
 #Visual studio
 .vscode/*
 .vscode
+.theia
 
 #Idea Files
 **/.idea/

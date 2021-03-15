@@ -13,6 +13,7 @@ buildifier(
 )
 
 REQS = [
+    "django",
     "python-dotenv",
     "social-auth-app-django",
     "social-auth-core",
@@ -23,7 +24,7 @@ REQS = [
     ]
 
 DEPS = [
-    "//covidX/settings:dev",
+    "//covidX:settings",
     "//covidX:urls",
     "//covidX:asgi",
     "//covidX:wsgi",
