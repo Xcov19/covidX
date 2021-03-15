@@ -76,7 +76,7 @@ COPY . .
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R "$(whoami)" static/ && rm -rf static; fi; \
     touch logs.log && chmod 0777 logs.log && chown "$(whoami)" logs.log
 
-COPY .env .env
+COPY .env.dev .env
 ENV DEBUG_ENV=1
 ENV SECRET_KEY=dskaj343
 ENV CPPFLAGS="$(pg_config --cppflags)"
