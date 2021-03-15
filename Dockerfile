@@ -37,6 +37,7 @@ RUN apt-get update -y \
     zlib1g-dev \
     memcached \
     libmemcached-tools \
+    libssl-dev \  # openssl
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bazel using bazelisk
@@ -82,6 +83,7 @@ ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
 ENV BAZEL_CACHE="/bazel-cache"
 
+RUN openssl req -x509 -newkey rsa:4096 -keyout privateKey.key -out certificate -days 365 -nodes
 COPY privateKey.key /privateKey.key
 COPY certificate /certificate
 
