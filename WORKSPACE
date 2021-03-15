@@ -94,7 +94,10 @@ http_archive(
 # Install the rule dependencies
 load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
 rules_python_external_dependencies()
-load("@rules_python_external//:defs.bzl", "pip_install")
+
+# See why: https://github.com/dillon-giacoppo/rules_python_external
+# load("@rules_python_external//:defs.bzl", "pip_install")
+load("@rules_python//python:pip.bzl", "pip_install")
 pip_install(
     # Uses the default repository name "pip"
     name = "my_deps",
