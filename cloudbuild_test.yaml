@@ -2,9 +2,8 @@ steps:
 - name: 'gcr.io/cloud-builders/gcloud'
   entrypoint: 'bash'
   args: ['./secrets.sh']
-- name: 'index.docker.io/codecakes/buster_py'
+- name: 'index.docker.io/codecakes/covidx_backend'
   entrypoint: 'bash'
   args: ['./gen_static.sh']
   env:
     - 'SECRET_KEY=testsecret'
-
