@@ -37,6 +37,7 @@ RUN apt-get update -y \
     zlib1g-dev \
     memcached \
     libmemcached-tools \
+    libssl-dev \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bazel using bazelisk
@@ -75,15 +76,14 @@ COPY . .
 RUN if [ -d "static" ]; then chmod -R a+rx static/ && chown -R "$(whoami)" static/ && rm -rf static; fi; \
     touch logs.log && chmod 0777 logs.log && chown "$(whoami)" logs.log
 
-COPY .env .env
+COPY .env.dev .env
 ENV DEBUG_ENV=1
 ENV SECRET_KEY=dskaj343
 ENV CPPFLAGS="$(pg_config --cppflags)"
 ENV LDFLAGS="$(pg_config --ldflags)"
 ENV BAZEL_CACHE="/bazel-cache"
 
-COPY privateKey.key /privateKey.key
-COPY certificate /certificate
+RUN openssl req -x509 -newkey rsa:4096 -keyout privateKey.key -out certificate -days 365 -nodes -subj "/C=IN/ST=NCR/L=DEL/O=XCoV19/OU=DEV/CN=XCoV19"
 
 COPY pre-start.sh /pre-start.sh
 COPY up-script.sh /up-script.sh

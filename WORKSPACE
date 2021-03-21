@@ -76,7 +76,7 @@ load("@rules_python//python:repositories.bzl",
 py_repositories()
 # Only needed if using the packaging rules.
 
-load("@rules_python//python:pip.bzl", "pip_repositories")
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip3_import")
 pip_repositories()
 
 # Create a central repo that knows about the dependencies needed for
@@ -94,12 +94,17 @@ http_archive(
 # Install the rule dependencies
 load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
 rules_python_external_dependencies()
-load("@rules_python_external//:defs.bzl", "pip_install")
-pip_install(
+
+# See why: https://github.com/dillon-giacoppo/rules_python_external
+# load("@rules_python_external//:defs.bzl", "pip_install")
+pip3_import(
     # Uses the default repository name "pip"
     name = "my_deps",
     requirements = "//:requirements.txt",
 )
+load("@my_deps//:requirements.bzl", "pip_install")
+
+pip_install()
 
 
 # Invoke buildifier via the Bazel rule
