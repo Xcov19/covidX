@@ -85,7 +85,6 @@ pip_repositories()
 # and call it.
 
 # See why: https://github.com/dillon-giacoppo/rules_python_external
-# load("@rules_python_external//:defs.bzl", "pip_install")
 pip3_import(
     # Uses the default repository name "pip"
     name = "my_deps",
