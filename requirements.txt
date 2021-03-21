@@ -156,9 +156,9 @@ django-phonenumber-field==5.0.0 \
     --hash=sha256:1eb7af3a108744665f7c3939d38aa15b3728c57d13d45d656b0a2aa11e8cdc3c \
     --hash=sha256:adb46905cc4ecb19d8494424e1c4352f24946bb472340a2a17257d44bf8228e6
     # via -r requirements.txt
-django==3.0.7 \
-    --hash=sha256:5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2 \
-    --hash=sha256:e1630333248c9b3d4e38f02093a26f1e07b271ca896d73097457996e0fae12e8
+django==3.1.6 \
+    --hash=sha256:169e2e7b4839a7910b393eec127fd7cbae62e80fa55f89c6510426abf673fe5f \
+    --hash=sha256:c6c0462b8b361f8691171af1fb87eceb4442da28477e12200c40420176206ba7
     # via
     #   -r requirements.txt
     #   algoliasearch-django
