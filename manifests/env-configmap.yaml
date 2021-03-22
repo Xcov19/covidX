@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  ACCESS_TOKEN_METHOD: POST
+  ALGOLIA_API_KEY: bc14d480c3c827a3034c36a174518a9c
+  ALGOLIA_APPLICATION_ID: TS34X1EK7M
+  BAZEL_CACHE: /bazel-cache
+  DB_PORT: "5432"
+  DEBUG_ENV: "1"
+  DEFAULT_PORT: "8000"
+  DJANGO_ALLOWED_HOST: localhost
+  JWT_AUDIENCE: http://localhost:8090/
+  POSTGRES_DB_HOST: postgres
+  POSTGRES_DB_PORT: "5432"
+  POSTGRES_PASSWORD: postgres
+  SECRET_KEY: dskaj343
+  SETTINGS_ENV: covidX.settings.dev
+  SOCIAL_AUTH_TRAILING_SLASH: "False"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: backend-env
+  name: env
