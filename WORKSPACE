@@ -96,16 +96,11 @@ load("@rules_python_external//:repositories.bzl", "rules_python_external_depende
 rules_python_external_dependencies()
 
 # See why: https://github.com/dillon-giacoppo/rules_python_external
-# load("@rules_python_external//:defs.bzl", "pip_install")
-pip3_import(
-    # Uses the default repository name "pip"
+load("@rules_python_external//:defs.bzl", "pip_install")
+pip_install(
     name = "my_deps",
     requirements = "//:requirements.txt",
 )
-load("@my_deps//:requirements.bzl", "pip_install")
-
-pip_install()
-
 
 # Invoke buildifier via the Bazel rule
 # buildifier is written in Go and hence needs rules_go to be built.
