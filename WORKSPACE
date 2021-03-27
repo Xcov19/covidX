@@ -76,30 +76,23 @@ load("@rules_python//python:repositories.bzl",
 py_repositories()
 # Only needed if using the packaging rules.
 
-load("@rules_python//python:pip.bzl", "pip_repositories")
+load("@rules_python//python:pip.bzl", "pip_repositories", "pip3_import")
 pip_repositories()
 
 # Create a central repo that knows about the dependencies needed for
 # requirements.txt.
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
-rules_python_external_version = "0.1.5"
-RULES_PY_COMMIT_SHA = "bc655e6d402915944e014c3b2cad23d0a97b83a66cc22f20db09c9f8da2e2789"
-http_archive(
-    name = "rules_python_external",
-    sha256 = "{COMMIT_SHA}".format(COMMIT_SHA=RULES_PY_COMMIT_SHA), # Fill in with correct sha256 of your COMMIT_SHA version
-    strip_prefix = "rules_python_external-{version}".format(version = rules_python_external_version),
-    url = "https://github.com/dillon-giacoppo/rules_python_external/archive/v{version}.zip".format(version = rules_python_external_version),
-)
-# Install the rule dependencies
-load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
-rules_python_external_dependencies()
-load("@rules_python_external//:defs.bzl", "pip_install")
-pip_install(
+
+# See why: https://github.com/dillon-giacoppo/rules_python_external
+pip3_import(
     # Uses the default repository name "pip"
     name = "my_deps",
     requirements = "//:requirements.txt",
 )
+load("@my_deps//:requirements.bzl", "pip_install")
+
+pip_install()
 
 
 # Invoke buildifier via the Bazel rule

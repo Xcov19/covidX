@@ -6,4 +6,5 @@ toml>=0.10.1
 black
 # The following packages are considered to be unsafe in a requirements file:
 setuptools==50.3.0        # via -r requirements.txt, google-api-core, google-auth, gunicorn, ipdb, ipython, protobuf
-pip-tools==5.3.1
+# See: https://github.com/jazzband/pip-tools/issues/1307#issuecomment-764654930
+pip-tools==5.5.0
