@@ -32,6 +32,7 @@ RUN apt-get update -y \
     python3-pip \
     software-properties-common \
     subversion \
+    sudo \
     unzip \
     xz-utils \
     zlib1g-dev \
