@@ -30,24 +30,21 @@ The following steps are necessary in order to ensure that you are able to self-h
 
 #### How to Run Locally Using Docker (docker-compose)
 
-* Create your `.env` file from the sample:
-
-```shell
-cp .env_sample .env
-```
-
-* Build and start the app
+* Build and start the app:
 
 ```shell
 docker-compose up
 ```
 
-The app should be built automatically on first run.
+The app should be built automatically on first run. Subsequent to the initial build, this same command can be repeated every time you want to start the
+app, without having to rebuild each time.
 
-Note: to reflect changes made to `.env` after the application has been brought `up`, you need to force a rebuild:
+The local server will be visible at `https://localhost:8000`.
+
+NB: To reflect changes made to `.env.dev` after the application has been brought `up`, you need to force a rebuild:
 
 ```shell
-docker-compose --build
+docker-compose up --build
 ```
 
 ### How to Setup for Development
