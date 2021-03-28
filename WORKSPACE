@@ -83,6 +83,7 @@ pip_repositories()
 # requirements.txt.
 # Load the central repo's install function from its `//:requirements.bzl` file,
 # and call it.
+# Fixes pip._vendor.urllib3.exceptions.ReadTimeoutError
 rules_python_external_version = "0.1.5"
 RULES_PY_COMMIT_SHA = "bc655e6d402915944e014c3b2cad23d0a97b83a66cc22f20db09c9f8da2e2789"
 http_archive(
@@ -96,11 +97,16 @@ load("@rules_python_external//:repositories.bzl", "rules_python_external_depende
 rules_python_external_dependencies()
 
 # See why: https://github.com/dillon-giacoppo/rules_python_external
-load("@rules_python_external//:defs.bzl", "pip_install")
-pip_install(
+# load("@rules_python_external//:defs.bzl", "pip_install")
+pip3_import(
+    # Uses the default repository name "pip"
     name = "my_deps",
     requirements = "//:requirements.txt",
 )
+load("@my_deps//:requirements.bzl", "pip_install")
+
+pip_install()
+
 
 # Invoke buildifier via the Bazel rule
 # buildifier is written in Go and hence needs rules_go to be built.
