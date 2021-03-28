@@ -36,16 +36,6 @@ The following steps are necessary in order to ensure that you are able to self-h
 cp .env_sample .env
 ```
 
-* Fill in the details based on the Auth0 and Algolia sign-ups
-
-See https://github.com/Xcov19/covidX/issues/78
-
-* Generate a private / public key pair
-
-```shell
-openssl req -x509 -newkey rsa:4096 -keyout privateKey.key -out certificate -days 365 -nodes
-```
-
 * Build and start the app
 
 ```shell
