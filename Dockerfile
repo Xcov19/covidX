@@ -32,6 +32,7 @@ RUN apt-get update -y \
     python3-pip \
     software-properties-common \
     subversion \
+    sudo \
     unzip \
     xz-utils \
     zlib1g-dev \
@@ -94,4 +95,11 @@ RUN sed -i 's/\r$//' /pre-start.sh && chmod +x /pre-start.sh \
 
 #build
 RUN mkdir -p $BAZEL_CACHE
-RUN CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY --action_env=$BAZEL_CACHE --disk_cache=$BAZEL_CACHE
+RUN PULLER_TIMEOUT=3600 CPPFLAGS="$(pg_config --cppflags)" LDFLAGS="$(pg_config --ldflags)" bazel build :manage --watchfs --spawn_strategy=standalone --copt --aspects=@bazel_tools//tools/python:srcs_version.bzl%find_requirements --verbose_failures=true --show_timestamps=true --python_version=PY3 --build_python_zip --sandbox_debug --color=yes --curses=yes --jobs=2000 --loading_phase_threads=HOST_CPUS --action_env=LDFLAGS --action_env=CPPFLAGS --action_env=DEBUG_ENV --action_env=SECRET_KEY --action_env=$BAZEL_CACHE --action_env=PULLER_TIMEOUT --disk_cache=$BAZEL_CACHE
+
+#See: https://github.com/gitpod-io/gitpod/issues/2614#issuecomment-752362094
+### Gitpod user ###
+# '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
+    # passwordless sudo for users in the 'sudo' group
+    && sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
