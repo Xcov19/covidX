@@ -59,46 +59,18 @@ _py3_image_repos()
 
 http_archive(
     name = "rules_python",
-    url = "https://github.com/bazelbuild/rules_python/archive/master.zip",
+    url = "https://github.com/bazelbuild/rules_python/releases/download/0.1.0/rules_python-0.1.0.tar.gz",
+    sha256 = "b6d46438523a3ec0f3cead544190ee13223a52f6a6765a29eae7b7cc24cc83a0",
 )
 
-load("@rules_python//python:repositories.bzl",
-    "py_repositories",
-    )
-py_repositories()
-# Only needed if using the packaging rules.
-
-load("@rules_python//python:pip.bzl", "pip_repositories", "pip3_import")
-pip_repositories()
+load("@rules_python//python:pip.bzl", "pip_install")
 
 # Create a central repo that knows about the dependencies needed for
 # requirements.txt.
-# Load the central repo's install function from its `//:requirements.bzl` file,
-# and call it.
-# Fixes pip._vendor.urllib3.exceptions.ReadTimeoutError
-rules_python_external_version = "0.1.5"
-RULES_PY_COMMIT_SHA = "bc655e6d402915944e014c3b2cad23d0a97b83a66cc22f20db09c9f8da2e2789"
-http_archive(
-    name = "rules_python_external",
-    sha256 = "{COMMIT_SHA}".format(COMMIT_SHA=RULES_PY_COMMIT_SHA), # Fill in with correct sha256 of your COMMIT_SHA version
-    strip_prefix = "rules_python_external-{version}".format(version = rules_python_external_version),
-    url = "https://github.com/dillon-giacoppo/rules_python_external/archive/v{version}.zip".format(version = rules_python_external_version),
+pip_install(
+   name = "my_deps",
+   requirements = "//:requirements.txt",
 )
-# Install the rule dependencies
-load("@rules_python_external//:repositories.bzl", "rules_python_external_dependencies")
-rules_python_external_dependencies()
-
-# See why: https://github.com/dillon-giacoppo/rules_python_external
-# load("@rules_python_external//:defs.bzl", "pip_install")
-pip3_import(
-    # Uses the default repository name "pip"
-    name = "my_deps",
-    requirements = "//:requirements.txt",
-)
-load("@my_deps//:requirements.bzl", "pip_install")
-
-pip_install()
-
 
 # Invoke buildifier via the Bazel rule
 # buildifier is written in Go and hence needs rules_go to be built.
