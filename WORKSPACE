@@ -15,11 +15,11 @@ http_archive(
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
 bazel_skylib_workspace()
 
-# Download the rules_docker repository at release v0.14.4
-git_repository(
+http_archive(
     name = "io_bazel_rules_docker",
-    remote = "https://github.com/bazelbuild/rules_docker.git",
-    tag = "v0.14.4",
+    sha256 = "95d39fd84ff4474babaf190450ee034d958202043e366b9fc38f438c9e6c3334",
+    strip_prefix = "rules_docker-0.16.0",
+    urls = ["https://github.com/bazelbuild/rules_docker/releases/download/v0.16.0/rules_docker-v0.16.0.tar.gz"],
 )
 
 load(
@@ -35,27 +35,14 @@ container_deps()
 load(
     "@io_bazel_rules_docker//container:container.bzl",
     "container_pull",
-    "container_image",
 )
-
-container_pull(
-  name = "python3_image",
-  registry = "index.docker.io",
-  repository = "codecakes/buster_py",
-  # 'tag' is also supported, but digest is encouraged for reproducibility.
-  digest = "sha256:c461bf44bafc3b434ec6818075cf499338b8ff934130989a288e5a045b076c16",
-)
-
-load("@io_bazel_rules_docker//repositories:pip_repositories.bzl", "pip_deps")
-
-pip_deps()
 
 load(
     "@io_bazel_rules_docker//python3:image.bzl",
-    _py3_image_repos = "repositories",
+    _py_image_repos = "repositories",
 )
 
-_py3_image_repos()
+_py_image_repos()
 
 http_archive(
     name = "rules_python",
