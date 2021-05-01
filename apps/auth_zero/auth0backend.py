@@ -16,7 +16,7 @@ from apps.auth_zero.apps import Store
 
 LOGGER = settings.LOGGER
 
-CACHE_TOKEN = Store(**dict())
+CACHE_TOKEN = Store(**{})
 
 
 class Auth0(Auth0OAuth2):
