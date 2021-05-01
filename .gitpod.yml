@@ -1,8 +1,7 @@
 image:
   file: gitpod.Dockerfile
 tasks:
-  - init: sudo docker-up
-    command: docker-compose up --build
+  - init: docker-compose up --build
 ports:
   - port: 9119
   - port: 5432
