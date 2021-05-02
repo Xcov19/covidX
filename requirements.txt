@@ -128,9 +128,9 @@ django-cors-headers==3.5.0 \
     --hash=sha256:9322255c296d5f75089571f29e520c83ff9693df17aa3cf9f6a4bea7c6740169 \
     --hash=sha256:db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a
     # via -r requirements.txt
-django-debug-toolbar==3.2 \
-    --hash=sha256:84e2607d900dbd571df0a2acf380b47c088efb787dce9805aefeb407341961d2 \
-    --hash=sha256:9e5a25d0c965f7e686f6a8ba23613ca9ca30184daa26487706d4829f5cfb697a
+django-debug-toolbar==3.2.1 \
+    --hash=sha256:e759e63e3fe2d3110e0e519639c166816368701eab4a47fed75d7de7018467b9 \
+    --hash=sha256:a5ff2a54f24bf88286f9872836081078f4baa843dc3735ee88524e89f8821e33
     # via -r requirements.txt
 django-extensions==3.0.9 \
     --hash=sha256:6809c89ca952f0e08d4e0766bc0101dfaf508d7649aced1180c091d737046ea7 \
@@ -558,9 +558,9 @@ pycparser==2.20 \
     # via
     #   -r requirements.txt
     #   cffi
-pygments==2.7.1 \
-    --hash=sha256:307543fe65c0947b126e83dd5a61bd8acbd84abec11f43caebaf5534cbc17998 \
-    --hash=sha256:926c3f319eda178d1bd90851e4317e6d8cdb5e292a3386aac9bd75eca29cf9c7
+pygments==2.7.4 \
+    --hash=sha256:bc9591213a8f0e0ca1a5e68a479b4887fdc3e75d0774e5c71c31920c427de435 \
+    --hash=sha256:df49d09b498e83c1a73128295860250b0b7edd4c723a32e9bc0d295c7c2ec337
     # via
     #   -r requirements.txt
     #   ipython
