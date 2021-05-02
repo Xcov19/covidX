@@ -67,9 +67,7 @@ COPY requirements_dev.txt requirements_dev.txt
 
 #Fix setuptools_rust issue
 #See: https://github.com/frappe/bench/issues/1117
-RUN apt install snapd
-RUN snap install rustup --classic
-RUN rustup default stable
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # For gevent
 RUN mkdir -p .pip \
