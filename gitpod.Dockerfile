@@ -33,12 +33,15 @@ RUN apt-get update -y \
     software-properties-common \
     subversion \
     sudo \
+    build-essential \
     unzip \
     xz-utils \
     zlib1g-dev \
     memcached \
     libmemcached-tools \
     libssl-dev \
+    libffi-dev \
+    cargo \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bazel using bazelisk
@@ -61,6 +64,14 @@ ENV LANG C.UTF-8
 
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
+
+#Fix setuptools_rust issue
+#Upgrade pip3
+RUN python3 -m pip3 --cache-dir=.pip install -U pip
+#See: https://github.com/frappe/bench/issues/1117
+RUN apt install snapd
+RUN snap install rustup --classic
+RUN rustup default stable
 
 # For gevent
 RUN mkdir -p .pip \
