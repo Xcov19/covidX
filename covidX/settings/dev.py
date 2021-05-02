@@ -1,4 +1,4 @@
-# pylint:disable=E0611
+# pylint:disable=E0611 skipcq: PYL-W0614
 from covidX.settings.base import *
 
 CONFIG_FILE = "apps/auth_zero/config/test_config.ini"
