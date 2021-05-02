@@ -3,7 +3,7 @@ FROM ubuntu:focal
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update -y \
- && apt-get install -y --no-install-recommends \
+ && apt-get install -y --no-install-recommends --fix-missing \
     autoconf \
     automake \
     bzip2 \
@@ -33,12 +33,15 @@ RUN apt-get update -y \
     software-properties-common \
     subversion \
     sudo \
+    build-essential \
     unzip \
     xz-utils \
     zlib1g-dev \
     memcached \
     libmemcached-tools \
     libssl-dev \
+    libffi-dev \
+    cargo \
  && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add bazel using bazelisk
@@ -61,6 +64,10 @@ ENV LANG C.UTF-8
 
 COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
+
+#Fix setuptools_rust issue
+#See: https://github.com/frappe/bench/issues/1117
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # For gevent
 RUN mkdir -p .pip \
