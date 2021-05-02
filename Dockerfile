@@ -3,7 +3,7 @@ FROM ubuntu:focal
 ENV DEBIAN_FRONTEND="noninteractive"
 
 RUN apt-get update -y \
- && apt-get install -y --no-install-recommends \
+ && apt-get install -y --no-install-recommends --fix-missing \
     autoconf \
     automake \
     bzip2 \
@@ -66,8 +66,6 @@ COPY requirements.txt requirements.txt
 COPY requirements_dev.txt requirements_dev.txt
 
 #Fix setuptools_rust issue
-#Upgrade pip3
-RUN python3 -m pip3 --cache-dir=.pip install -U pip
 #See: https://github.com/frappe/bench/issues/1117
 RUN apt install snapd
 RUN snap install rustup --classic
