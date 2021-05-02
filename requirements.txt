@@ -238,9 +238,9 @@ google-api-core[grpc]==1.26.1 \
     # via
     #   -r requirements.txt
     #   google-cloud-secret-manager
-google-auth==1.21.2 \
-    --hash=sha256:7084c50c03f7a8a5696ef4500e65df0c525a0f6909f3c70b9ee65900a230c755 \
-    --hash=sha256:dcf86c5adc3a8a7659be190b12bb8912ae019cfd9ee2a571ea881e289fafbe39
+google-auth==1.30.0 \
+    --hash=sha256:588bdb03a41ecb4978472b847881e5518b5d9ec6153d3d679aa127a55e13b39f \
+    --hash=sha256:9ad25fba07f46a628ad4d0ca09f38dcb262830df2ac95b217f9b0129c9e42206
     # via
     #   -r requirements.txt
     #   google-api-core
@@ -670,7 +670,9 @@ rx==1.6.1 \
 semantic-version==2.8.5 \
     --hash=sha256:45e4b32ee9d6d70ba5f440ec8cc5221074c7f4b0e8918bdab748cc37912440a9 \
     --hash=sha256:d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54
-    # via setuptools-rust
+    # via
+    #   -r requirements.txt
+    #   setuptools-rust
 setuptools-rust==0.12.1 \
     --hash=sha256:60c9bf1423a725e472c4a2a6274598251f959f3ed5ffe7698526e78bb431b9b7 \
     --hash=sha256:647009e924f0ae439c7f3e0141a184a69ad247ecb9044c511dabde232d3d570e
@@ -739,7 +741,9 @@ text-unidecode==1.3 \
 toml==0.10.2 \
     --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b \
     --hash=sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f
-    # via setuptools-rust
+    # via
+    #   -r requirements.txt
+    #   setuptools-rust
 traitlets==5.0.4 \
     --hash=sha256:86c9351f94f95de9db8a04ad8e892da299a088a64fd283f9f6f18770ae5eae1b \
     --hash=sha256:9664ec0c526e48e7b47b7d14cd6b252efa03e0129011de0a9c1d70315d4309c3
@@ -806,3 +810,5 @@ xlrd==1.2.0 \
 # WARNING: The following packages were not pinned, but pip requires them to be
 # pinned when the requirements file includes hashes. Consider using the --allow-unsafe flag.
 # setuptools
+setuptools==56.0.0 \
+    --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
