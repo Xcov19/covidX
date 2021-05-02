@@ -26,7 +26,9 @@ aniso8601==7.0.0 \
 appnope==0.1.2 \
     --hash=sha256:93aa393e9d6c54c5cd570ccadd8edad61ea0c4b9ea7a01409020c9aa019eb442 \
     --hash=sha256:dd83cd4b5b460958838f6eb3000c660b1f9caf2a5b1de4264e941512f603258a
-    # via -r requirements.txt
+    # via
+    #   -r requirements.txt
+    #   ipython
 asgiref==3.2.10 \
     --hash=sha256:7e51911ee147dd685c3c8b805c0ad0cb58d360987b56953878f8c06d2d1c6f1a \
     --hash=sha256:9fc6fb5d39b8af147ba40765234fa822b39818b12cc80b35ad9b0cef3a476aed
@@ -129,8 +131,8 @@ django-cors-headers==3.5.0 \
     --hash=sha256:db82b2840f667d47872ae3e4a4e0a0d72fbecb42779b8aa233fa8bb965f7836a
     # via -r requirements.txt
 django-debug-toolbar==3.2.1 \
-    --hash=sha256:e759e63e3fe2d3110e0e519639c166816368701eab4a47fed75d7de7018467b9 \
-    --hash=sha256:a5ff2a54f24bf88286f9872836081078f4baa843dc3735ee88524e89f8821e33
+    --hash=sha256:a5ff2a54f24bf88286f9872836081078f4baa843dc3735ee88524e89f8821e33 \
+    --hash=sha256:e759e63e3fe2d3110e0e519639c166816368701eab4a47fed75d7de7018467b9
     # via -r requirements.txt
 django-extensions==3.0.9 \
     --hash=sha256:6809c89ca952f0e08d4e0766bc0101dfaf508d7649aced1180c091d737046ea7 \
@@ -665,6 +667,14 @@ rx==1.6.1 \
     # via
     #   -r requirements.txt
     #   graphql-core
+semantic-version==2.8.5 \
+    --hash=sha256:45e4b32ee9d6d70ba5f440ec8cc5221074c7f4b0e8918bdab748cc37912440a9 \
+    --hash=sha256:d2cb2de0558762934679b9a104e82eca7af448c9f4974d1f3eeccff651df8a54
+    # via setuptools-rust
+setuptools-rust==0.12.1 \
+    --hash=sha256:60c9bf1423a725e472c4a2a6274598251f959f3ed5ffe7698526e78bb431b9b7 \
+    --hash=sha256:647009e924f0ae439c7f3e0141a184a69ad247ecb9044c511dabde232d3d570e
+    # via -r requirements.txt
 singledispatch==3.4.0.3 \
     --hash=sha256:5b06af87df13818d14f08a028e42f566640aef80805c3b50c5056b086e3c2b9c \
     --hash=sha256:833b46966687b3de7f438c761ac475213e53b306740f1abfaa86e1d1aae56aa8
@@ -726,6 +736,10 @@ text-unidecode==1.3 \
     # via
     #   -r requirements.txt
     #   faker
+toml==0.10.2 \
+    --hash=sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b \
+    --hash=sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f
+    # via setuptools-rust
 traitlets==5.0.4 \
     --hash=sha256:86c9351f94f95de9db8a04ad8e892da299a088a64fd283f9f6f18770ae5eae1b \
     --hash=sha256:9664ec0c526e48e7b47b7d14cd6b252efa03e0129011de0a9c1d70315d4309c3
