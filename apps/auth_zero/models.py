@@ -47,7 +47,6 @@ class User(AbstractUser):
     def save(self, *args, **kwargs):
         """Set user type then save."""
         acc_levels: List[UserTypes_T] = []
-        acc_type_ids: List[int]
         if self.username != "AnonymousUser":
             # Refer to auth0backend.Auth0.process_roles to see why
             if self.is_staff:
