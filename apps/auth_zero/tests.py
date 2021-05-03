@@ -5,7 +5,7 @@ from apps.common.config import ConfigFileLoader
 from apps.common.config import CredentialsLoader
 
 
-class UserTestCase(TestCase):
+class UserVerificationTestCase(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
         config_file = "apps/auth_zero/config/data/test/test_config.ini"
