@@ -19,9 +19,6 @@ py_library(
         "//covidX/settings:base",
         "//covidX/settings:dev",
     ],
-    deps = [
-        "//:__init__",
-    ],
     srcs_version="PY3",
     data = ["//:static",],
 )
