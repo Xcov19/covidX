@@ -30,6 +30,7 @@ py_library(
         "//apps/auth_zero:apps",
         "//apps/auth_zero:models",
         "//apps/auth_zero:auth0backend",
+        "//covidX/settings:__init__"
     ],
     srcs_version="PY3",
     data = ["//:static",],
