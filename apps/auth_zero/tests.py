@@ -1,14 +1,14 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 
-from common.config import ConfigFileLoader
-from common.config import CredentialsLoader
+from apps.common.config import ConfigFileLoader
+from apps.common.config import CredentialsLoader
 
 
-class UserTestCase(TestCase):
+class UserVerificationTestCase(TestCase):
     def setUp(self):
         self.user_model = get_user_model()
-        config_file = "apps/auth_zero/config/test_config.ini"
+        config_file = "apps/auth_zero/config/data/test/test_config.ini"
         self.creds_obj = CredentialsLoader(config_file, ConfigFileLoader)
         self.users = {
             verification_status: self.user_model.objects.create_user(
