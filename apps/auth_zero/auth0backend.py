@@ -127,8 +127,8 @@ class Auth0CodeFlow(Auth0):
             token: str, access token.
             **options: dict, jwt decode options.
         Returns:
-            dict: The dict representation of the claims set, assuming the signature is valid
-                and all requested data validation passes.
+            dict: The dict representation of the claims set, assuming the
+            signature is valid and all requested data validation passes.
         Raises:
             JWTError: If the signature is invalid in any way.
             ExpiredSignatureError: If the signature has expired.
