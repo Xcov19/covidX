@@ -29,11 +29,6 @@ DEPS = [
     "//covidX:wsgi",
 ] + [requirement(r) for r in REQS]
 
-py_library(
-    name = "__init__",
-    srcs = ["__init__.py"],
-)
-
 py_binary(
     name = "manage",
     srcs=["manage.py"],
