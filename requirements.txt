@@ -720,7 +720,7 @@ social-auth-core==4.1.0 \
     # via
     #   -r requirements.txt
     #   social-auth-app-django
-sqlparse==0.3.0 \
+sqlparse==0.4.2 \
     --hash=sha256:40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177 \
     --hash=sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873
     # via
