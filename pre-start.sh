@@ -9,8 +9,8 @@ fi;
 for dir in apps/*/migrations; do touch "$dir/__init__.py"; done;
 
 echo "===pip install========="
-python -m pip --cache-dir=.pip install -r requirements.txt;
+python3 -m pip --cache-dir=.pip install -r requirements.txt;
 echo "=====drop db==========="
-python manage.py reset_db -c --noinput;
+python3 manage.py reset_db -c --noinput;
 echo "=====makemigrations====="
-python manage.py makemigrations;
+python3 manage.py makemigrations;
