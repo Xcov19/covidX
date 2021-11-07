@@ -138,7 +138,7 @@ django-extensions==3.0.9 \
     --hash=sha256:6809c89ca952f0e08d4e0766bc0101dfaf508d7649aced1180c091d737046ea7 \
     --hash=sha256:dc663652ac9460fd06580a973576820430c6d428720e874ae46b041fa63e0efa
     # via -r requirements.txt
-django-filter==2.3.0 \
+django-filter==2.4.0 \
     --hash=sha256:11e63dd759835d9ba7a763926ffb2662cf8a6dcb4c7971a95064de34dbc7e5af \
     --hash=sha256:616848eab6fc50193a1b3730140c49b60c57a3eda1f7fc57fa8505ac156c6c75
     # via -r requirements.txt
@@ -720,7 +720,7 @@ social-auth-core==4.1.0 \
     # via
     #   -r requirements.txt
     #   social-auth-app-django
-sqlparse==0.3.0 \
+sqlparse==0.4.2 \
     --hash=sha256:40afe6b8d4b1117e7dff5504d7a8ce07d9a1b15aeeade8a2d10f130a834f8177 \
     --hash=sha256:7c3dca29c022744e95b547e867cee89f4fce4373f3549ccd8797d8eb52cdb873
     # via
