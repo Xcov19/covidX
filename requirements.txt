@@ -812,3 +812,4 @@ xlrd==1.2.0 \
 # setuptools
 setuptools==56.0.0 \
     --hash=sha256:7430499900e443375ba9449a9cc5d78506b801e929fef4a186496012f93683b5
+pyjwt>=2.4.0 # not directly required, pinned by Snyk to avoid a vulnerability
